@@ -1,8 +1,7 @@
 // js/services/userService.js
-import { db } from '../config/firebase.js';
-import { doc, setDoc, getDoc, updateDoc, collection, query, getDocs } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+import { db, doc, getDoc, setDoc, updateDoc, collection, getDocs, query, where } from '../config/firebase.js';
 
-export const userService = {
+class UserService {
     // Get user by ID
     async getUser(uid) {
         try {
@@ -13,34 +12,51 @@ export const userService = {
             console.error('Error getting user:', error);
             return null;
         }
-    },
+    }
     
-    // Create user
+    // Create new user
     async createUser(userData) {
         try {
-            await setDoc(doc(db, 'users', userData.uid), userData);
+            const userRef = doc(db, 'users', userData.uid);
+            await setDoc(userRef, userData);
             return { success: true };
         } catch (error) {
             console.error('Error creating user:', error);
             return { success: false, error: error.message };
         }
-    },
+    }
     
-    // Update user profile
-    async updateUserProfile(uid, profileData) {
+    // Update user
+    async updateUser(uid, data) {
         try {
             const userRef = doc(db, 'users', uid);
             await updateDoc(userRef, {
-                ...profileData,
-                updatedAt: new Date().toISOString(),
-                hasSetProfile: true
+                ...data,
+                updatedAt: new Date().toISOString()
             });
             return { success: true };
         } catch (error) {
             console.error('Error updating user:', error);
             return { success: false, error: error.message };
         }
-    },
+    }
+    
+    // Update profile settings
+    async updateProfile(uid, profileData) {
+        try {
+            const userRef = doc(db, 'users', uid);
+            await updateDoc(userRef, {
+                customDisplayName: profileData.customDisplayName,
+                customAvatar: profileData.customAvatar,
+                hasSetProfile: true,
+                updatedAt: new Date().toISOString()
+            });
+            return { success: true };
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            return { success: false, error: error.message };
+        }
+    }
     
     // Get all users (for contacts list)
     async getAllUsers() {
@@ -49,7 +65,7 @@ export const userService = {
             const querySnapshot = await getDocs(usersRef);
             const users = [];
             querySnapshot.forEach(doc => {
-                users.push({ id: doc.id, ...doc.data() });
+                users.push({ uid: doc.id, ...doc.data() });
             });
             return users;
         } catch (error) {
@@ -57,4 +73,26 @@ export const userService = {
             return [];
         }
     }
-};
+    
+    // Search users by name
+    async searchUsers(searchTerm) {
+        try {
+            const usersRef = collection(db, 'users');
+            const querySnapshot = await getDocs(usersRef);
+            const users = [];
+            querySnapshot.forEach(doc => {
+                const user = { uid: doc.id, ...doc.data() };
+                const displayName = user.customDisplayName || user.displayName;
+                if (displayName?.toLowerCase().includes(searchTerm.toLowerCase())) {
+                    users.push(user);
+                }
+            });
+            return users;
+        } catch (error) {
+            console.error('Error searching users:', error);
+            return [];
+        }
+    }
+}
+
+export const userService = new UserService();
