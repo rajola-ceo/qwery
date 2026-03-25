@@ -1,40 +1,19 @@
-// ===================== COMPLETE APP.JS =====================
-// This file contains ALL your JavaScript code in one place
-// Includes: Firebase config, services, components, pages, and utilities
+// ===================== VENO-ARENA COMPLETE APP =====================
+// This single file contains ALL your frontend code
+// Connects to Render backend: https://crunck-backend.onrender.com
 
-// ===================== FIREBASE CONFIGURATION =====================
+// ===================== IMPORTS & CONFIG =====================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import { 
-    getAuth, 
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged
+    getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 import { 
-    getFirestore, 
-    collection, 
-    doc, 
-    getDoc, 
-    getDocs, 
-    setDoc, 
-    updateDoc, 
-    deleteDoc, 
-    addDoc, 
-    query, 
-    where, 
-    orderBy, 
-    limit, 
-    Timestamp,
-    arrayUnion,
-    arrayRemove
+    getFirestore, collection, doc, getDoc, getDocs, setDoc, updateDoc, 
+    deleteDoc, addDoc, query, where, orderBy, limit, Timestamp,
+    arrayUnion, arrayRemove
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 import { 
-    getStorage, 
-    ref, 
-    uploadBytes, 
-    getDownloadURL, 
-    deleteObject 
+    getStorage, ref, uploadBytes, getDownloadURL, deleteObject 
 } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js";
 
 // Firebase Config
@@ -48,10 +27,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
+const storage = getStorage(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
 // ===================== BACKEND API CONFIG =====================
@@ -105,17 +84,6 @@ function formatTime(date) {
     return d.toLocaleDateString();
 }
 
-function formatDate(date) {
-    if (!date) return '';
-    const d = new Date(date);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    if (d.toDateString() === today.toDateString()) return 'Today';
-    if (d.toDateString() === yesterday.toDateString()) return 'Yesterday';
-    return d.toLocaleDateString();
-}
-
 function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
@@ -125,15 +93,6 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
-}
-
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => { clearTimeout(timeout); func(...args); };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
 }
 
 function getUrlParams() {
@@ -147,30 +106,18 @@ function getUrlParams() {
     return params;
 }
 
-function createElement(tag, classes = [], attributes = {}, children = []) {
-    const element = document.createElement(tag);
-    if (classes.length) element.classList.add(...classes);
-    Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
-    children.forEach(child => {
-        if (typeof child === 'string') element.appendChild(document.createTextNode(child));
-        else element.appendChild(child);
-    });
-    return element;
-}
-
-function showToast(message, type = 'info') {
-    const container = document.getElementById('toastContainer');
+function showToast(message, type = 'success') {
+    let container = document.getElementById('toastContainer');
     if (!container) {
-        const newContainer = createElement('div', ['toast-container'], { id: 'toastContainer' });
-        document.body.appendChild(newContainer);
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'toast-container';
+        document.body.appendChild(container);
     }
-    const toastContainer = document.getElementById('toastContainer');
-    const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
-    const toast = createElement('div', ['toast', type], {}, [
-        createElement('i', [], { class: `fas ${icons[type] || icons.info}` }),
-        message
-    ]);
-    toastContainer.appendChild(toast);
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+    container.appendChild(toast);
     setTimeout(() => toast.classList.add('show'), 10);
     setTimeout(() => {
         toast.classList.remove('show');
@@ -178,7 +125,7 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
-// ===================== USER SERVICE =====================
+// ===================== USER SERVICE (Backend API) =====================
 const userService = {
     async getUser(uid) {
         try {
@@ -189,9 +136,9 @@ const userService = {
         }
     },
     
-    async createUser(userData) {
+    async saveUser(uid, userData) {
         try {
-            return await apiRequest(`/api/users/${userData.uid}`, {
+            return await apiRequest(`/api/users/${uid}`, {
                 method: 'POST',
                 body: JSON.stringify(userData)
             });
@@ -209,24 +156,17 @@ const userService = {
         } catch (error) {
             return { success: false, error: error.message };
         }
-    },
-    
-    async updateProfile(uid, profileData) {
-        return this.updateUser(uid, profileData);
-    },
-    
-    async getAllUsers() {
-        return [];
     }
 };
 
-// ===================== COIN SERVICE =====================
+// ===================== COIN SERVICE (Backend API) =====================
 const coinService = {
-    async getUserCoins(uid) {
+    async getBalance(uid) {
         try {
             const data = await apiRequest(`/api/coins/${uid}`);
             return data.balance;
         } catch (error) {
+            console.error('Error getting coins:', error);
             return 100;
         }
     },
@@ -237,30 +177,19 @@ const coinService = {
         } catch (error) {
             return { success: false, error: error.message };
         }
-    },
-    
-    async addCoins(uid, amount, reason) {
-        return { success: false, error: 'Use backend endpoints' };
-    },
-    
-    async deductCoins(uid, amount, reason) {
-        return { success: false, error: 'Use backend endpoints' };
     }
 };
 
-// ===================== LEAGUE SERVICE =====================
+// ===================== LEAGUE SERVICE (Backend API) =====================
 const leagueService = {
     async getAllLeagues(status = null) {
         try {
             const url = status ? `/api/leagues?status=${status}` : '/api/leagues';
             return await apiRequest(url);
         } catch (error) {
+            console.error('Error getting leagues:', error);
             return [];
         }
-    },
-    
-    async getActiveLeagues() {
-        return this.getAllLeagues('registration');
     },
     
     async getLeague(leagueId) {
@@ -282,22 +211,11 @@ const leagueService = {
         }
     },
     
-    async joinLeague(leagueId, userId, userName, userAvatar) {
+    async joinLeague(leagueId, teamName) {
         try {
             return await apiRequest(`/api/leagues/${leagueId}/join`, {
                 method: 'POST',
-                body: JSON.stringify({ teamName: `${userName}'s Team` })
-            });
-        } catch (error) {
-            return { success: false, error: error.message };
-        }
-    },
-    
-    async updateLeague(leagueId, data) {
-        try {
-            return await apiRequest(`/api/leagues/${leagueId}`, {
-                method: 'PUT',
-                body: JSON.stringify(data)
+                body: JSON.stringify({ teamName })
             });
         } catch (error) {
             return { success: false, error: error.message };
@@ -305,8 +223,17 @@ const leagueService = {
     }
 };
 
-// ===================== TEAM SERVICE =====================
+// ===================== TEAM SERVICE (Backend API) =====================
 const teamService = {
+    async getUserTeams(userId) {
+        try {
+            return await apiRequest(`/api/teams/${userId}`);
+        } catch (error) {
+            console.error('Error getting teams:', error);
+            return [];
+        }
+    },
+    
     async createTeam(teamData) {
         try {
             return await apiRequest('/api/teams', {
@@ -316,34 +243,18 @@ const teamService = {
         } catch (error) {
             return { success: false, error: error.message };
         }
-    },
-    
-    async getUserTeams(userId) {
-        try {
-            return await apiRequest(`/api/teams/${userId}`);
-        } catch (error) {
-            return [];
-        }
-    },
-    
-    async getTeam(teamId) {
-        return null;
-    },
-    
-    async updateTeam(teamId, data) {
-        return { success: false, error: 'Not implemented' };
     }
 };
 
 // ===================== AUTH SERVICE =====================
 const authService = {
     currentUser: null,
-    listeners: [],
     
     async loginWithGoogle() {
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const firebaseUser = result.user;
+            
             let userData = await userService.getUser(firebaseUser.uid);
             if (!userData) {
                 userData = {
@@ -354,11 +265,11 @@ const authService = {
                     customDisplayName: null,
                     customAvatar: null,
                     hasSetProfile: false,
-                    createdAt: new Date().toISOString(),
-                    lastLogin: new Date().toISOString()
+                    createdAt: new Date().toISOString()
                 };
-                await userService.createUser(userData);
+                await userService.saveUser(firebaseUser.uid, userData);
             }
+            
             return { success: true, user: { ...firebaseUser, ...userData } };
         } catch (error) {
             return { success: false, error: error.message };
@@ -375,10 +286,6 @@ const authService = {
         }
     },
     
-    getCurrentUser() {
-        return this.currentUser;
-    },
-    
     onAuthStateChanged(callback) {
         return onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
@@ -390,10 +297,6 @@ const authService = {
                 callback(null);
             }
         });
-    },
-    
-    isAuthenticated() {
-        return this.currentUser !== null;
     }
 };
 
@@ -403,7 +306,6 @@ class App {
         this.currentUser = null;
         this.userData = null;
         this.userCoins = 0;
-        this.isInitialized = false;
     }
     
     async init() {
@@ -413,7 +315,7 @@ class App {
             if (user) {
                 this.currentUser = user;
                 this.userData = await userService.getUser(user.uid);
-                this.userCoins = await coinService.getUserCoins(user.uid);
+                this.userCoins = await coinService.getBalance(user.uid);
                 this.updateUI();
                 console.log('✅ User logged in:', this.userData?.customDisplayName || user.displayName);
                 this.initPage();
@@ -435,31 +337,54 @@ class App {
             case 'team-create.html': this.initTeamCreatePage(); break;
             case 'my-leagues.html': this.initMyLeaguesPage(); break;
             case 'profile-settings.html': this.initProfileSettingsPage(); break;
+            case 'tournaments.html': this.initHomePage(); break;
         }
     }
     
     updateUI() {
-        const coinElements = document.querySelectorAll('.venoCoinsAmount');
+        const coinElements = document.querySelectorAll('.venoCoinsAmount, #venoCoinsAmount');
         coinElements.forEach(el => el.textContent = this.userCoins);
         
         const displayName = this.userData?.customDisplayName || this.currentUser?.displayName || 'Player';
         const avatarUrl = this.userData?.customAvatar || this.currentUser?.photoURL;
         
-        const profileImgs = document.querySelectorAll('.profile-avatar-img');
+        const profileImgs = document.querySelectorAll('.profile-avatar-img, #profileAvatarImg, #googleProfilePic, .profile-pic');
         profileImgs.forEach(img => {
             img.src = avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=10b981&color=fff&size=128`;
         });
         
-        const nameSpans = document.querySelectorAll('.profile-name-display');
+        const nameSpans = document.querySelectorAll('.profile-name-display, #profileNameDisplay, #accountName');
         nameSpans.forEach(span => span.textContent = displayName);
+        
+        const emailSpans = document.querySelectorAll('#profileEmailDisplay, #accountEmail');
+        if (emailSpans.length && this.currentUser?.email) {
+            emailSpans.forEach(span => span.textContent = this.currentUser.email);
+        }
     }
     
+    async refreshCoins() {
+        this.userCoins = await coinService.getBalance(this.currentUser.uid);
+        this.updateUI();
+        return this.userCoins;
+    }
+    
+    async claimDaily() {
+        const result = await coinService.claimDaily(this.currentUser.uid);
+        if (result.success) {
+            await this.refreshCoins();
+            showToast(`🎉 You claimed ${result.amount} Veno Coins!`, 'success');
+        } else {
+            showToast(result.error, 'error');
+        }
+    }
+    
+    // ===================== HOME PAGE =====================
     async initHomePage() {
         console.log('🏠 Initializing home page...');
         const leagues = await leagueService.getAllLeagues();
         this.renderFeaturedLeagues(leagues.slice(0, 6));
         
-        const activeLeagues = await leagueService.getActiveLeagues();
+        const activeLeagues = await leagueService.getAllLeagues('registration');
         this.renderActiveLeagues(activeLeagues.slice(0, 3));
         
         const teams = await teamService.getUserTeams(this.currentUser.uid);
@@ -530,7 +455,7 @@ class App {
                 <div class="league-owner"><i class="fas fa-user"></i> Created by: <strong>${escapeHtml(league.ownerName || 'Unknown')}</strong></div>
             </div>
             <div class="league-footer">
-                ${!isOwner && !hasJoined ? `<button class="join-btn" onclick="event.stopPropagation(); window.App.joinLeague('${league.id}')" ${isFull ? 'disabled' : ''}><i class="fas fa-sign-in-alt"></i> ${isFull ? 'League Full' : 'Join League'}</button>` : hasJoined ? `<button class="joined-btn" disabled><i class="fas fa-check-circle"></i> Joined</button>` : ''}
+                ${!isOwner && !hasJoined ? `<button class="join-btn" onclick="event.stopPropagation(); window.App.joinLeague('${league.id}')" ${isFull ? 'disabled' : ''}><i class="fas fa-sign-in-alt"></i> ${isFull ? 'League Full' : 'Join League'} (${league.entryFee} VC)</button>` : hasJoined ? `<button class="joined-btn" disabled><i class="fas fa-check-circle"></i> Joined</button>` : ''}
                 <button class="details-btn" onclick="event.stopPropagation(); window.location.href='league-view.html?id=${league.id}'"><i class="fas fa-info-circle"></i> Details</button>
             </div>
         `;
@@ -568,11 +493,10 @@ class App {
         }
         
         const displayName = this.userData?.customDisplayName || this.currentUser.displayName;
-        const result = await leagueService.joinLeague(leagueId, this.currentUser.uid, displayName, null);
+        const result = await leagueService.joinLeague(leagueId, `${displayName}'s Team`);
         
         if (result.success) {
-            this.userCoins = await coinService.getUserCoins(this.currentUser.uid);
-            this.updateUI();
+            await this.refreshCoins();
             showToast(`Successfully joined ${league.name}!`, 'success');
             location.reload();
         } else {
@@ -580,66 +504,95 @@ class App {
         }
     }
     
-    async refreshCoins() {
-        this.userCoins = await coinService.getUserCoins(this.currentUser.uid);
-        this.updateUI();
-        return this.userCoins;
-    }
-    
-    async claimDaily() {
-        const result = await coinService.claimDaily(this.currentUser.uid);
-        if (result.success) {
-            await this.refreshCoins();
-            showToast(`🎉 You claimed ${result.amount} Veno Coins!`, 'success');
-        } else {
-            showToast(result.error, 'error');
-        }
-    }
-    
-    async initLeagueCreatePage() {
+    // ===================== LEAGUE CREATE PAGE =====================
+    initLeagueCreatePage() {
         console.log('🏆 Initializing league create page...');
-        const form = document.getElementById('createLeagueForm');
-        if (form) {
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const leagueName = document.getElementById('leagueName')?.value.trim();
-                if (!leagueName) {
-                    showToast('League name is required', 'error');
-                    return;
-                }
-                const maxTeams = parseInt(document.getElementById('maxTeams')?.value) || 16;
-                const entryFee = parseInt(document.getElementById('entryFee')?.value) || 0;
-                const totalPrize = maxTeams * entryFee * 0.8;
-                const leagueData = {
-                    name: leagueName,
-                    gameType: document.getElementById('gameType')?.value || 'eFootball',
-                    format: document.getElementById('leagueFormat')?.value || 'league',
-                    maxTeams: maxTeams,
-                    entryFee: entryFee,
-                    prizePool: totalPrize,
-                    prizes: {
-                        first: parseInt(document.getElementById('firstPrize')?.value) || 0,
-                        second: parseInt(document.getElementById('secondPrize')?.value) || 0,
-                        third: parseInt(document.getElementById('thirdPrize')?.value) || 0
-                    },
-                    description: document.getElementById('description')?.value || '',
-                    ownerId: this.currentUser.uid,
-                    ownerName: this.userData?.customDisplayName || this.currentUser.displayName
-                };
-                const result = await leagueService.createLeague(leagueData);
-                if (result.success) {
-                    showToast('League created successfully!', 'success');
-                    setTimeout(() => window.location.href = `league-view.html?id=${result.id}`, 1500);
-                } else {
-                    showToast(result.error, 'error');
-                }
-            });
-        }
+        this.setupLeagueCreateForm();
+        this.setupPrizeDistribution();
     }
     
+    setupPrizeDistribution() {
+        const maxTeams = document.getElementById('maxTeams');
+        const entryFee = document.getElementById('entryFee');
+        
+        const updatePrizes = () => {
+            const teams = parseInt(maxTeams?.value) || 16;
+            const fee = parseInt(entryFee?.value) || 0;
+            const totalPrize = teams * fee * 0.8;
+            
+            const first = document.getElementById('firstPrize');
+            const second = document.getElementById('secondPrize');
+            const third = document.getElementById('thirdPrize');
+            
+            if (first) first.value = Math.floor(totalPrize * 0.5);
+            if (second) second.value = Math.floor(totalPrize * 0.3);
+            if (third) third.value = Math.floor(totalPrize * 0.2);
+        };
+        
+        if (maxTeams) maxTeams.addEventListener('change', updatePrizes);
+        if (entryFee) entryFee.addEventListener('change', updatePrizes);
+        updatePrizes();
+        
+        // Format selector
+        document.querySelectorAll('.format-option').forEach(opt => {
+            opt.addEventListener('click', function() {
+                document.querySelectorAll('.format-option').forEach(o => o.classList.remove('active'));
+                this.classList.add('active');
+                const formatInput = document.getElementById('leagueFormat');
+                if (formatInput) formatInput.value = this.dataset.format;
+            });
+        });
+    }
+    
+    setupLeagueCreateForm() {
+        const form = document.getElementById('createLeagueForm');
+        if (!form) return;
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const leagueName = document.getElementById('leagueName')?.value.trim();
+            if (!leagueName) {
+                showToast('League name is required', 'error');
+                return;
+            }
+            
+            const maxTeams = parseInt(document.getElementById('maxTeams')?.value) || 16;
+            const entryFee = parseInt(document.getElementById('entryFee')?.value) || 0;
+            const totalPrize = maxTeams * entryFee * 0.8;
+            
+            const leagueData = {
+                name: leagueName,
+                gameType: document.getElementById('gameType')?.value || 'eFootball',
+                format: document.getElementById('leagueFormat')?.value || 'league',
+                maxTeams: maxTeams,
+                entryFee: entryFee,
+                prizePool: totalPrize,
+                prizes: {
+                    first: parseInt(document.getElementById('firstPrize')?.value) || 0,
+                    second: parseInt(document.getElementById('secondPrize')?.value) || 0,
+                    third: parseInt(document.getElementById('thirdPrize')?.value) || 0
+                },
+                description: document.getElementById('description')?.value || '',
+                ownerId: this.currentUser.uid,
+                ownerName: this.userData?.customDisplayName || this.currentUser.displayName
+            };
+            
+            const result = await leagueService.createLeague(leagueData);
+            if (result.success && result.id) {
+                showToast('League created successfully!', 'success');
+                setTimeout(() => window.location.href = `league-view.html?id=${result.id}`, 1500);
+            } else {
+                showToast(result.error || 'Failed to create league', 'error');
+            }
+        });
+    }
+    
+    // ===================== LEAGUE VIEW PAGE =====================
     async initLeagueViewPage() {
         const urlParams = getUrlParams();
         const leagueId = urlParams.id;
+        
         if (!leagueId) {
             showToast('League not found', 'error');
             setTimeout(() => window.location.href = 'home.html', 1500);
@@ -665,11 +618,14 @@ class App {
         const teamsContainer = document.getElementById('teamsGrid');
         if (teamsContainer) {
             const teams = league.teams || [];
-            if (teams.length === 0) teamsContainer.innerHTML = '<div class="empty-state">No teams joined yet. Be the first!</div>';
-            else {
+            if (teams.length === 0) {
+                teamsContainer.innerHTML = '<div class="empty-state">No teams joined yet. Be the first!</div>';
+            } else {
                 teamsContainer.innerHTML = '';
                 teams.forEach(team => {
-                    const card = createElement('div', ['team-card-view'], { onclick: () => window.location.href = `team-view.html?id=${team.id}` });
+                    const card = document.createElement('div');
+                    card.className = 'team-card-view';
+                    card.onclick = () => window.location.href = `team-view.html?id=${team.id}`;
                     card.innerHTML = `<div class="team-logo-view">${team.logo ? `<img src="${team.logo}">` : '<i class="fas fa-shield-alt"></i>'}</div><div class="team-name-view">${escapeHtml(team.name)}</div>`;
                     teamsContainer.appendChild(card);
                 });
@@ -684,55 +640,105 @@ class App {
         }
     }
     
-    async initTeamCreatePage() {
+    // ===================== TEAM CREATE PAGE =====================
+    initTeamCreatePage() {
         console.log('⚽ Initializing team create page...');
         const form = document.getElementById('createTeamForm');
-        if (form) {
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const teamName = document.getElementById('teamName')?.value.trim();
-                if (!teamName) {
-                    showToast('Team name is required', 'error');
-                    return;
-                }
-                const result = await teamService.createTeam({
-                    name: teamName,
-                    ownerId: this.currentUser.uid,
-                    ownerName: this.userData?.customDisplayName || this.currentUser.displayName,
-                    logo: null,
-                    players: []
-                });
-                if (result.success) {
-                    showToast('Team created successfully!', 'success');
-                    setTimeout(() => window.location.href = 'home.html', 1500);
-                } else {
-                    showToast(result.error, 'error');
+        if (!form) return;
+        
+        // Logo upload
+        const uploadBtn = document.getElementById('uploadLogoBtn');
+        const logoInput = document.getElementById('teamLogo');
+        const logoPreview = document.getElementById('logoPreview');
+        
+        if (uploadBtn && logoInput) {
+            uploadBtn.addEventListener('click', () => logoInput.click());
+            logoInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && logoPreview) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        logoPreview.innerHTML = `<img src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+                    };
+                    reader.readAsDataURL(file);
                 }
             });
         }
+        
+        // Formation selector
+        document.querySelectorAll('.formation-option').forEach(opt => {
+            opt.addEventListener('click', function() {
+                document.querySelectorAll('.formation-option').forEach(o => o.classList.remove('active'));
+                this.classList.add('active');
+                const formationInput = document.getElementById('formation');
+                if (formationInput) formationInput.value = this.dataset.formation;
+            });
+        });
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const teamName = document.getElementById('teamName')?.value.trim();
+            if (!teamName) {
+                showToast('Team name is required', 'error');
+                return;
+            }
+            
+            const teamData = {
+                name: teamName,
+                shortName: document.getElementById('teamShortName')?.value || teamName.slice(0, 5),
+                stadium: document.getElementById('homeStadium')?.value || '',
+                gameType: document.getElementById('gameType')?.value || 'eFootball',
+                formation: document.getElementById('formation')?.value || '4-4-2',
+                logo: null,
+                players: [],
+                ownerId: this.currentUser.uid,
+                ownerName: this.userData?.customDisplayName || this.currentUser.displayName
+            };
+            
+            const result = await teamService.createTeam(teamData);
+            if (result.success && result.id) {
+                showToast('Team created successfully!', 'success');
+                setTimeout(() => window.location.href = `team-view.html?id=${result.id}`, 1500);
+            } else {
+                showToast(result.error || 'Failed to create team', 'error');
+            }
+        });
     }
     
+    // ===================== MY LEAGUES PAGE =====================
     async initMyLeaguesPage() {
         console.log('📋 Initializing my leagues page...');
         const leagues = await leagueService.getAllLeagues();
-        const myLeagues = leagues.filter(l => l.ownerId === this.currentUser?.uid || l.teams?.some(t => t.ownerId === this.currentUser?.uid));
+        const myLeagues = leagues.filter(l => 
+            l.ownerId === this.currentUser?.uid || 
+            l.teams?.some(t => t.ownerId === this.currentUser?.uid)
+        );
+        
         const container = document.getElementById('myLeaguesList');
         if (container) {
-            if (myLeagues.length === 0) container.innerHTML = '<div class="empty-state">You haven\'t joined or created any leagues yet.</div>';
-            else {
+            if (myLeagues.length === 0) {
+                container.innerHTML = '<div class="empty-state">You haven\'t joined or created any leagues yet.</div>';
+            } else {
                 container.innerHTML = '';
                 myLeagues.forEach(league => container.appendChild(this.createLeagueCard(league)));
             }
         }
     }
     
-    async initProfileSettingsPage() {
+    // ===================== PROFILE SETTINGS PAGE =====================
+    initProfileSettingsPage() {
         console.log('👤 Initializing profile settings page...');
+        
         const displayNameInput = document.getElementById('displayName');
-        if (displayNameInput) displayNameInput.value = this.userData?.customDisplayName || this.currentUser?.displayName || '';
+        if (displayNameInput) {
+            displayNameInput.value = this.userData?.customDisplayName || this.currentUser?.displayName || '';
+        }
         
         const emailDisplay = document.getElementById('emailDisplay');
-        if (emailDisplay) emailDisplay.innerText = this.currentUser?.email || '';
+        if (emailDisplay && this.currentUser?.email) {
+            emailDisplay.innerText = this.currentUser.email;
+        }
         
         const saveBtn = document.getElementById('saveBtn');
         if (saveBtn) {
@@ -742,7 +748,9 @@ class App {
                     showToast('Please enter a display name', 'error');
                     return;
                 }
-                const result = await userService.updateProfile(this.currentUser.uid, { customDisplayName: displayName });
+                const result = await userService.updateUser(this.currentUser.uid, {
+                    customDisplayName: displayName
+                });
                 if (result.success) {
                     this.userData.customDisplayName = displayName;
                     showToast('Profile updated successfully!', 'success');
@@ -755,12 +763,151 @@ class App {
     }
 }
 
-// ===================== INITIALIZE APP =====================
-window.App = new App();
+// ===================== SIDEBAR & NAVIGATION =====================
+function initSidebar() {
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const closeSidebar = document.getElementById('closeSidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+    if (menuBtn && sidebar) {
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.add('open');
+            if (overlay) overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        const closeFunc = () => {
+            sidebar.classList.remove('open');
+            if (overlay) overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+        
+        if (closeSidebar) closeSidebar.addEventListener('click', closeFunc);
+        if (overlay) overlay.addEventListener('click', closeFunc);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar.classList.contains('open')) closeFunc();
+        });
+    }
+    
+    // Navigation
+    const navItems = {
+        menuHome: 'home.html',
+        menuTournaments: 'home.html',
+        menuLeagues: 'my-leagues.html',
+        menuTeams: 'teams.html',
+        menuCreateLeague: 'league-create.html',
+        menuCreateTeam: 'team-create.html',
+        menuLeaderboard: 'leaderboard.html',
+        menuProfile: 'profile-settings.html'
+    };
+    
+    for (const [id, url] of Object.entries(navItems)) {
+        const element = document.getElementById(id);
+        if (element) element.addEventListener('click', () => window.location.href = url);
+    }
+    
+    // Venaura link
+    const venauraIcon = document.getElementById('venauraIcon');
+    if (venauraIcon) {
+        venauraIcon.addEventListener('click', () => window.open('https://venauraai.netlify.app/', '_blank'));
+    }
+    
+    // Profile dropdown
+    const profileDropdown = document.getElementById('profileDropdown');
+    const profilePopup = document.getElementById('profilePopup');
+    if (profileDropdown && profilePopup) {
+        profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profilePopup.classList.toggle('active');
+        });
+        document.addEventListener('click', () => profilePopup?.classList.remove('active'));
+    }
+    
+    // Logout
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            await authService.logout();
+            localStorage.removeItem('crunkUser');
+            window.location.href = 'index.html';
+        });
+    }
+    
+    // Theme toggle
+    const menuTheme = document.getElementById('menuTheme');
+    const themeLabel = document.getElementById('themeLabel');
+    if (menuTheme) {
+        menuTheme.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            if (themeLabel) themeLabel.innerText = isLight ? 'Light' : 'Dark';
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        });
+    }
+    
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        if (themeLabel) themeLabel.innerText = 'Light';
+    }
+}
 
+// ===================== DAILY CLAIM BUTTON =====================
+function initClaimButton() {
+    const claimBtn = document.getElementById('claimVenoCoinsBtn');
+    if (!claimBtn) return;
+    
+    const LAST_CLAIM_KEY = 'lastVenoClaim';
+    let app = window.App;
+    
+    function canClaim() {
+        const last = localStorage.getItem(LAST_CLAIM_KEY);
+        if (!last) return true;
+        return (Date.now() - parseInt(last)) >= 24 * 60 * 60 * 1000;
+    }
+    
+    function updateClaimButton() {
+        if (canClaim()) {
+            claimBtn.disabled = false;
+            claimBtn.innerHTML = '<i class="fas fa-gift"></i> Claim 10';
+            claimBtn.style.opacity = '1';
+        } else {
+            claimBtn.disabled = true;
+            const lastClaim = parseInt(localStorage.getItem(LAST_CLAIM_KEY));
+            const timeLeft = 24 * 60 * 60 * 1000 - (Date.now() - lastClaim);
+            const hoursLeft = Math.floor(timeLeft / (60 * 60 * 1000));
+            const minutesLeft = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
+            claimBtn.innerHTML = `<i class="fas fa-clock"></i> ${hoursLeft}h ${minutesLeft}m left`;
+            claimBtn.style.opacity = '0.6';
+        }
+    }
+    
+    claimBtn.addEventListener('click', async () => {
+        if (canClaim() && app) {
+            await app.claimDaily();
+            localStorage.setItem(LAST_CLAIM_KEY, Date.now().toString());
+            updateClaimButton();
+        } else {
+            showToast('Already claimed! Come back tomorrow', 'error');
+        }
+    });
+    
+    updateClaimButton();
+    setInterval(updateClaimButton, 60000);
+}
+
+// ===================== INITIALIZE =====================
 document.addEventListener('DOMContentLoaded', () => {
+    initSidebar();
+    initClaimButton();
+    window.App = new App();
     window.App.init();
 });
 
-// Export for use in console
-export { auth, db, storage, authService, userService, coinService, leagueService, teamService, showToast as toast };
+// Make functions global
+window.showToast = showToast;
+window.joinLeague = (leagueId) => window.App?.joinLeague(leagueId);
+window.viewLeague = (leagueId) => window.location.href = `league-view.html?id=${leagueId}`;
+
+console.log('✅ Veno-Arena loaded - Connected to Render backend at', 'https://crunck-backend.onrender.com');
