@@ -1104,13 +1104,14 @@
 <div id="toastContainer" class="toast-container"></div>
 
 <script type="module">
-    // ===================== IMPORTS & CONFIG =====================
+    // ===================== FIREBASE IMPORT =====================
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { 
         getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword,
         createUserWithEmailAndPassword, signOut, onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
+    // Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyBW0Sz7TODfa8tQJTfNUaLhfK9qJhdA1yE",
         authDomain: "crunck-app.firebaseapp.com",
@@ -1120,6 +1121,7 @@
         appId: "1:475953302982:web:607e08379adb12f985f6c7"
     };
 
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const googleProvider = new GoogleAuthProvider();
@@ -1510,9 +1512,10 @@
     }
 
     // ===================== EVENT LISTENERS =====================
-    // Login
+    // Google Login
     document.getElementById('googleLoginBtn').addEventListener('click', async () => {
         try {
+            showToast('Connecting to Google...', 'info');
             const result = await signInWithPopup(auth, googleProvider);
             currentUser = result.user;
             await updateProfileUI(currentUser);
@@ -1524,10 +1527,16 @@
             loadMyTeams();
             showToast(`Welcome ${currentUser.displayName || currentUser.email}!`, 'success');
         } catch (error) {
-            showToast(error.message, 'error');
+            console.error('Google login error:', error);
+            if (error.code === 'auth/unauthorized-domain') {
+                showToast(`Please add ${window.location.hostname} to Firebase authorized domains`, 'error');
+            } else {
+                showToast(error.message, 'error');
+            }
         }
     });
 
+    // Email Login
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value;
