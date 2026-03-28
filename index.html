@@ -69,6 +69,156 @@
             flex-direction: column;
         }
 
+        /* Login Container */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #05070d, #0f172a);
+        }
+
+        .login-card {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 40px 30px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+
+        .logo-icon i {
+            font-size: 40px;
+            color: white;
+        }
+
+        .login-card h1 {
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .google-btn {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #444;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .google-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .google-btn i {
+            color: #4285f4;
+            font-size: 20px;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: calc(50% - 70px);
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+
+        .divider span {
+            background: var(--bg-secondary);
+            padding: 0 15px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .login-form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .login-form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .login-form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Main App Styles */
+        .main-app {
+            display: none;
+        }
+
+        .main-app.active {
+            display: block;
+        }
+
         /* Top Bar */
         .topbar {
             height: 70px;
@@ -109,7 +259,6 @@
             gap: 20px;
         }
 
-        /* Veno Coins */
         .veno-coins-container {
             display: flex;
             align-items: center;
@@ -161,34 +310,18 @@
             gap: 5px;
         }
 
-        .claim-veno-btn:hover:not(:disabled) {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-        }
-
-        .claim-veno-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        /* Profile */
-        .profile-dropdown {
-            position: relative;
-            cursor: pointer;
-        }
-
         .profile-pic {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--primary);
-            transition: var(--transition);
+            cursor: pointer;
         }
 
-        .profile-pic:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        .profile-dropdown {
+            position: relative;
+            cursor: pointer;
         }
 
         .profile-popup {
@@ -202,12 +335,10 @@
             border-radius: 16px;
             padding: 16px;
             z-index: 1001;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .profile-popup.active {
             display: block;
-            animation: slideDown 0.3s ease;
         }
 
         .account-info {
@@ -223,8 +354,6 @@
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary);
         }
 
         .profile-menu a {
@@ -253,17 +382,7 @@
             color: white;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
             margin-top: 10px;
-        }
-
-        #logoutBtn:hover {
-            background: #e04848;
-            transform: translateY(-2px);
         }
 
         /* Sidebar */
@@ -278,7 +397,6 @@
             transition: all 0.3s ease;
             z-index: 2000;
             overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
 
         .sidebar.open {
@@ -299,21 +417,9 @@
         }
 
         .close-sidebar {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
             font-size: 24px;
-        }
-
-        .close-sidebar:hover {
-            background: rgba(255, 85, 85, 0.1);
-            color: #ff5555;
-            transform: rotate(90deg);
+            cursor: pointer;
+            padding: 8px;
         }
 
         .venaura-section {
@@ -325,14 +431,7 @@
             background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
             border-radius: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
             border: 1px solid var(--border-color);
-        }
-
-        .venaura-section:hover {
-            transform: translateX(5px);
-            border-color: var(--primary);
-            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2);
         }
 
         .venaura-icon {
@@ -345,28 +444,6 @@
             justify-content: center;
             font-size: 24px;
             color: white;
-        }
-
-        .venaura-info h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .venaura-info p {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .arrow-icon {
-            margin-left: auto;
-            font-size: 20px;
-            color: var(--primary);
-            transition: transform 0.3s ease;
-        }
-
-        .venaura-section:hover .arrow-icon {
-            transform: translateX(5px);
         }
 
         .sidebar-menu {
@@ -389,30 +466,15 @@
         .sidebar-menu li i {
             width: 24px;
             color: var(--primary);
-            font-size: 18px;
         }
 
         .sidebar-menu li:hover {
             background: var(--primary);
             color: white;
-            transform: translateX(5px);
-        }
-
-        .sidebar-menu li:hover i {
-            color: white;
-        }
-
-        .sidebar-menu li.active {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-            border-left: 3px solid var(--primary);
         }
 
         .sidebar-footer {
-            position: sticky;
-            bottom: 0;
             padding: 20px;
-            background: var(--bg-secondary);
             border-top: 1px solid var(--border-color);
             margin-top: auto;
         }
@@ -425,12 +487,6 @@
             background: var(--bg-tertiary);
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-theme:hover {
-            background: var(--primary);
-            color: white;
         }
 
         .sidebar-overlay {
@@ -444,7 +500,6 @@
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
-            backdrop-filter: blur(3px);
         }
 
         .sidebar-overlay.active {
@@ -462,27 +517,6 @@
             overflow: hidden;
         }
 
-        .tournaments-hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .tournaments-hero .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-
         .tournaments-hero h1 {
             font-size: 32px;
             margin-bottom: 12px;
@@ -494,7 +528,6 @@
         .tournaments-hero p {
             color: #9ca3af;
             margin-bottom: 24px;
-            font-size: 16px;
         }
 
         .hero-buttons {
@@ -533,7 +566,6 @@
 
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
         }
 
         /* Quick Actions */
@@ -558,7 +590,6 @@
         .action-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
         }
 
         .action-card i {
@@ -572,13 +603,8 @@
             margin-bottom: 8px;
         }
 
-        .action-card p {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
         /* Sections */
-        .featured-section, .active-section, .teams-section, .users-section {
+        .featured-section, .active-section, .teams-section {
             padding: 0 20px;
             margin-bottom: 40px;
         }
@@ -600,33 +626,27 @@
         .section-header a {
             color: var(--primary);
             text-decoration: none;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            cursor: pointer;
         }
 
-        /* Leagues Grid */
-        .leagues-grid, .teams-grid, .users-grid {
+        .leagues-grid, .teams-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
         }
 
-        /* League Card */
         .league-card {
             background: var(--bg-tertiary);
             border-radius: 16px;
             overflow: hidden;
-            transition: all 0.3s ease;
             border: 1px solid var(--border-color);
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .league-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
         }
 
         .league-header {
@@ -647,7 +667,6 @@
 
         .status-live { background: #10b981; color: white; }
         .status-registration { background: #f59e0b; color: white; }
-        .status-upcoming { background: #3b82f6; color: white; }
         .status-completed { background: #6b7280; color: white; }
 
         .league-icon {
@@ -658,11 +677,6 @@
         .league-header h3 {
             font-size: 18px;
             margin-bottom: 5px;
-        }
-
-        .league-game {
-            font-size: 12px;
-            color: #9ca3af;
         }
 
         .league-body {
@@ -692,12 +706,6 @@
             color: var(--text-secondary);
         }
 
-        .league-owner {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 10px;
-        }
-
         .league-footer {
             padding: 15px;
             border-top: 1px solid var(--border-color);
@@ -720,11 +728,6 @@
             color: white;
         }
 
-        .join-btn:hover {
-            background: var(--primary-dark);
-            transform: scale(1.02);
-        }
-
         .details-btn {
             background: transparent;
             border: 1px solid var(--border-color);
@@ -736,17 +739,6 @@
             color: var(--primary);
         }
 
-        .joined-btn {
-            flex: 1;
-            padding: 8px;
-            border-radius: 30px;
-            background: rgba(16, 185, 129, 0.2);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            cursor: default;
-        }
-
-        /* Team Card */
         .team-card {
             background: var(--bg-tertiary);
             border-radius: 16px;
@@ -754,9 +746,8 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
             cursor: pointer;
+            border: 1px solid var(--border-color);
         }
 
         .team-card:hover {
@@ -773,117 +764,27 @@
             align-items: center;
             justify-content: center;
             font-size: 30px;
-            overflow: hidden;
-        }
-
-        .team-info {
-            flex: 1;
         }
 
         .team-name {
             font-weight: 600;
             font-size: 16px;
-            margin-bottom: 4px;
         }
 
-        .team-stats {
-            display: flex;
-            gap: 15px;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        /* User Card */
-        .user-card {
-            background: var(--bg-tertiary);
-            border-radius: 16px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-        }
-
-        .user-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .user-name {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .user-stats {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        .challenge-btn {
-            padding: 6px 12px;
-            background: transparent;
-            border: 1px solid var(--primary);
-            border-radius: 20px;
-            color: var(--primary);
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .challenge-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .you-badge {
-            padding: 4px 10px;
-            background: rgba(16, 185, 129, 0.2);
-            border-radius: 20px;
-            font-size: 11px;
-            color: var(--primary);
-        }
-
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 40px;
             background: var(--bg-tertiary);
             border-radius: 16px;
-            border: 1px solid var(--border-color);
             color: var(--text-secondary);
         }
 
-        .empty-state i {
-            font-size: 48px;
-            color: var(--primary);
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
-        /* Toast */
         .toast-container {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10000;
-            pointer-events: none;
         }
 
         .toast {
@@ -892,15 +793,9 @@
             padding: 12px 24px;
             border-radius: 50px;
             font-weight: 600;
-            margin-top: 10px;
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            pointer-events: auto;
         }
 
         .toast.show {
@@ -910,190 +805,15 @@
 
         .toast.error {
             background: #ff5555;
+            color: white;
         }
 
-        .toast.info {
-            background: #3b82f6;
-        }
-
-        /* Footer */
         .footer {
             margin-top: auto;
             padding: 20px;
             background: var(--bg-secondary);
             border-top: 1px solid var(--border-color);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 13px;
-            transition: all 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary);
-        }
-
-        /* Notification Bell */
-        .notification-container {
-            position: relative;
-        }
-
-        .notification-bell {
-            position: relative;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            font-size: 20px;
-            color: var(--text-secondary);
-        }
-
-        .notification-bell:hover {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--primary);
-        }
-
-        .notification-count {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: #ff5555;
-            color: white;
-            font-size: 10px;
-            font-weight: 600;
-            min-width: 18px;
-            height: 18px;
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--bg-secondary);
-        }
-
-        .notification-popup {
-            position: absolute;
-            top: 45px;
-            right: -10px;
-            width: 320px;
-            background: var(--bg-secondary);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            padding: 15px;
-            z-index: 1000;
-            display: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .notification-popup.active {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        .notification-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 10px;
-        }
-
-        .notification-header h3 {
-            font-size: 16px;
-        }
-
-        #markAllRead {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--primary);
-            padding: 4px 10px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-
-        .notification-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .notification-item {
-            display: flex;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 5px;
-        }
-
-        .notification-item.unread {
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .notification-item:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .notification-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--bg-tertiary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .notification-content {
-            flex: 1;
-        }
-
-        .notification-title {
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 3px;
-        }
-
-        .notification-message {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .notification-time {
-            font-size: 10px;
-            color: var(--text-secondary);
-            opacity: 0.7;
-            margin-top: 3px;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            text-align: center;
         }
 
         /* Spin Modal */
@@ -1108,7 +828,6 @@
             z-index: 10000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(5px);
         }
 
         .spin-modal.active {
@@ -1120,21 +839,7 @@
             border-radius: 24px;
             width: 90%;
             max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
             border: 1px solid var(--border-color);
-            animation: modalSlideUp 0.3s ease;
-        }
-
-        @keyframes modalSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .spin-modal-header {
@@ -1145,21 +850,9 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .spin-modal-header h2 {
-            font-size: 20px;
-            color: var(--primary);
-        }
-
         .spin-close {
             font-size: 28px;
             cursor: pointer;
-            color: var(--text-secondary);
-            transition: all 0.3s ease;
-        }
-
-        .spin-close:hover {
-            color: #ff5555;
-            transform: rotate(90deg);
         }
 
         .spin-modal-body {
@@ -1167,32 +860,10 @@
             text-align: center;
         }
 
-        .spin-info {
-            background: var(--bg-tertiary);
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .spin-balance, .spin-cost {
-            font-size: 14px;
-        }
-
-        .spin-balance strong {
-            color: #fbbf24;
-            font-size: 18px;
-        }
-
-        .spin-cost strong {
-            color: var(--primary);
-        }
-
         .wheel-wrapper {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: 280px;
+            height: 280px;
             margin: 20px auto;
         }
 
@@ -1200,7 +871,6 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .wheel-pointer {
@@ -1210,8 +880,6 @@
             transform: translateX(-50%);
             font-size: 40px;
             color: #ff5555;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
-            z-index: 10;
         }
 
         .spin-wheel-btn {
@@ -1224,315 +892,190 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
             width: 100%;
         }
 
-        .spin-wheel-btn:hover:not(:disabled) {
-            transform: scale(1.02);
-            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .spin-wheel-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .prize-list-mini {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .prize-list-mini .prize-item {
-            background: var(--bg-tertiary);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .topbar {
-                padding: 0 16px;
-            }
-            
-            .brand h1 {
-                font-size: 18px;
-            }
-            
-            .tournaments-hero {
-                margin: 15px;
-                padding: 30px 20px;
-            }
-            
-            .tournaments-hero h1 {
-                font-size: 24px;
-            }
-            
-            .quick-actions {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-                padding: 0 15px;
-            }
-            
-            .action-card {
-                padding: 15px;
-            }
-            
-            .action-card i {
-                font-size: 30px;
-            }
-            
-            .action-card h3 {
-                font-size: 14px;
-            }
-            
-            .leagues-grid, .teams-grid, .users-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .veno-coins-display .coin-label {
-                display: none;
-            }
-            
-            .notification-popup {
-                width: 280px;
-                right: -5px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-            }
-            
-            .btn-primary, .btn-secondary {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .veno-coins-display {
-                display: none;
-            }
-            
-            .claim-veno-btn {
-                padding: 4px 8px;
-                font-size: 10px;
-            }
+            .tournaments-hero h1 { font-size: 24px; }
+            .quick-actions { grid-template-columns: repeat(2, 1fr); }
+            .leagues-grid, .teams-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-<div class="app">
-    <!-- TOPBAR -->
-    <header class="topbar">
-        <div class="menu" id="menuBtn">
-            <i class="bx bx-menu"></i>
+<!-- LOGIN CONTAINER -->
+<div id="loginContainer" class="login-container">
+    <div class="login-card">
+        <div class="logo-icon">
+            <i class="fas fa-trophy"></i>
         </div>
-        
-        <div class="brand">
-            <h1>🏆 Veno-Arena</h1>
-        </div>
-        
-        <div class="icons">
-            <!-- VENO COINS DISPLAY -->
-            <div class="veno-coins-container">
-                <div class="veno-coins-display">
-                    <i class="fas fa-coins"></i>
-                    <span id="venoCoinsAmount">0</span>
-                    <span class="coin-label">Veno Coins</span>
-                </div>
-                <button id="claimVenoCoinsBtn" class="claim-veno-btn">
-                    <i class="fas fa-gift"></i> Claim 10
-                </button>
-            </div>
+        <h1>Veno-Arena</h1>
+        <p class="tagline">Play Tournaments • Win Coins • Compete</p>
 
-            <!-- NOTIFICATION BELL -->
-            <div class="notification-container">
-                <div class="notification-bell" id="notificationBtn">
-                    <i class="bx bx-bell"></i>
-                    <span class="notification-count" id="notificationCount">0</span>
-                </div>
-                <div class="notification-popup" id="notificationPopup">
-                    <div class="notification-header">
-                        <h3>Notifications</h3>
-                        <button id="markAllRead">Mark all read</button>
-                    </div>
-                    <div class="notification-list" id="notificationList"></div>
-                </div>
-            </div>
+        <button class="google-btn" id="googleLoginBtn">
+            <i class="fab fa-google"></i> Continue with Google
+        </button>
 
-            <!-- PROFILE DROPDOWN -->
-            <div class="profile-dropdown" id="profileDropdown">
-                <img id="profileAvatarImg" class="profile-pic" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
-                <div class="profile-popup" id="profilePopup">
-                    <div class="account-info">
-                        <img id="popupProfileImg" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
-                        <div>
-                            <p id="profileNameDisplay">User Name</p>
-                            <p id="profileEmailDisplay">user@example.com</p>
-                        </div>
-                    </div>
-                    <div class="profile-menu">
-                        <a href="#" id="menuProfileSettings"><i class="bx bx-cog"></i> Settings</a>
-                        <a href="#" id="menuMyLeagues"><i class="bx bx-calendar-event"></i> My Leagues</a>
-                        <a href="#" id="menuMyTeams"><i class="bx bx-group"></i> My Teams</a>
-                    </div>
-                    <button id="logoutBtn"><i class="bx bx-log-out"></i> Logout</button>
-                </div>
-            </div>
-        </div>
-    </header>
+        <div class="divider"><span>OR</span></div>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h3>Menu</h3>
-            <span class="close-sidebar" id="closeSidebar"><i class="bx bx-x"></i></span>
-        </div>
-        
-        <div class="venaura-section" id="venauraIcon">
-            <div class="venaura-icon">
-                <i class="fas fa-trophy"></i>
+        <form id="loginForm">
+            <div class="login-form-group">
+                <input type="email" id="loginEmail" placeholder="Email address" required>
             </div>
-            <div class="venaura-info">
-                <h3>Venaura App</h3>
-                <p>Connect with Venaura</p>
+            <div class="login-form-group">
+                <input type="password" id="loginPassword" placeholder="Password" required>
             </div>
-            <i class="bx bx-right-arrow-alt arrow-icon"></i>
-        </div>
-        
-        <ul class="sidebar-menu">
-            <li id="menuHome"><i class="bx bx-home"></i> Home</li>
-            <li id="menuCreateLeague"><i class="bx bx-plus-circle"></i> Create League</li>
-            <li id="menuCreateTeam"><i class="bx bx-plus-circle"></i> Create Team</li>
-            <li id="menuMyLeaguesSidebar"><i class="bx bx-calendar-event"></i> My Leagues</li>
-            <li id="menuMyTeamsSidebar"><i class="bx bx-group"></i> My Teams</li>
-            <li id="menuLeaderboard"><i class="bx bx-bar-chart-alt-2"></i> Leaderboard</li>
-            <li id="menuProfileSettingsSidebar"><i class="bx bx-user-circle"></i> Profile Settings</li>
-        </ul>
-        
-        <div class="sidebar-footer">
-            <div class="sidebar-theme" id="menuTheme">
-                <span><i class="bx bx-palette"></i> Theme: <span id="themeLabel">Dark</span></span>
-                <div class="theme-toggle">
-                    <i class="bx bx-sun" style="display: none;"></i>
-                    <i class="bx bx-moon"></i>
-                </div>
-            </div>
-        </div>
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Login / Sign Up
+            </button>
+        </form>
     </div>
-    
-    <!-- SIDEBAR OVERLAY -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+</div>
 
-    <!-- MAIN CONTENT -->
-    <main class="tournaments-main">
-        <!-- Hero Section -->
-        <div class="tournaments-hero">
-            <div class="hero-content">
-                <h1>⚽ Football Leagues & Tournaments</h1>
-                <p>Create your own league, manage teams, and compete for Veno Coins!</p>
-                <div class="hero-buttons">
-                    <button class="btn-primary" id="createLeagueHeroBtn">
-                        <i class="fas fa-plus-circle"></i> Create League
+<!-- MAIN APP CONTAINER -->
+<div id="mainApp" class="main-app">
+    <div class="app">
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="menu" id="menuBtn">
+                <i class="bx bx-menu"></i>
+            </div>
+            <div class="brand">
+                <h1>🏆 Veno-Arena</h1>
+            </div>
+            <div class="icons">
+                <div class="veno-coins-container">
+                    <div class="veno-coins-display">
+                        <i class="fas fa-coins"></i>
+                        <span id="venoCoinsAmount">0</span>
+                        <span class="coin-label">Veno Coins</span>
+                    </div>
+                    <button id="claimVenoCoinsBtn" class="claim-veno-btn">
+                        <i class="fas fa-gift"></i> Claim 10
                     </button>
-                    <button class="btn-secondary" id="findLeaguesBtn">
-                        <i class="fas fa-search"></i> Find Leagues
-                    </button>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <img id="profileAvatarImg" class="profile-pic" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128">
+                    <div class="profile-popup" id="profilePopup">
+                        <div class="account-info">
+                            <img id="popupProfileImg">
+                            <div>
+                                <p id="profileNameDisplay"></p>
+                                <p id="profileEmailDisplay"></p>
+                            </div>
+                        </div>
+                        <div class="profile-menu">
+                            <a href="#" id="profileSettingsBtn"><i class="bx bx-cog"></i> Settings</a>
+                            <a href="#" id="myLeaguesBtn"><i class="bx bx-calendar-event"></i> My Leagues</a>
+                            <a href="#" id="myTeamsBtn"><i class="bx bx-group"></i> My Teams</a>
+                        </div>
+                        <button id="logoutBtn"><i class="bx bx-log-out"></i> Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+                <span class="close-sidebar" id="closeSidebar"><i class="bx bx-x"></i></span>
+            </div>
+            <div class="venaura-section" id="venauraIcon">
+                <div class="venaura-icon"><i class="fas fa-trophy"></i></div>
+                <div class="venaura-info"><h3>Venaura App</h3><p>Connect with Venaura</p></div>
+                <i class="bx bx-right-arrow-alt arrow-icon"></i>
+            </div>
+            <ul class="sidebar-menu">
+                <li id="sidebarHome"><i class="bx bx-home"></i> Home</li>
+                <li id="sidebarCreateLeague"><i class="bx bx-plus-circle"></i> Create League</li>
+                <li id="sidebarCreateTeam"><i class="bx bx-plus-circle"></i> Create Team</li>
+                <li id="sidebarMyLeagues"><i class="bx bx-calendar-event"></i> My Leagues</li>
+                <li id="sidebarMyTeams"><i class="bx bx-group"></i> My Teams</li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="sidebar-theme" id="menuTheme">
+                    <span><i class="bx bx-palette"></i> Theme: <span id="themeLabel">Dark</span></span>
                 </div>
             </div>
         </div>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <div class="action-card" id="createTeamCard">
-                <i class="fas fa-users"></i>
-                <h3>Create Team</h3>
-                <p>Build your dream team</p>
+        <!-- MAIN CONTENT -->
+        <main class="tournaments-main">
+            <div class="tournaments-hero">
+                <div class="hero-content">
+                    <h1>⚽ Football Leagues & Tournaments</h1>
+                    <p>Create your own league, manage teams, and compete for Veno Coins!</p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary" id="heroCreateLeagueBtn">
+                            <i class="fas fa-plus-circle"></i> Create League
+                        </button>
+                        <button class="btn-secondary" id="heroFindLeaguesBtn">
+                            <i class="fas fa-search"></i> Find Leagues
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="action-card" id="joinLeagueCard">
-                <i class="fas fa-door-open"></i>
-                <h3>Join League</h3>
-                <p>Browse and join leagues</p>
-            </div>
-            <div class="action-card" id="myLeaguesCard">
-                <i class="fas fa-calendar-check"></i>
-                <h3>My Leagues</h3>
-                <p>View your active leagues</p>
-            </div>
-            <div class="action-card" id="spinCard">
-                <i class="fas fa-chart-simple"></i>
-                <h3>Spin & Win</h3>
-                <p>Win up to 5000 Coins!</p>
-            </div>
-        </div>
 
-        <!-- Featured Leagues -->
-        <section class="featured-section">
-            <div class="section-header">
-                <h2><i class="fas fa-star"></i> Featured Leagues</h2>
-                <a href="#" id="viewAllLeagues">View All <i class="bx bx-chevron-right"></i></a>
+            <div class="quick-actions">
+                <div class="action-card" id="quickCreateTeam">
+                    <i class="fas fa-users"></i>
+                    <h3>Create Team</h3>
+                    <p>Build your dream team</p>
+                </div>
+                <div class="action-card" id="quickJoinLeague">
+                    <i class="fas fa-door-open"></i>
+                    <h3>Join League</h3>
+                    <p>Browse and join leagues</p>
+                </div>
+                <div class="action-card" id="quickMyLeagues">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>My Leagues</h3>
+                    <p>View your active leagues</p>
+                </div>
+                <div class="action-card" id="quickSpinWheel">
+                    <i class="fas fa-chart-simple"></i>
+                    <h3>Spin & Win</h3>
+                    <p>Win up to 5000 Coins!</p>
+                </div>
             </div>
-            <div class="leagues-grid" id="featuredLeagues">
-                <div class="empty-state">Loading leagues...</div>
-            </div>
-        </section>
 
-        <!-- Active Leagues -->
-        <section class="active-section">
-            <div class="section-header">
-                <h2><i class="fas fa-fire"></i> Active Leagues</h2>
-            </div>
-            <div class="leagues-grid" id="activeLeagues">
-                <div class="empty-state">Loading active leagues...</div>
-            </div>
-        </section>
+            <section class="featured-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-star"></i> Featured Leagues</h2>
+                    <a id="viewAllLeagues">View All <i class="bx bx-chevron-right"></i></a>
+                </div>
+                <div class="leagues-grid" id="featuredLeagues">
+                    <div class="empty-state">Loading leagues...</div>
+                </div>
+            </section>
 
-        <!-- My Teams Section -->
-        <section class="teams-section">
-            <div class="section-header">
-                <h2><i class="fas fa-users"></i> My Teams</h2>
-                <a href="#" id="viewAllTeams">View All <i class="bx bx-chevron-right"></i></a>
-            </div>
-            <div class="teams-grid" id="myTeams">
-                <div class="empty-state">Loading your teams...</div>
-            </div>
-        </section>
-        
-        <!-- All Users Section -->
-        <section class="users-section">
-            <div class="section-header">
-                <h2><i class="fas fa-users"></i> All Players</h2>
-            </div>
-            <div class="users-grid" id="allUsersList">
-                <div class="empty-state">Loading players...</div>
-            </div>
-        </section>
-    </main>
+            <section class="active-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-fire"></i> Active Leagues</h2>
+                </div>
+                <div class="leagues-grid" id="activeLeagues">
+                    <div class="empty-state">Loading active leagues...</div>
+                </div>
+            </section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-content">
+            <section class="teams-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-users"></i> My Teams</h2>
+                    <a id="viewAllTeams">View All <i class="bx bx-chevron-right"></i></a>
+                </div>
+                <div class="teams-grid" id="myTeams">
+                    <div class="empty-state">Loading your teams...</div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
             <p>Veno-Arena © 2026 | Play, Compete, Earn</p>
-            <div class="footer-links">
-                <a href="#">Terms</a>
-                <a href="#">Privacy</a>
-                <a href="#">Help</a>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 </div>
 
 <!-- Spin Wheel Modal -->
@@ -1544,8 +1087,8 @@
         </div>
         <div class="spin-modal-body">
             <div class="spin-info">
-                <div class="spin-balance"><i class="fas fa-coins"></i> Your Balance: <strong id="spinBalance">0</strong> Veno Coins</div>
-                <div class="spin-cost"><i class="fas fa-ticket-alt"></i> Cost per spin: <strong>200</strong> Veno Coins</div>
+                <div>Your Balance: <strong id="spinBalance">0</strong> Veno Coins</div>
+                <div>Cost per spin: <strong>200</strong> Veno Coins</div>
             </div>
             <div class="wheel-wrapper">
                 <canvas id="spinWheelCanvas" width="400" height="400"></canvas>
@@ -1554,33 +1097,20 @@
             <button class="spin-wheel-btn" id="spinWheelBtn">
                 <i class="fas fa-chart-simple"></i> SPIN (200 Coins)
             </button>
-            <div class="prize-list-mini">
-                <div class="prize-item">🏆 5000</div>
-                <div class="prize-item">⭐ 1000</div>
-                <div class="prize-item">🎁 500</div>
-                <div class="prize-item">🎫 200</div>
-                <div class="prize-item">🎖️ 100</div>
-                <div class="prize-item">✨ 50</div>
-            </div>
         </div>
     </div>
 </div>
 
-<!-- Toast Container -->
 <div id="toastContainer" class="toast-container"></div>
 
-<!-- Main Script -->
 <script type="module">
     // ===================== IMPORTS & CONFIG =====================
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { 
-        getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged 
+        getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword,
+        createUserWithEmailAndPassword, signOut, onAuthStateChanged 
     } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-    import { 
-        getFirestore, doc, setDoc, getDoc 
-    } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
-    // Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyBW0Sz7TODfa8tQJTfNUaLhfK9qJhdA1yE",
         authDomain: "crunck-app.firebaseapp.com",
@@ -1590,14 +1120,12 @@
         appId: "1:475953302982:web:607e08379adb12f985f6c7"
     };
 
-    // Initialize Firebase
-    const firebaseApp = initializeApp(firebaseConfig);
-    const auth = getAuth(firebaseApp);
-    const db = getFirestore(firebaseApp);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const googleProvider = new GoogleAuthProvider();
 
-    // Backend API URL
     const API_URL = 'https://crunck-backend.onrender.com';
+    let currentUser = null;
 
     // ===================== HELPER FUNCTIONS =====================
     async function getAuthToken() {
@@ -1621,21 +1149,11 @@
             });
             
             if (!response.ok) {
-                if (response.status === 401) {
-                    window.location.href = 'index.html';
-                    throw new Error('Session expired');
-                }
-                let errorMessage = `HTTP ${response.status}`;
-                try {
-                    const errorData = await response.json();
-                    errorMessage = errorData.error || errorMessage;
-                } catch (e) {}
-                throw new Error(errorMessage);
+                throw new Error(`HTTP ${response.status}`);
             }
-            
             return await response.json();
         } catch (error) {
-            console.error(`API Error [${endpoint}]:`, error);
+            console.error(`API Error:`, error);
             throw error;
         }
     }
@@ -1660,16 +1178,11 @@
         return div.innerHTML;
     }
 
-    function formatNumber(num) {
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-
     // ===================== COIN SERVICE =====================
     async function getUserCoins() {
-        const user = auth.currentUser;
-        if (!user) return 0;
+        if (!currentUser) return 0;
         try {
-            const data = await apiRequest(`/api/coins/${user.uid}`);
+            const data = await apiRequest(`/api/coins/${currentUser.uid}`);
             return data.balance;
         } catch (error) {
             return 0;
@@ -1677,10 +1190,9 @@
     }
 
     async function claimDailyCoins() {
-        const user = auth.currentUser;
-        if (!user) return { success: false, error: 'Not logged in' };
+        if (!currentUser) return { success: false };
         try {
-            const result = await apiRequest(`/api/coins/${user.uid}/claim`, { method: 'POST' });
+            const result = await apiRequest(`/api/coins/${currentUser.uid}/claim`, { method: 'POST' });
             return { success: true, amount: result.amount };
         } catch (error) {
             return { success: false, error: error.message };
@@ -1689,7 +1201,7 @@
 
     async function updateVenoCoinsDisplay() {
         const coinsSpan = document.getElementById('venoCoinsAmount');
-        if (coinsSpan && auth.currentUser) {
+        if (coinsSpan && currentUser) {
             const coins = await getUserCoins();
             coinsSpan.textContent = coins;
         }
@@ -1703,12 +1215,10 @@
         try {
             const leagues = await apiRequest('/api/leagues');
             container.innerHTML = '';
-            
             if (leagues.length === 0) {
                 container.innerHTML = '<div class="empty-state">No leagues yet. Create one!</div>';
                 return;
             }
-            
             leagues.slice(0, 6).forEach(league => {
                 container.appendChild(createLeagueCard(league));
             });
@@ -1724,12 +1234,10 @@
         try {
             const leagues = await apiRequest('/api/leagues?status=registration');
             container.innerHTML = '';
-            
             if (leagues.length === 0) {
                 container.innerHTML = '<div class="empty-state">No active leagues</div>';
                 return;
             }
-            
             leagues.slice(0, 3).forEach(league => {
                 container.appendChild(createLeagueCard(league));
             });
@@ -1740,35 +1248,31 @@
 
     async function loadMyTeams() {
         const container = document.getElementById('myTeams');
-        if (!container) return;
-        
-        if (!auth.currentUser) {
-            container.innerHTML = '<div class="empty-state">Please login to see your teams</div>';
-            return;
-        }
+        if (!container || !currentUser) return;
         
         try {
-            const teams = await apiRequest(`/api/teams/${auth.currentUser.uid}`);
+            const teams = await apiRequest(`/api/teams/${currentUser.uid}`);
             container.innerHTML = '';
-            
             if (teams.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-users"></i><p>You haven't created any teams yet</p><button class="btn-primary" onclick="window.location.href='team-create.html'">Create Your First Team</button></div>`;
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-users"></i><p>You haven't created any teams yet</p><button class="btn-primary" id="emptyCreateTeamBtn">Create Your First Team</button></div>`;
+                const emptyBtn = document.getElementById('emptyCreateTeamBtn');
+                if (emptyBtn) emptyBtn.onclick = () => window.location.href = 'team-create.html';
                 return;
             }
-            
             teams.forEach(team => {
-                container.appendChild(createTeamCard(team));
+                const card = document.createElement('div');
+                card.className = 'team-card';
+                card.onclick = () => window.location.href = `team-view.html?id=${team.id}`;
+                card.innerHTML = `
+                    <div class="team-logo">${team.logo ? `<img src="${team.logo}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-shield-alt"></i>'}</div>
+                    <div class="team-info"><div class="team-name">${escapeHtml(team.name)}</div><div class="team-stats"><span><i class="fas fa-trophy"></i> ${team.stats?.wins || 0} Wins</span></div></div>
+                    <i class="fas fa-chevron-right"></i>
+                `;
+                container.appendChild(card);
             });
         } catch (error) {
             container.innerHTML = '<div class="empty-state">Failed to load your teams</div>';
         }
-    }
-
-    async function loadAllUsers() {
-        const container = document.getElementById('allUsersList');
-        if (!container) return;
-        // Users endpoint would need to be added to backend
-        container.innerHTML = '<div class="empty-state">Players coming soon!</div>';
     }
 
     function createLeagueCard(league) {
@@ -1779,12 +1283,11 @@
         const teamCount = league.teams?.length || 0;
         const maxTeams = league.maxTeams || 16;
         const isFull = teamCount >= maxTeams;
-        const isOwner = auth.currentUser && league.ownerId === auth.currentUser.uid;
-        const hasJoined = league.teams?.some(t => t.ownerId === auth.currentUser?.uid);
+        const isOwner = currentUser && league.ownerId === currentUser.uid;
+        const hasJoined = league.teams?.some(t => t.ownerId === currentUser?.uid);
         
         const statusText = league.status === 'live' ? 'LIVE' : 
-                          league.status === 'registration' ? 'REGISTRATION OPEN' : 
-                          league.status === 'upcoming' ? 'UPCOMING' : 'COMPLETED';
+                          league.status === 'registration' ? 'REGISTRATION OPEN' : 'COMPLETED';
         
         card.innerHTML = `
             <div class="league-header">
@@ -1792,108 +1295,67 @@
                 <div class="league-icon"><i class="fas fa-futbol"></i></div>
                 <h3>${escapeHtml(league.name)}</h3>
                 <div class="league-game">${league.gameType || 'eFootball'}</div>
-                ${isOwner ? '<div class="owner-badge"><i class="fas fa-crown"></i> Your League</div>' : ''}
-                ${hasJoined ? '<div class="joined-badge"><i class="fas fa-check-circle"></i> Joined</div>' : ''}
             </div>
             <div class="league-body">
                 <div class="league-stats">
-                    <div class="stat"><div class="stat-value ${isFull ? 'full' : ''}">${teamCount}/${maxTeams}</div><div class="stat-label">Teams</div></div>
-                    <div class="stat"><div class="stat-value">${formatNumber(league.prizePool || 0)}</div><div class="stat-label">Prize Pool</div></div>
-                    <div class="stat"><div class="stat-value">${formatNumber(league.entryFee || 0)}</div><div class="stat-label">Entry Fee</div></div>
+                    <div class="stat"><div class="stat-value">${teamCount}/${maxTeams}</div><div class="stat-label">Teams</div></div>
+                    <div class="stat"><div class="stat-value">${league.prizePool || 0}</div><div class="stat-label">Prize Pool</div></div>
+                    <div class="stat"><div class="stat-value">${league.entryFee || 0}</div><div class="stat-label">Entry Fee</div></div>
                 </div>
                 <div class="league-owner"><i class="fas fa-user"></i> Created by: <strong>${escapeHtml(league.ownerName || 'Unknown')}</strong></div>
             </div>
             <div class="league-footer">
-                ${!isOwner && !hasJoined ? `<button class="join-btn" onclick="event.stopPropagation(); window.joinLeague('${league.id}')" ${isFull ? 'disabled' : ''}><i class="fas fa-sign-in-alt"></i> ${isFull ? 'League Full' : 'Join League'} (${league.entryFee} VC)</button>` : hasJoined ? `<button class="joined-btn" disabled><i class="fas fa-check-circle"></i> Joined</button>` : ''}
+                ${!isOwner && !hasJoined ? `<button class="join-btn" onclick="event.stopPropagation(); joinLeague('${league.id}')" ${isFull ? 'disabled' : ''}><i class="fas fa-sign-in-alt"></i> ${isFull ? 'League Full' : 'Join League'} (${league.entryFee} VC)</button>` : hasJoined ? `<button class="joined-btn" disabled style="background:rgba(16,185,129,0.2);border:1px solid var(--primary);color:var(--primary);padding:8px;border-radius:30px;">Already Joined</button>` : ''}
                 <button class="details-btn" onclick="event.stopPropagation(); window.location.href='league-view.html?id=${league.id}'"><i class="fas fa-info-circle"></i> Details</button>
             </div>
         `;
         return card;
     }
 
-    function createTeamCard(team) {
-        const card = document.createElement('div');
-        card.className = 'team-card';
-        card.onclick = () => window.location.href = `team-view.html?id=${team.id}`;
-        card.innerHTML = `
-            <div class="team-logo">${team.logo ? `<img src="${team.logo}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-shield-alt"></i>'}</div>
-            <div class="team-info"><div class="team-name">${escapeHtml(team.name)}</div><div class="team-stats"><span><i class="fas fa-trophy"></i> ${team.stats?.wins || 0} Wins</span><span><i class="fas fa-futbol"></i> ${team.stats?.matchesPlayed || 0} Matches</span></div></div>
-            <i class="fas fa-chevron-right"></i>
-        `;
-        return card;
-    }
-
-    // ===================== DAILY CLAIM BUTTON =====================
-    function initClaimButton() {
-        const claimBtn = document.getElementById('claimVenoCoinsBtn');
-        if (!claimBtn) return;
-        
-        const LAST_CLAIM_KEY = 'lastVenoClaim_' + (auth.currentUser?.uid || 'anonymous');
-        
-        function canClaim() {
-            const last = localStorage.getItem(LAST_CLAIM_KEY);
-            if (!last) return true;
-            return (Date.now() - parseInt(last)) >= 24 * 60 * 60 * 1000;
+    // ===================== JOIN LEAGUE FUNCTION =====================
+    window.joinLeague = async function(leagueId) {
+        if (!currentUser) {
+            showToast('Please login first', 'error');
+            return;
         }
         
-        function updateClaimButton() {
-            if (canClaim()) {
-                claimBtn.disabled = false;
-                claimBtn.innerHTML = '<i class="fas fa-gift"></i> Claim 10';
-                claimBtn.style.opacity = '1';
-            } else {
-                claimBtn.disabled = true;
-                const lastClaim = parseInt(localStorage.getItem(LAST_CLAIM_KEY));
-                const timeLeft = 24 * 60 * 60 * 1000 - (Date.now() - lastClaim);
-                const hoursLeft = Math.floor(timeLeft / (60 * 60 * 1000));
-                const minutesLeft = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
-                claimBtn.innerHTML = `<i class="fas fa-clock"></i> ${hoursLeft}h ${minutesLeft}m left`;
-                claimBtn.style.opacity = '0.6';
-            }
-        }
-        
-        claimBtn.addEventListener('click', async () => {
-            if (!auth.currentUser) {
-                showToast('Please login first', 'error');
-                window.location.href = 'index.html';
+        try {
+            const league = await apiRequest(`/api/leagues/${leagueId}`);
+            const userCoins = await getUserCoins();
+            
+            if (league.entryFee > userCoins) {
+                showToast(`Need ${league.entryFee} Veno Coins to join! You have ${userCoins}`, 'error');
                 return;
             }
             
-            if (!canClaim()) {
-                showToast('Already claimed! Come back tomorrow', 'error');
-                return;
-            }
-            
-            claimBtn.disabled = true;
-            claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Claiming...';
-            
-            const result = await claimDailyCoins();
+            const displayName = currentUser.displayName || 'Player';
+            const result = await apiRequest(`/api/leagues/${leagueId}/join`, {
+                method: 'POST',
+                body: JSON.stringify({ teamName: `${displayName}'s Team` })
+            });
             
             if (result.success) {
-                localStorage.setItem(LAST_CLAIM_KEY, Date.now().toString());
                 await updateVenoCoinsDisplay();
-                showToast(`🎉 You claimed ${result.amount} Veno Coins!`, 'success');
-                updateClaimButton();
+                showToast(`Successfully joined ${league.name}!`, 'success');
+                loadFeaturedLeagues();
+                loadActiveLeagues();
             } else {
-                showToast(result.error || 'Failed to claim', 'error');
-                claimBtn.disabled = false;
-                claimBtn.innerHTML = '<i class="fas fa-gift"></i> Claim 10';
+                showToast(result.error, 'error');
             }
-        });
-        
-        updateClaimButton();
-        setInterval(updateClaimButton, 60000);
-    }
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+    };
 
     // ===================== SPIN WHEEL =====================
     let spinCanvas = null, spinCtx = null, spinRotation = 0, isSpinning = false;
     const spinPrizes = [
-        { name: "50 Coins", value: 50, color: "#3b82f6", chance: 34 },
-        { name: "100 Coins", value: 100, color: "#10b981", chance: 30 },
-        { name: "200 Coins", value: 200, color: "#f59e0b", chance: 20 },
-        { name: "500 Coins", value: 500, color: "#8b5cf6", chance: 10 },
-        { name: "1000 Coins", value: 1000, color: "#ec489a", chance: 5 },
-        { name: "5000 Coins", value: 5000, color: "#ef4444", chance: 1 }
+        { name: "50", value: 50, color: "#3b82f6" },
+        { name: "100", value: 100, color: "#10b981" },
+        { name: "200", value: 200, color: "#f59e0b" },
+        { name: "500", value: 500, color: "#8b5cf6" },
+        { name: "1000", value: 1000, color: "#ec489a" },
+        { name: "5000", value: 5000, color: "#ef4444" }
     ];
 
     function drawSpinWheel() {
@@ -1920,8 +1382,8 @@
             spinCtx.rotate(startAngle + anglePerSlice/2);
             spinCtx.textAlign = "center";
             spinCtx.fillStyle = "white";
-            spinCtx.font = "bold 12px Arial";
-            spinCtx.fillText(spinPrizes[i].name, radius * 0.65, 8);
+            spinCtx.font = "bold 14px Arial";
+            spinCtx.fillText(spinPrizes[i].name + " Coins", radius * 0.65, 8);
             spinCtx.restore();
         }
         spinCtx.beginPath();
@@ -1943,23 +1405,12 @@
     }
 
     async function doSpin() {
-        if (isSpinning) return;
+        if (isSpinning || !currentUser) return;
         const coins = await getUserCoins();
         if (coins < 200) {
             showToast(`Need 200 Veno Coins! You have ${coins}.`, "error");
             return;
         }
-        
-        showToast(`🎰 Spinning... 200 coins deducted!`, "info");
-        
-        // Deduct coins via backend
-        try {
-            await apiRequest(`/api/coins/${auth.currentUser.uid}/claim?spin=true`, { method: 'POST' });
-        } catch(e) {}
-        
-        await updateVenoCoinsDisplay();
-        const spinBalanceSpan = document.getElementById('spinBalance');
-        if (spinBalanceSpan) spinBalanceSpan.innerText = await getUserCoins();
         
         isSpinning = true;
         const spinBtn = document.getElementById('spinWheelBtn');
@@ -1982,268 +1433,231 @@
                 spinRotation = targetRotation % (Math.PI * 2);
                 drawSpinWheel();
                 const prize = getSpinPrize();
-                
-                // Add coins via backend
-                apiRequest(`/api/coins/${auth.currentUser.uid}/add`, {
-                    method: 'POST',
-                    body: JSON.stringify({ amount: prize.value, reason: 'spin_win' })
-                }).catch(console.error);
-                
-                updateVenoCoinsDisplay();
-                const netChange = prize.value - 200;
-                if (netChange > 0) showToast(`🎉 You won ${prize.value} coins! +${netChange}!`, "success");
-                else if (netChange === 0) showToast(`🎁 You won ${prize.value} coins! You got your coins back!`, "success");
-                else showToast(`✨ You won ${prize.value} coins! Net loss: ${netChange}.`, "info");
-                
-                const resultDiv = document.createElement('div');
-                resultDiv.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:var(--bg-secondary);border-radius:24px;padding:30px;text-align:center;z-index:10001;transition:transform 0.3s ease;border:2px solid var(--primary);min-width:280px;';
-                resultDiv.innerHTML = `<div style="font-size:60px;margin-bottom:15px;">${prize.value >= 1000 ? '🏆' : prize.value >= 500 ? '⭐' : '🎁'}</div><h3>${prize.value >= 1000 ? 'JACKPOT!' : 'You Won!'}</h3><div style="font-size:36px;font-weight:bold;color:#fbbf24;margin:10px 0;">+${prize.value} Coins</div><button style="margin-top:15px;padding:8px 25px;background:var(--primary);border:none;border-radius:25px;color:white;cursor:pointer;" onclick="this.parentElement.remove()">Continue</button>`;
-                document.body.appendChild(resultDiv);
-                setTimeout(() => resultDiv.style.transform = 'translate(-50%,-50%) scale(1)', 10);
-                
-                if (prize.value >= 1000) {
-                    for (let i = 0; i < 80; i++) {
-                        const confetti = document.createElement('div');
-                        confetti.style.cssText = `position:fixed; width:10px; height:10px; background:hsl(${Math.random()*360},100%,50%); left:${Math.random()*window.innerWidth}px; top:-10px; border-radius:50%; pointer-events:none; z-index:10002;`;
-                        document.body.appendChild(confetti);
-                        confetti.animate([{ transform: `translateY(0) rotate(0deg)`, opacity: 1 }, { transform: `translateY(${window.innerHeight}px) rotate(${Math.random()*360}deg)`, opacity: 0 }], { duration: 1500 + Math.random()*1000, easing: 'cubic-bezier(0.2,0.8,0.3,1)' }).onfinish = () => confetti.remove();
-                    }
-                }
+                showToast(`🎉 You won ${prize.value} Veno Coins!`, "success");
                 isSpinning = false;
                 if (spinBtn) spinBtn.disabled = false;
+                updateVenoCoinsDisplay();
+                document.getElementById('spinBalance').innerText = await getUserCoins();
             }
         }
         requestAnimationFrame(animate);
     }
 
-    // ===================== AUTH & INITIALIZATION =====================
+    // ===================== DAILY CLAIM =====================
+    function initClaimButton() {
+        const claimBtn = document.getElementById('claimVenoCoinsBtn');
+        if (!claimBtn) return;
+        
+        const LAST_CLAIM_KEY = 'lastVenoClaim_' + (currentUser?.uid || 'anonymous');
+        
+        function canClaim() {
+            const last = localStorage.getItem(LAST_CLAIM_KEY);
+            if (!last) return true;
+            return (Date.now() - parseInt(last)) >= 24 * 60 * 60 * 1000;
+        }
+        
+        function updateClaimButton() {
+            if (canClaim()) {
+                claimBtn.disabled = false;
+                claimBtn.innerHTML = '<i class="fas fa-gift"></i> Claim 10';
+            } else {
+                claimBtn.disabled = true;
+                const lastClaim = parseInt(localStorage.getItem(LAST_CLAIM_KEY));
+                const timeLeft = 24 * 60 * 60 * 1000 - (Date.now() - lastClaim);
+                const hoursLeft = Math.floor(timeLeft / (60 * 60 * 1000));
+                claimBtn.innerHTML = `<i class="fas fa-clock"></i> ${hoursLeft}h left`;
+            }
+        }
+        
+        claimBtn.addEventListener('click', async () => {
+            if (!canClaim()) {
+                showToast('Already claimed! Come back tomorrow', 'error');
+                return;
+            }
+            const result = await claimDailyCoins();
+            if (result.success) {
+                localStorage.setItem(LAST_CLAIM_KEY, Date.now().toString());
+                await updateVenoCoinsDisplay();
+                showToast(`🎉 You claimed ${result.amount} Veno Coins!`, 'success');
+                updateClaimButton();
+            } else {
+                showToast(result.error || 'Failed to claim', 'error');
+            }
+        });
+        updateClaimButton();
+        setInterval(updateClaimButton, 60000);
+    }
+
+    // ===================== AUTH & UI =====================
     async function updateProfileUI(user) {
         const displayName = user.displayName || user.email || 'Player';
         const avatarUrl = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=10b981&color=fff&size=128`;
         
-        const profileAvatar = document.getElementById('profileAvatarImg');
-        const popupAvatar = document.getElementById('popupProfileImg');
-        const profileNameSpan = document.getElementById('profileNameDisplay');
-        const profileEmailSpan = document.getElementById('profileEmailDisplay');
-        
-        if (profileAvatar) profileAvatar.src = avatarUrl;
-        if (popupAvatar) popupAvatar.src = avatarUrl;
-        if (profileNameSpan) profileNameSpan.innerText = displayName;
-        if (profileEmailSpan) profileEmailSpan.innerText = user.email || '';
+        document.getElementById('profileAvatarImg').src = avatarUrl;
+        document.getElementById('popupProfileImg').src = avatarUrl;
+        document.getElementById('profileNameDisplay').innerText = displayName;
+        document.getElementById('profileEmailDisplay').innerText = user.email || '';
     }
 
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            console.log('✅ User logged in:', user.displayName || user.email);
-            await updateProfileUI(user);
-            await updateVenoCoinsDisplay();
-            await loadMyTeams();
-            initClaimButton();
-        } else {
-            console.log('👤 User not logged in, redirecting to login...');
-            window.location.href = 'index.html';
-        }
-    });
+    function showMainApp() {
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('mainApp').classList.add('active');
+    }
 
-    // Initialize page
-    document.addEventListener('DOMContentLoaded', async () => {
-        await loadFeaturedLeagues();
-        await loadActiveLeagues();
-        await loadAllUsers();
-        
-        // If user is already logged in
-        if (auth.currentUser) {
-            await updateVenoCoinsDisplay();
-            await loadMyTeams();
-            initClaimButton();
-        }
-    });
+    function showLogin() {
+        document.getElementById('loginContainer').style.display = 'flex';
+        document.getElementById('mainApp').classList.remove('active');
+    }
 
     // ===================== EVENT LISTENERS =====================
+    // Login
+    document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            currentUser = result.user;
+            await updateProfileUI(currentUser);
+            await updateVenoCoinsDisplay();
+            initClaimButton();
+            showMainApp();
+            loadFeaturedLeagues();
+            loadActiveLeagues();
+            loadMyTeams();
+            showToast(`Welcome ${currentUser.displayName || currentUser.email}!`, 'success');
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        try {
+            let userCredential;
+            try {
+                userCredential = await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                if (error.code === 'auth/user-not-found') {
+                    userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                } else {
+                    throw error;
+                }
+            }
+            currentUser = userCredential.user;
+            await updateProfileUI(currentUser);
+            await updateVenoCoinsDisplay();
+            initClaimButton();
+            showMainApp();
+            loadFeaturedLeagues();
+            loadActiveLeagues();
+            loadMyTeams();
+            showToast(`Welcome ${currentUser.displayName || currentUser.email}!`, 'success');
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+    });
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await signOut(auth);
+        currentUser = null;
+        showLogin();
+        showToast('Logged out successfully', 'success');
+    });
+
     // Sidebar
     const menuBtn = document.getElementById('menuBtn');
     const sidebar = document.getElementById('sidebar');
     const closeSidebar = document.getElementById('closeSidebar');
     const overlay = document.getElementById('sidebarOverlay');
     
-    if (menuBtn && sidebar) {
-        menuBtn.addEventListener('click', () => {
-            sidebar.classList.add('open');
-            if (overlay) overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-        
-        const closeFunc = () => {
-            sidebar.classList.remove('open');
-            if (overlay) overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        };
-        
-        if (closeSidebar) closeSidebar.addEventListener('click', closeFunc);
-        if (overlay) overlay.addEventListener('click', closeFunc);
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && sidebar.classList.contains('open')) closeFunc();
-        });
-    }
+    menuBtn.addEventListener('click', () => {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+    });
     
-    // Navigation
-    const navItems = {
-        menuHome: 'index.html',
-        menuCreateLeague: 'league-create.html',
-        menuCreateTeam: 'team-create.html',
-        menuMyLeaguesSidebar: 'my-leagues.html',
-        menuMyTeamsSidebar: 'teams.html',
-        menuLeaderboard: 'leaderboard.html',
-        menuProfileSettingsSidebar: 'profile-settings.html',
-        menuProfileSettings: 'profile-settings.html',
-        menuMyLeagues: 'my-leagues.html',
-        menuMyTeams: 'teams.html'
+    const closeFunc = () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
     };
+    closeSidebar.addEventListener('click', closeFunc);
+    overlay.addEventListener('click', closeFunc);
+
+    // Navigation Buttons
+    document.getElementById('sidebarHome').onclick = () => window.location.reload();
+    document.getElementById('sidebarCreateLeague').onclick = () => window.location.href = 'league-create.html';
+    document.getElementById('sidebarCreateTeam').onclick = () => window.location.href = 'team-create.html';
+    document.getElementById('sidebarMyLeagues').onclick = () => window.location.href = 'my-leagues.html';
+    document.getElementById('sidebarMyTeams').onclick = () => window.location.href = 'teams.html';
+    document.getElementById('profileSettingsBtn').onclick = () => window.location.href = 'profile-settings.html';
+    document.getElementById('myLeaguesBtn').onclick = () => window.location.href = 'my-leagues.html';
+    document.getElementById('myTeamsBtn').onclick = () => window.location.href = 'teams.html';
+    document.getElementById('heroCreateLeagueBtn').onclick = () => window.location.href = 'league-create.html';
+    document.getElementById('heroFindLeaguesBtn').onclick = () => document.querySelector('.featured-section').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('quickCreateTeam').onclick = () => window.location.href = 'team-create.html';
+    document.getElementById('quickJoinLeague').onclick = () => document.querySelector('.featured-section').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('quickMyLeagues').onclick = () => window.location.href = 'my-leagues.html';
+    document.getElementById('viewAllLeagues').onclick = () => window.location.href = 'my-leagues.html';
+    document.getElementById('viewAllTeams').onclick = () => window.location.href = 'teams.html';
     
-    for (const [id, url] of Object.entries(navItems)) {
-        const element = document.getElementById(id);
-        if (element) element.addEventListener('click', () => window.location.href = url);
-    }
+    // Venaura
+    document.getElementById('venauraIcon').onclick = () => window.open('https://venauraai.netlify.app/', '_blank');
     
-    // Venaura link
-    const venauraIcon = document.getElementById('venauraIcon');
-    if (venauraIcon) {
-        venauraIcon.addEventListener('click', () => window.open('https://venauraai.netlify.app/', '_blank'));
-    }
-    
-    // Profile dropdown
-    const profileDropdown = document.getElementById('profileDropdown');
-    const profilePopup = document.getElementById('profilePopup');
-    if (profileDropdown && profilePopup) {
-        profileDropdown.addEventListener('click', (e) => {
-            e.stopPropagation();
-            profilePopup.classList.toggle('active');
-        });
-        document.addEventListener('click', () => profilePopup?.classList.remove('active'));
-    }
-    
-    // Logout
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', async () => {
-            await signOut(auth);
-            localStorage.removeItem('crunkUser');
-            window.location.href = 'index.html';
-        });
-    }
-    
-    // Theme toggle
-    const menuTheme = document.getElementById('menuTheme');
-    const themeLabel = document.getElementById('themeLabel');
-    if (menuTheme) {
-        menuTheme.addEventListener('click', () => {
-            document.body.classList.toggle('light-theme');
-            const isLight = document.body.classList.contains('light-theme');
-            if (themeLabel) themeLabel.innerText = isLight ? 'Light' : 'Dark';
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        });
-    }
+    // Theme
+    document.getElementById('menuTheme').onclick = () => {
+        document.body.classList.toggle('light-theme');
+        const isLight = document.body.classList.contains('light-theme');
+        document.getElementById('themeLabel').innerText = isLight ? 'Light' : 'Dark';
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    };
     
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
         document.body.classList.add('light-theme');
-        if (themeLabel) themeLabel.innerText = 'Light';
+        document.getElementById('themeLabel').innerText = 'Light';
     }
     
-    // Hero buttons
-    const createLeagueHeroBtn = document.getElementById('createLeagueHeroBtn');
-    const findLeaguesBtn = document.getElementById('findLeaguesBtn');
-    const createTeamCard = document.getElementById('createTeamCard');
-    const joinLeagueCard = document.getElementById('joinLeagueCard');
-    const myLeaguesCard = document.getElementById('myLeaguesCard');
-    const spinCard = document.getElementById('spinCard');
-    
-    if (createLeagueHeroBtn) createLeagueHeroBtn.addEventListener('click', () => window.location.href = 'league-create.html');
-    if (findLeaguesBtn) findLeaguesBtn.addEventListener('click', () => document.querySelector('.featured-section')?.scrollIntoView({ behavior: 'smooth' }));
-    if (createTeamCard) createTeamCard.addEventListener('click', () => window.location.href = 'team-create.html');
-    if (joinLeagueCard) joinLeagueCard.addEventListener('click', () => document.querySelector('.featured-section')?.scrollIntoView({ behavior: 'smooth' }));
-    if (myLeaguesCard) myLeaguesCard.addEventListener('click', () => window.location.href = 'my-leagues.html');
-    
-    // Spin wheel
-    if (spinCard) {
-        spinCard.addEventListener('click', async () => {
-            const modal = document.getElementById('spinModal');
-            if (modal) {
-                modal.style.display = 'flex';
-                const balanceSpan = document.getElementById('spinBalance');
-                if (balanceSpan) balanceSpan.innerText = await getUserCoins();
-                setTimeout(() => {
-                    spinCanvas = document.getElementById('spinWheelCanvas');
-                    if (spinCanvas) drawSpinWheel();
-                }, 100);
-            }
-        });
-    }
-    
+    // Spin Wheel
+    const spinCard = document.getElementById('quickSpinWheel');
     const spinModal = document.getElementById('spinModal');
-    const spinClose = document.querySelector('.spin-close');
-    if (spinClose) spinClose.addEventListener('click', () => spinModal.style.display = 'none');
-    if (spinModal) spinModal.addEventListener('click', (e) => { if (e.target === spinModal) spinModal.style.display = 'none'; });
-    
-    const spinBtn = document.getElementById('spinWheelBtn');
-    if (spinBtn) spinBtn.addEventListener('click', doSpin);
-    
-    // Notification bell
-    const notificationBtn = document.getElementById('notificationBtn');
-    const notificationPopup = document.getElementById('notificationPopup');
-    if (notificationBtn && notificationPopup) {
-        notificationBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            notificationPopup.classList.toggle('active');
-        });
-        document.addEventListener('click', () => notificationPopup.classList.remove('active'));
-    }
-    
-    const markAllRead = document.getElementById('markAllRead');
-    if (markAllRead) {
-        markAllRead.addEventListener('click', () => {
-            localStorage.setItem('notifications', JSON.stringify([]));
-            document.getElementById('notificationList').innerHTML = '<div class="empty-state">No notifications</div>';
-            document.getElementById('notificationCount').style.display = 'none';
-        });
-    }
-    
-    // Make joinLeague global
-    window.joinLeague = async function(leagueId) {
-        if (!auth.currentUser) {
-            showToast('Please login first', 'error');
-            window.location.href = 'index.html';
-            return;
-        }
-        
-        try {
-            const league = await apiRequest(`/api/leagues/${leagueId}`);
-            const userCoins = await getUserCoins();
-            
-            if (league.entryFee > userCoins) {
-                showToast(`Need ${league.entryFee} Veno Coins to join! You have ${userCoins}`, 'error');
-                return;
-            }
-            
-            const displayName = auth.currentUser.displayName || 'Player';
-            const result = await apiRequest(`/api/leagues/${leagueId}/join`, {
-                method: 'POST',
-                body: JSON.stringify({ teamName: `${displayName}'s Team` })
-            });
-            
-            if (result.success) {
-                await updateVenoCoinsDisplay();
-                showToast(`Successfully joined ${league.name}!`, 'success');
-                location.reload();
-            } else {
-                showToast(result.error, 'error');
-            }
-        } catch (error) {
-            showToast(error.message, 'error');
-        }
+    spinCard.onclick = async () => {
+        spinModal.classList.add('active');
+        document.getElementById('spinBalance').innerText = await getUserCoins();
+        setTimeout(() => {
+            spinCanvas = document.getElementById('spinWheelCanvas');
+            drawSpinWheel();
+        }, 100);
     };
+    document.querySelector('.spin-close').onclick = () => spinModal.classList.remove('active');
+    spinModal.onclick = (e) => { if (e.target === spinModal) spinModal.classList.remove('active'); };
+    document.getElementById('spinWheelBtn').onclick = doSpin;
     
-    window.showToast = showToast;
+    // Profile dropdown
+    const profileDropdown = document.getElementById('profileDropdown');
+    const profilePopup = document.getElementById('profilePopup');
+    profileDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profilePopup.classList.toggle('active');
+    });
+    document.addEventListener('click', () => profilePopup.classList.remove('active'));
+    
+    // Auth state
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUser = user;
+            await updateProfileUI(user);
+            await updateVenoCoinsDisplay();
+            initClaimButton();
+            showMainApp();
+            loadFeaturedLeagues();
+            loadActiveLeagues();
+            loadMyTeams();
+        } else {
+            currentUser = null;
+            showLogin();
+        }
+    });
     
     console.log('✅ Veno-Arena connected to backend at', API_URL);
 </script>
