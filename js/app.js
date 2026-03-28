@@ -34,7 +34,7 @@ const storage = getStorage(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
 // ===================== BACKEND API CONFIG =====================
-const API_URL = 'https://crunck-backend.onrender.com';
+const API_URL = 'https://arena-backend-cv5d.onrender.com';
 
 async function getAuthToken() {
     const user = auth.currentUser;
