@@ -3,747 +3,1327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Crunk Games - Complete Web App</title>
+    <title>Veno-Arena - Gaming Platform</title>
     
     <!-- External Libraries -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#10b981">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Veno-Arena">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Play tournaments, create teams, and earn Veno Coins!">
+    <meta property="og:title" content="Veno-Arena">
+    <meta property="og:description" content="Play tournaments, create teams, and earn Veno Coins!">
+    <meta property="og:image" content="https://rajola-ceo.github.io/icon-512x512.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
     <style>
-        /* ================== GLOBAL VARIABLES & RESET ================== */
-        :root {
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --primary-light: #34d399;
-            --bg-primary: #05070d;
-            --bg-secondary: #0b1222;
-            --bg-tertiary: #111827;
-            --border-color: #1f2937;
-            --text-primary: #e6e6e6;
-            --text-secondary: #9ca3af;
-            --text-muted: #6b7280;
-            --success: #10b981;
-            --error: #ef4444;
-            --warning: #f59e0b;
-            --info: #3b82f6;
-            --transition: all 0.3s ease;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow-x: hidden;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.5;
-        }
-
-        .app {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* ================== TOPBAR ================== */
-        .topbar {
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .brand h1 {
-            font-size: 24px;
-            color: var(--primary);
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .menu-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: var(--primary);
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .menu-btn:hover {
-            background: rgba(16, 185, 129, 0.1);
-            transform: scale(1.1);
-        }
-
-        .icons {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .veno-coins-display {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(16, 185, 129, 0.1);
-            padding: 8px 16px;
-            border-radius: 40px;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-
-        .veno-coins-display i {
-            color: #fbbf24;
-            font-size: 18px;
-        }
-
-        .veno-coins-display span {
-            font-weight: 700;
-            font-size: 16px;
-            color: var(--primary);
-        }
-
-        .profile-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .profile-pic:hover {
-            transform: scale(1.05);
-        }
-
-        /* ================== SIDEBAR ================== */
-        .sidebar {
-            position: fixed;
-            left: -300px;
-            top: 0;
-            width: 280px;
-            height: 100vh;
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border-color);
-            transition: var(--transition);
-            z-index: 2000;
-            overflow-y: auto;
-        }
-
-        .sidebar.open {
-            left: 0;
-        }
-
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .sidebar-header h3 {
-            color: var(--primary);
-            font-size: 20px;
-        }
-
-        .close-sidebar {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: var(--transition);
-            padding: 8px;
-            border-radius: 50%;
-        }
-
-        .close-sidebar:hover {
-            color: #ff5555;
-            transform: rotate(90deg);
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 10px 15px;
-        }
-
-        .sidebar-menu li {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-bottom: 5px;
-        }
-
-        .sidebar-menu li:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .sidebar-menu li i {
-            width: 24px;
-            color: var(--primary);
-        }
-
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1999;
-            display: none;
-            backdrop-filter: blur(3px);
-        }
-
-        .sidebar-overlay.active {
-            display: block;
-        }
-
-        /* ================== MAIN CONTENT ================== */
-        main {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .hero {
-            background: linear-gradient(135deg, #1a2a3a, #0f172a);
-            border-radius: 24px;
-            padding: 40px;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 36px;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            color: var(--text-secondary);
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* ================== GRID & CARDS ================== */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
-        }
-
-        .card-header {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .card-meta {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-        }
-
-        .meta-item {
-            background: var(--bg-secondary);
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
-        .card-footer {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .card-footer button {
-            flex: 1;
-            padding: 8px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        /* ================== FORMS ================== */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-
-        /* ================== MODAL ================== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--bg-primary);
-            border-radius: 24px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid var(--border-color);
-            padding: 30px;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .modal-header h2 {
-            font-size: 20px;
-            color: var(--primary);
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .modal-close:hover {
-            color: #ff5555;
-        }
-
-        /* ================== TABS ================== */
-        .tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .tab-btn {
-            padding: 12px 24px;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-weight: 600;
-            cursor: pointer;
-            position: relative;
-            transition: var(--transition);
-        }
-
-        .tab-btn.active {
-            color: var(--primary);
-        }
-
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--primary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* ================== NOTIFICATIONS & TOASTS ================== */
-        .toast-container {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10000;
-        }
-
-        .toast {
-            background: var(--primary);
-            color: var(--bg-primary);
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            margin-top: 10px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .toast.error {
-            background: var(--error);
-        }
-
-        .toast.warning {
-            background: var(--warning);
-        }
-
-        .toast.info {
-            background: var(--info);
-        }
-
-        /* ================== RESPONSIVE ================== */
-        @media (max-width: 768px) {
-            .topbar {
-                padding: 0 16px;
-            }
-
-            .brand h1 {
-                font-size: 18px;
-            }
-
-            .hero {
-                padding: 30px 20px;
-            }
-
-            .hero h1 {
-                font-size: 24px;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-content {
-                width: 95%;
-            }
-
-            main {
-                padding: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .topbar {
-                height: 55px;
-                padding: 0 12px;
-            }
-
-            .brand h1 {
-                font-size: 16px;
-            }
-
-            .icons {
-                gap: 10px;
-            }
-
-            .veno-coins-display {
-                padding: 6px 12px;
-                font-size: 14px;
-            }
-
-            .hero {
-                padding: 20px 15px;
-            }
-
-            .hero h1 {
-                font-size: 20px;
-            }
-
-            .btn {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-
-            .card {
-                padding: 15px;
-            }
-        }
-
-        /* ================== ANIMATIONS ================== */
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading {
-            display: inline-block;
-            animation: spin 1s linear infinite;
-        }
-
-        /* ================== UTILITY CLASSES ================== */
-        .text-center {
-            text-align: center;
-        }
-
-        .mt-20 {
-            margin-top: 20px;
-        }
-
-        .mb-20 {
-            margin-bottom: 20px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-secondary);
-        }
-
-        .empty-state i {
-            font-size: 48px;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
-        .loading-spinner {
-            border: 4px solid rgba(16, 185, 129, 0.1);
-            border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        footer {
-            margin-top: auto;
-            padding: 20px;
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
+/* ========== GLOBAL VARIABLES & RESET ========== */
+:root {
+    --primary: #10b981;
+    --primary-dark: #059669;
+    --primary-light: #34d399;
+    --bg-primary: #05070d;
+    --bg-secondary: #0b1222;
+    --bg-tertiary: #111827;
+    --border-color: #1f2937;
+    --text-primary: #e6e6e6;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+    --success: #10b981;
+    --error: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    --shadow-primary: 0 8px 20px rgba(16, 185, 129, 0.2);
+}
+
+body.light-theme {
+    --primary: #059669;
+    --primary-dark: #047857;
+    --primary-light: #10b981;
+    --bg-primary: #f3f4f6;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #e5e7eb;
+    --border-color: #d1d5db;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========== TOPBAR ========== */
+.topbar {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-sm);
+}
+
+.menu-btn {
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--primary);
+    border: none;
+    background: none;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.menu-btn:hover {
+    background: rgba(16, 185, 129, 0.1);
+    transform: scale(1.1);
+}
+
+.brand {
+    flex: 1;
+    text-align: center;
+}
+
+.brand h1 {
+    font-size: 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+}
+
+.topbar-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.veno-coins-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 8px 16px;
+    border-radius: 40px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    font-weight: 700;
+}
+
+.veno-coins-display i {
+    color: #fbbf24;
+    font-size: 18px;
+}
+
+.veno-coins-display span {
+    color: var(--primary);
+}
+
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid var(--primary);
+    transition: all 0.3s ease;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+    position: fixed;
+    left: -300px;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    z-index: 2000;
+    overflow-y: auto;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-header h3 {
+    color: var(--primary);
+    font-size: 20px;
+}
+
+.close-sidebar {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 24px;
+}
+
+.close-sidebar:hover {
+    background: rgba(255, 85, 85, 0.1);
+    color: #ff5555;
+    transform: rotate(90deg);
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 10px 15px;
+}
+
+.sidebar-menu li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.sidebar-menu li i {
+    width: 24px;
+    color: var(--primary);
+    font-size: 18px;
+}
+
+.sidebar-menu li:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateX(5px);
+}
+
+.sidebar-menu li:hover i {
+    color: white;
+}
+
+.sidebar-menu li.active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--primary);
+    border-left: 3px solid var(--primary);
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(3px);
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+/* ========== HERO SECTION ========== */
+.hero {
+    background: linear-gradient(135deg, #1a2a3a, #0f172a);
+    margin: 20px;
+    border-radius: 24px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 32px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    color: #9ca3af;
+    margin-bottom: 24px;
+    font-size: 16px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* ========== QUICK ACTIONS ========== */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 0 20px;
+    margin-bottom: 40px;
+}
+
+.action-card {
+    background: var(--bg-tertiary);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+}
+
+.action-card i {
+    font-size: 40px;
+    color: var(--primary);
+    margin-bottom: 12px;
+}
+
+.action-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.action-card p {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* ========== LEAGUES SECTION ========== */
+.section {
+    padding: 0 20px;
+    margin-bottom: 40px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-header a {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.leagues-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.league-card {
+    background: var(--bg-tertiary);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.league-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+}
+
+.league-header {
+    background: linear-gradient(135deg, #1f2937, #111827);
+    padding: 20px;
+    position: relative;
+}
+
+.league-header h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.league-game {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.status-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status-live {
+    background: #10b981;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.status-registration {
+    background: #f59e0b;
+    color: white;
+}
+
+.status-completed {
+    background: #6b7280;
+    color: white;
+}
+
+.league-body {
+    padding: 15px;
+    flex: 1;
+}
+
+.league-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.league-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.info-item {
+    font-size: 12px;
+}
+
+.info-item strong {
+    color: var(--primary);
+}
+
+.league-footer {
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+}
+
+.join-btn, .view-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 12px;
+}
+
+.join-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.join-btn:hover:not(:disabled) {
+    background: var(--primary-dark);
+    transform: scale(1.02);
+}
+
+.join-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.view-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.view-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* ========== TEAMS SECTION ========== */
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.team-card {
+    background: var(--bg-tertiary);
+    border-radius: 16px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.team-card:hover {
+    transform: translateX(5px);
+    border-color: var(--primary);
+}
+
+.team-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.team-info {
+    flex: 1;
+}
+
+.team-name {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.team-stats {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* ========== USERS SECTION ========== */
+.users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.user-card {
+    background: var(--bg-tertiary);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+}
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--primary);
+    flex-shrink: 0;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.user-stats {
+    display: flex;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.challenge-btn {
+    padding: 6px 12px;
+    background: var(--primary);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.challenge-btn:hover {
+    background: var(--primary-dark);
+    transform: scale(1.02);
+}
+
+/* ========== MODALS ========== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--bg-primary);
+    border-radius: 24px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    font-size: 24px;
+    color: var(--primary);
+}
+
+.modal-close {
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    color: #ff5555;
+    transform: rotate(90deg);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* ========== TOAST NOTIFICATIONS ========== */
+.toast-container {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--primary);
+    color: var(--bg-primary);
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    margin-top: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: auto;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.error {
+    background: #ff5555;
+}
+
+.toast.warning {
+    background: #f59e0b;
+}
+
+.toast.info {
+    background: #3b82f6;
+}
+
+/* ========== EMPTY STATE ========== */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--bg-tertiary);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.empty-state i {
+    font-size: 60px;
+    color: var(--primary);
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    margin-bottom: 20px;
+}
+
+/* ========== LOADING STATE ========== */
+.loading {
+    text-align: center;
+    padding: 60px;
+    color: var(--text-secondary);
+}
+
+.loading i {
+    font-size: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* ========== FOOTER ========== */
+.footer {
+    margin-top: auto;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* ========== PROFILE POPUP ========== */
+.profile-popup {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 260px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px;
+    z-index: 1001;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.profile-popup.active {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.account-info {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.account-info img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+}
+
+.account-info p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.profile-menu {
+    margin-bottom: 12px;
+}
+
+.profile-menu a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+.profile-menu a:hover {
+    background: var(--bg-secondary);
+    color: var(--primary);
+}
+
+#logoutBtn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #ff5555;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#logoutBtn:hover {
+    background: #e04848;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .topbar {
+        height: 55px;
+        padding: 0 12px;
+    }
+    
+    .brand h1 {
+        font-size: 18px;
+    }
+    
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 0 10px;
+    }
+    
+    .action-card {
+        padding: 12px;
+    }
+    
+    .action-card i {
+        font-size: 24px;
+    }
+    
+    .action-card h3 {
+        font-size: 12px;
+    }
+    
+    .leagues-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .teams-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .users-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .hero h1 {
+        font-size: 24px;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .section {
+        padding: 0 10px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .veno-coins-display {
+        display: none;
+    }
+    
+    .brand h1 {
+        font-size: 16px;
+    }
+    
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        margin-bottom: 20px;
+    }
+    
+    .action-card i {
+        font-size: 20px;
+    }
+    
+    .action-card h3 {
+        font-size: 11px;
+    }
+    
+    .action-card p {
+        display: none;
+    }
+}
     </style>
 </head>
 <body>
-    <!-- APP CONTAINER -->
     <div class="app">
         <!-- TOPBAR -->
         <header class="topbar">
-            <button class="menu-btn" id="menuBtn"><i class="bx bx-menu"></i></button>
-            <div class="brand"><h1>🏆 Crunk Games</h1></div>
-            <div class="icons">
+            <button class="menu-btn" id="menuBtn">
+                <i class="bx bx-menu"></i>
+            </button>
+            <div class="brand">
+                <h1>🏆 Veno-Arena</h1>
+            </div>
+            <div class="topbar-icons">
                 <div class="veno-coins-display">
                     <i class="fas fa-coins"></i>
                     <span id="venoCoinsAmount">0</span>
                 </div>
-                <img id="profilePic" class="profile-pic" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
+                <div style="position: relative;">
+                    <img id="profileAvatarImg" class="profile-avatar" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
+                    <div class="profile-popup" id="profilePopup">
+                        <div class="account-info">
+                            <img id="popupProfileImg" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
+                            <div>
+                                <p id="profileNameDisplay" style="font-weight: 600;">User</p>
+                                <p id="profileEmailDisplay">user@example.com</p>
+                            </div>
+                        </div>
+                        <div class="profile-menu">
+                            <a href="#" id="viewProfileLink">
+                                <i class="fas fa-user"></i> View Profile
+                            </a>
+                            <a href="#" id="settingsLink">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                        </div>
+                        <button id="logoutBtn">
+                            <i class="bx bx-log-out"></i> Logout
+                        </button>
+                    </div>
+                </div>
             </div>
         </header>
 
         <!-- SIDEBAR -->
-        <aside class="sidebar" id="sidebar">
+        <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h3>Menu</h3>
-                <button class="close-sidebar" id="closeSidebar"><i class="bx bx-x"></i></button>
+                <span class="close-sidebar" id="closeSidebar">
+                    <i class="bx bx-x"></i>
+                </span>
             </div>
             <ul class="sidebar-menu">
-                <li data-page="home"><i class="bx bx-home"></i> Home</li>
-                <li data-page="leagues"><i class="bx bx-trophy"></i> Leagues</li>
-                <li data-page="teams"><i class="bx bx-group"></i> Teams</li>
-                <li data-page="leaderboard"><i class="bx bx-bar-chart-alt-2"></i> Leaderboard</li>
-                <li data-page="profile"><i class="bx bx-user-circle"></i> Profile</li>
+                <li id="homeMenu" class="active">
+                    <i class="bx bx-home"></i> Home
+                </li>
+                <li id="leaguesMenu">
+                    <i class="bx bx-trophy"></i> Leagues
+                </li>
+                <li id="teamsMenu">
+                    <i class="bx bx-shield"></i> Teams
+                </li>
+                <li id="leaderboardMenu">
+                    <i class="bx bx-bar-chart"></i> Leaderboard
+                </li>
+                <li id="profileMenu">
+                    <i class="bx bx-user-circle"></i> Profile
+                </li>
             </ul>
-        </aside>
+        </div>
 
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <!-- MAIN CONTENT -->
-        <main id="mainContent">
-            <!-- This will be dynamically populated -->
+        <main class="main-content">
+            <!-- HOME PAGE -->
+            <div id="homePage" class="page-section">
+                <!-- HERO SECTION -->
+                <section class="hero">
+                    <h1>⚽ Football Tournaments & Leagues</h1>
+                    <p>Create teams, join tournaments, compete with players worldwide, and earn Veno Coins!</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" id="createLeagueBtn">
+                            <i class="fas fa-plus-circle"></i> Create League
+                        </button>
+                        <button class="btn btn-secondary" id="browseLeaguesBtn">
+                            <i class="fas fa-search"></i> Browse Leagues
+                        </button>
+                    </div>
+                </section>
+
+                <!-- QUICK ACTIONS -->
+                <div class="quick-actions">
+                    <div class="action-card" id="createTeamCard">
+                        <i class="fas fa-users"></i>
+                        <h3>Create Team</h3>
+                        <p>Build your dream squad</p>
+                    </div>
+                    <div class="action-card" id="myTeamsCard">
+                        <i class="fas fa-shield"></i>
+                        <h3>My Teams</h3>
+                        <p>View your teams</p>
+                    </div>
+                    <div class="action-card" id="leaderboardCard">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Leaderboard</h3>
+                        <p>Check rankings</p>
+                    </div>
+                    <div class="action-card" id="challengeCard">
+                        <i class="fas fa-handshake"></i>
+                        <h3>Challenge</h3>
+                        <p>Challenge players</p>
+                    </div>
+                </div>
+
+                <!-- FEATURED LEAGUES -->
+                <section class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-star"></i> Featured Leagues</h2>
+                    </div>
+                    <div class="leagues-grid" id="featuredLeaguesContainer">
+                        <div class="empty-state">
+                            <i class="fas fa-spinner"></i>
+                            <p>Loading leagues...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ACTIVE LEAGUES -->
+                <section class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-fire"></i> Active Leagues</h2>
+                    </div>
+                    <div class="leagues-grid" id="activeLeaguesContainer">
+                        <div class="empty-state">
+                            <i class="fas fa-spinner"></i>
+                            <p>Loading leagues...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MY TEAMS -->
+                <section class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-users"></i> My Teams</h2>
+                    </div>
+                    <div class="teams-grid" id="myTeamsContainer">
+                        <div class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <h3>No Teams Yet</h3>
+                            <p>Create your first team to get started!</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TOP PLAYERS -->
+                <section class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-users"></i> Top Players</h2>
+                    </div>
+                    <div class="users-grid" id="topPlayersContainer">
+                        <div class="empty-state">
+                            <i class="fas fa-spinner"></i>
+                            <p>Loading players...</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- LEADERBOARD PAGE -->
+            <div id="leaderboardPage" class="page-section" style="display: none;">
+                <section class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-trophy"></i> Global Leaderboard</h2>
+                    </div>
+                    <div id="leaderboardContainer" style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead style="background: var(--bg-tertiary);">
+                                <tr>
+                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Rank</th>
+                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Player</th>
+                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Wins</th>
+                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Losses</th>
+                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Win Rate</th>
+                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Coins</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardBody">
+                                <tr>
+                                    <td colspan="6" style="padding: 20px; text-align: center; color: var(--text-secondary);">
+                                        Loading leaderboard...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
         </main>
 
         <!-- FOOTER -->
-        <footer>
-            <p>&copy; 2024 Crunk Games. All rights reserved. | Build your legacy, one match at a time</p>
+        <footer class="footer">
+            <p>Veno-Arena © 2026 | Play tournaments, earn Veno Coins!</p>
         </footer>
     </div>
 
-    <!-- MODALS -->
-    <div class="modal" id="leagueModal">
+    <!-- CREATE LEAGUE MODAL -->
+    <div class="modal" id="createLeagueModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Create League</h2>
-                <button class="modal-close" onclick="app.closeModal()"><i class="fas fa-times"></i></button>
+                <h2><i class="fas fa-plus-circle"></i> Create New League</h2>
+                <span class="modal-close" id="closeLeagueModal">×</span>
             </div>
-            <form id="leagueForm" onsubmit="app.createLeague(event)">
+            <form id="createLeagueForm">
                 <div class="form-group">
                     <label>League Name *</label>
-                    <input type="text" id="leagueName" required placeholder="e.g., Champions Cup 2024">
+                    <input type="text" id="leagueName" placeholder="E.g., Champions 2026" required>
                 </div>
                 <div class="form-group">
                     <label>Game Type *</label>
                     <select id="gameType" required>
-                        <option value="">Select a game type</option>
+                        <option value="">Select Game Type</option>
                         <option value="eFootball">eFootball</option>
-                        <option value="FC">EA Sports FC</option>
+                        <option value="FC">FC (EA Sports FC)</option>
                         <option value="DLS">Dream League Soccer</option>
                     </select>
                 </div>
@@ -752,687 +1332,561 @@
                     <input type="number" id="maxTeams" min="4" max="32" value="16" required>
                 </div>
                 <div class="form-group">
-                    <label>Entry Fee (Veno Coins) *</label>
-                    <input type="number" id="entryFee" min="0" value="50" required>
+                    <label>Entry Fee (Veno Coins)</label>
+                    <input type="number" id="entryFee" min="0" value="50">
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-plus"></i> Create League
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="leagueDescription" rows="3" placeholder="League rules and details..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    <i class="fas fa-trophy"></i> Create League
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- CREATE TEAM MODAL -->
+    <div class="modal" id="createTeamModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-users"></i> Create New Team</h2>
+                <span class="modal-close" id="closeTeamModal">×</span>
+            </div>
+            <form id="createTeamForm">
+                <div class="form-group">
+                    <label>Team Name *</label>
+                    <input type="text" id="teamName" placeholder="E.g., FC Barcelona" required>
+                </div>
+                <div class="form-group">
+                    <label>Team Formation *</label>
+                    <select id="teamFormation" required>
+                        <option value="">Select Formation</option>
+                        <option value="4-3-3">4-3-3</option>
+                        <option value="4-4-2">4-4-2</option>
+                        <option value="3-5-2">3-5-2</option>
+                        <option value="5-3-2">5-3-2</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Game Type *</label>
+                    <select id="teamGameType" required>
+                        <option value="">Select Game Type</option>
+                        <option value="eFootball">eFootball</option>
+                        <option value="FC">FC</option>
+                        <option value="DLS">DLS</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    <i class="fas fa-check-circle"></i> Create Team
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CHALLENGE MODAL -->
+    <div class="modal" id="challengeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-handshake"></i> Challenge a Player</h2>
+                <span class="modal-close" id="closeChallengeModal">×</span>
+            </div>
+            <div id="playersListForChallenge" style="max-height: 400px; overflow-y: auto;">
+                <p style="text-align: center; color: var(--text-secondary);">Loading players...</p>
+            </div>
         </div>
     </div>
 
     <!-- TOAST CONTAINER -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- MAIN JAVASCRIPT -->
     <script>
-        /***********************************
-         *       APPLICATION NAMESPACE
-         ***********************************/
-        const app = {
-            // ==================== CONFIGURATION ====================
-            API_BASE: "https://api.example.com", // Replace with your backend
-            STORAGE_KEYS: {
-                USER: "crunkUser",
-                LEAGUES: "leagues",
-                TEAMS: "userTeams",
-                COINS: "userCoins",
-                NOTIFICATIONS: "notifications"
-            },
+// ============== CONFIGURATION ==============
+const API_BASE_URL = 'YOUR_BACKEND_API_URL'; // Replace with your backend URL
+const API_ENDPOINTS = {
+    auth: '/api/auth',
+    leagues: '/api/leagues',
+    teams: '/api/teams',
+    users: '/api/users',
+    matches: '/api/matches',
+    leaderboard: '/api/leaderboard'
+};
 
-            // ==================== STATE ====================
-            state: {
-                currentUser: null,
-                currentPage: "home",
-                leagues: [],
-                teams: [],
-                users: [],
-                notifications: []
-            },
+// ============== STATE MANAGEMENT ==============
+let currentUser = null;
+let authToken = null;
+let appState = {
+    leagues: [],
+    teams: [],
+    users: [],
+    currentPage: 'home'
+};
 
-            // ==================== INITIALIZATION ====================
-            init() {
-                console.log("🚀 Initializing Crunk Games App...");
-                this.setupEventListeners();
-                this.loadUserData();
-                this.renderPage("home");
-                this.updateCoinsDisplay();
-                console.log("✅ App initialized successfully");
-            },
+// ============== INITIALIZATION ==============
+document.addEventListener('DOMContentLoaded', () => {
+    initializeApp();
+});
 
-            // ==================== EVENT LISTENERS ====================
-            setupEventListeners() {
-                // Menu
-                document.getElementById("menuBtn").addEventListener("click", () => this.toggleSidebar());
-                document.getElementById("closeSidebar").addEventListener("click", () => this.toggleSidebar());
-                document.getElementById("sidebarOverlay").addEventListener("click", () => this.toggleSidebar());
+async function initializeApp() {
+    loadUserFromStorage();
+    setupEventListeners();
+    if (currentUser && authToken) {
+        await loadAppData();
+        updateVenoCoinsDisplay();
+        renderHomePage();
+    } else {
+        redirectToLogin();
+    }
+}
 
-                // Sidebar Navigation
-                document.querySelectorAll(".sidebar-menu li").forEach(li => {
-                    li.addEventListener("click", (e) => {
-                        const page = e.currentTarget.dataset.page;
-                        this.renderPage(page);
-                        this.toggleSidebar();
-                    });
-                });
+function loadUserFromStorage() {
+    const stored = localStorage.getItem('user');
+    const token = localStorage.getItem('authToken');
+    if (stored && token) {
+        currentUser = JSON.parse(stored);
+        authToken = token;
+    }
+}
 
-                // Profile Picture
-                document.getElementById("profilePic").addEventListener("click", () => this.renderPage("profile"));
-            },
+function saveUserToStorage() {
+    if (currentUser) {
+        localStorage.setItem('user', JSON.stringify(currentUser));
+    }
+    if (authToken) {
+        localStorage.setItem('authToken', authToken);
+    }
+}
 
-            // ==================== SIDEBAR ====================
-            toggleSidebar() {
-                const sidebar = document.getElementById("sidebar");
-                const overlay = document.getElementById("sidebarOverlay");
-                sidebar.classList.toggle("open");
-                overlay.classList.toggle("active");
-            },
+// ============== EVENT LISTENERS ==============
+function setupEventListeners() {
+    // Sidebar
+    document.getElementById('menuBtn').addEventListener('click', toggleSidebar);
+    document.getElementById('closeSidebar').addEventListener('click', closeSidebar);
+    document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
 
-            // ==================== PAGE ROUTING ====================
-            renderPage(pageName) {
-                this.state.currentPage = pageName;
-                const mainContent = document.getElementById("mainContent");
+    // Navigation
+    document.getElementById('homeMenu').addEventListener('click', () => switchPage('home'));
+    document.getElementById('leaguesMenu').addEventListener('click', () => switchPage('leagues'));
+    document.getElementById('teamsMenu').addEventListener('click', () => switchPage('teams'));
+    document.getElementById('leaderboardMenu').addEventListener('click', () => switchPage('leaderboard'));
+    document.getElementById('profileMenu').addEventListener('click', () => switchPage('profile'));
 
-                switch (pageName) {
-                    case "home":
-                        mainContent.innerHTML = this.renderHomePage();
-                        break;
-                    case "leagues":
-                        mainContent.innerHTML = this.renderLeaguesPage();
-                        break;
-                    case "teams":
-                        mainContent.innerHTML = this.renderTeamsPage();
-                        break;
-                    case "leaderboard":
-                        mainContent.innerHTML = this.renderLeaderboardPage();
-                        break;
-                    case "profile":
-                        mainContent.innerHTML = this.renderProfilePage();
-                        break;
-                    default:
-                        mainContent.innerHTML = this.renderHomePage();
-                }
+    // Profile
+    document.getElementById('profileAvatarImg').addEventListener('click', toggleProfilePopup);
+    document.getElementById('logoutBtn').addEventListener('click', logout);
 
-                // Re-attach any dynamic event listeners
-                this.attachDynamicListeners();
-            },
+    // Modals
+    document.getElementById('createLeagueBtn').addEventListener('click', () => showModal('createLeagueModal'));
+    document.getElementById('browseLeaguesBtn').addEventListener('click', () => switchPage('leagues'));
+    document.getElementById('closeLeagueModal').addEventListener('click', () => hideModal('createLeagueModal'));
+    document.getElementById('closeTeamModal').addEventListener('click', () => hideModal('createTeamModal'));
+    document.getElementById('closeChallengeModal').addEventListener('click', () => hideModal('challengeModal'));
 
-            // ==================== HOME PAGE ====================
-            renderHomePage() {
-                const user = this.state.currentUser;
-                const recentLeagues = this.state.leagues.slice(0, 3);
+    // Forms
+    document.getElementById('createLeagueForm').addEventListener('submit', handleCreateLeague);
+    document.getElementById('createTeamForm').addEventListener('submit', handleCreateTeam);
 
-                return `
-                    <div class="hero">
-                        <h1>⚽ Welcome to Crunk Games</h1>
-                        <p>${user ? `Welcome back, ${user.displayName}!` : "Join the ultimate gaming platform"}</p>
-                        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                            <button class="btn btn-primary" onclick="app.openLeagueModal()">
-                                <i class="fas fa-plus-circle"></i> Create League
-                            </button>
-                            <button class="btn btn-secondary" onclick="app.renderPage('leagues')">
-                                <i class="fas fa-search"></i> Browse Leagues
-                            </button>
-                        </div>
-                    </div>
+    // Quick Actions
+    document.getElementById('createTeamCard').addEventListener('click', () => showModal('createTeamModal'));
+    document.getElementById('myTeamsCard').addEventListener('click', () => switchPage('teams'));
+    document.getElementById('leaderboardCard').addEventListener('click', () => switchPage('leaderboard'));
+    document.getElementById('challengeCard').addEventListener('click', () => showModal('challengeModal'));
+}
 
-                    <div style="margin-bottom: 30px;">
-                        <h2 style="font-size: 20px; margin-bottom: 15px;"><i class="fas fa-fire"></i> Recent Leagues</h2>
-                        <div class="grid">
-                            ${recentLeagues.map(league => this.renderLeagueCard(league)).join('')}
-                        </div>
-                    </div>
+// ============== API CALLS ==============
+async function apiCall(endpoint, method = 'GET', data = null) {
+    const options = {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+        }
+    };
 
-                    <div>
-                        <h2 style="font-size: 20px; margin-bottom: 15px;"><i class="fas fa-trophy"></i> Top Players</h2>
-                        <div class="grid">
-                            ${this.state.users.slice(0, 4).map(user => `
-                                <div class="card">
-                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                                        <img src="${user.photoURL}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                                        <div>
-                                            <div class="card-header" style="margin: 0; font-size: 16px;">${user.displayName}</div>
-                                            <div style="font-size: 12px; color: var(--text-secondary);">Level ${Math.floor(Math.random() * 50) + 1}</div>
-                                        </div>
-                                    </div>
-                                    <div class="card-meta">
-                                        <span class="meta-item">⚽ ${Math.floor(Math.random() * 100)}</span>
-                                        <span class="meta-item">🏆 ${Math.floor(Math.random() * 20)}</span>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            },
+    if (data) {
+        options.body = JSON.stringify(data);
+    }
 
-            // ==================== LEAGUES PAGE ====================
-            renderLeaguesPage() {
-                return `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                        <h2 style="font-size: 24px;"><i class="fas fa-trophy"></i> All Leagues</h2>
-                        <button class="btn btn-primary" onclick="app.openLeagueModal()">
-                            <i class="fas fa-plus"></i> Create New
-                        </button>
-                    </div>
-
-                    <div class="tabs" id="leagueTabs">
-                        <button class="tab-btn active" data-tab="active">🔥 Active</button>
-                        <button class="tab-btn" data-tab="completed">✅ Completed</button>
-                        <button class="tab-btn" data-tab="myLeagues">👤 My Leagues</button>
-                    </div>
-
-                    <div id="active" class="tab-content active">
-                        <div class="grid">
-                            ${this.state.leagues
-                                .filter(l => l.status === "live")
-                                .map(league => this.renderLeagueCard(league))
-                                .join('')}
-                        </div>
-                    </div>
-
-                    <div id="completed" class="tab-content">
-                        <div class="grid">
-                            ${this.state.leagues
-                                .filter(l => l.status === "completed")
-                                .map(league => this.renderLeagueCard(league))
-                                .join('')}
-                        </div>
-                    </div>
-
-                    <div id="myLeagues" class="tab-content">
-                        <div class="grid">
-                            ${this.state.leagues
-                                .filter(l => l.ownerId === this.state.currentUser?.uid)
-                                .map(league => this.renderLeagueCard(league))
-                                .join('')}
-                        </div>
-                    </div>
-                `;
-            },
-
-            // ==================== TEAMS PAGE ====================
-            renderTeamsPage() {
-                return `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                        <h2 style="font-size: 24px;"><i class="fas fa-users"></i> My Teams</h2>
-                        <button class="btn btn-primary" onclick="app.createTeam()">
-                            <i class="fas fa-plus"></i> Create Team
-                        </button>
-                    </div>
-
-                    <div class="grid">
-                        ${this.state.teams.map(team => `
-                            <div class="card">
-                                <div class="card-header">⚽ ${team.name}</div>
-                                <div class="card-meta">
-                                    <span class="meta-item">${team.gameType}</span>
-                                    <span class="meta-item">${team.formation}</span>
-                                </div>
-                                <div style="margin: 15px 0; padding: 15px; background: var(--bg-secondary); border-radius: 12px;">
-                                    <div style="display: flex; justify-content: space-around;">
-                                        <div style="text-align: center;">
-                                            <div style="font-size: 20px; font-weight: bold; color: var(--primary);">${team.wins || 0}</div>
-                                            <div style="font-size: 12px; color: var(--text-secondary);">Wins</div>
-                                        </div>
-                                        <div style="text-align: center;">
-                                            <div style="font-size: 20px; font-weight: bold; color: var(--primary);">${team.players?.length || 0}</div>
-                                            <div style="font-size: 12px; color: var(--text-secondary);">Players</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <button class="btn btn-primary" style="flex: 1; padding: 8px; border: none; border-radius: 20px;" onclick="app.editTeam('${team.id}')">
-                                        Edit
-                                    </button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            },
-
-            // ==================== LEADERBOARD PAGE ====================
-            renderLeaderboardPage() {
-                const sortedUsers = [...this.state.users].sort((a, b) => (b.wins || 0) - (a.wins || 0));
-
-                return `
-                    <div style="margin-bottom: 30px;">
-                        <h2 style="font-size: 24px; margin-bottom: 20px;"><i class="fas fa-trophy"></i> Global Leaderboard</h2>
-                        
-                        <div style="background: var(--bg-tertiary); border-radius: 16px; overflow: hidden;">
-                            <div style="display: grid; grid-template-columns: 60px 1fr 100px 100px; gap: 10px; padding: 15px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); font-weight: 600; color: var(--primary);">
-                                <div>Rank</div>
-                                <div>Player</div>
-                                <div style="text-align: center;">Wins</div>
-                                <div style="text-align: center;">Coins</div>
-                            </div>
-                            ${sortedUsers.map((user, index) => `
-                                <div style="display: grid; grid-template-columns: 60px 1fr 100px 100px; gap: 10px; padding: 15px; border-bottom: 1px solid var(--border-color); align-items: center;">
-                                    <div style="font-size: 18px; font-weight: bold; color: ${index === 0 ? '#fbbf24' : index === 1 ? '#94a3b8' : index === 2 ? '#cd7f32' : 'var(--text-secondary)'};">
-                                        #${index + 1}
-                                    </div>
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <img src="${user.photoURL}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                                        <div>
-                                            <div style="font-weight: 600;">${user.displayName}</div>
-                                            <div style="font-size: 12px; color: var(--text-secondary);">${user.email}</div>
-                                        </div>
-                                    </div>
-                                    <div style="text-align: center; font-weight: 600;">${user.wins || 0}</div>
-                                    <div style="text-align: center; color: #fbbf24; font-weight: 600;">💰 ${user.coins || 0}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            },
-
-            // ==================== PROFILE PAGE ====================
-            renderProfilePage() {
-                const user = this.state.currentUser;
-                if (!user) {
-                    return `<div class="empty-state"><i class="fas fa-user-circle"></i><p>Please login to view your profile</p></div>`;
-                }
-
-                return `
-                    <div style="max-width: 600px; margin: 0 auto;">
-                        <div class="card" style="text-align: center; margin-bottom: 30px;">
-                            <img src="${user.photoURL}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid var(--primary);">
-                            <h2>${user.displayName}</h2>
-                            <p style="color: var(--text-secondary); margin-bottom: 15px;">${user.email}</p>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; padding: 20px 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
-                                <div>
-                                    <div style="font-size: 24px; font-weight: bold; color: var(--primary);">${this.state.teams.length}</div>
-                                    <div style="font-size: 12px; color: var(--text-secondary);">Teams Created</div>
-                                </div>
-                                <div>
-                                    <div style="font-size: 24px; font-weight: bold; color: #fbbf24;">💰 ${this.getCoins()}</div>
-                                    <div style="font-size: 12px; color: var(--text-secondary);">Veno Coins</div>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary" onclick="app.logoutUser()">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </button>
-                        </div>
-                    </div>
-                `;
-            },
-
-            // ==================== LEAGUE CARD ====================
-            renderLeagueCard(league) {
-                return `
-                    <div class="card">
-                        <div class="card-header">
-                            ${league.name}
-                            <span style="font-size: 12px; background: ${league.status === 'live' ? '#10b981' : '#6b7280'}; color: white; padding: 2px 6px; border-radius: 12px; margin-left: 10px;">
-                                ${league.status.toUpperCase()}
-                            </span>
-                        </div>
-                        <div class="card-meta">
-                            <span class="meta-item">🎮 ${league.gameType}</span>
-                            <span class="meta-item">👥 ${league.teams?.length || 0}/${league.maxTeams}</span>
-                            <span class="meta-item">💰 ${league.prizePool}</span>
-                        </div>
-                        <div style="margin: 15px 0; padding: 15px; background: var(--bg-secondary); border-radius: 12px; text-align: center;">
-                            <div style="font-size: 16px; font-weight: bold; color: var(--primary); margin-bottom: 5px;">Entry Fee</div>
-                            <div style="font-size: 14px; color: var(--text-secondary);">${league.entryFee} Veno Coins</div>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-primary" style="flex: 1; border: none; padding: 8px; border-radius: 20px;" onclick="app.joinLeague('${league.id}')">
-                                Join
-                            </button>
-                            <button class="btn btn-secondary" style="flex: 1; border: none; padding: 8px; border-radius: 20px;" onclick="app.viewLeague('${league.id}')">
-                                View
-                            </button>
-                        </div>
-                    </div>
-                `;
-            },
-
-            // ==================== MODALS ====================
-            openLeagueModal() {
-                if (!this.state.currentUser) {
-                    this.showToast("Please login first", "error");
-                    return;
-                }
-                document.getElementById("leagueModal").classList.add("active");
-            },
-
-            closeModal() {
-                document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
-            },
-
-            // ==================== LEAGUE ACTIONS ====================
-            createLeague(event) {
-                event.preventDefault();
-
-                const leagueName = document.getElementById("leagueName").value.trim();
-                const gameType = document.getElementById("gameType").value;
-                const maxTeams = parseInt(document.getElementById("maxTeams").value);
-                const entryFee = parseInt(document.getElementById("entryFee").value);
-
-                if (!leagueName || !gameType) {
-                    this.showToast("Please fill all required fields", "error");
-                    return;
-                }
-
-                const league = {
-                    id: "league_" + Date.now(),
-                    name: leagueName,
-                    gameType: gameType,
-                    maxTeams: maxTeams,
-                    entryFee: entryFee,
-                    prizePool: maxTeams * entryFee * 0.8,
-                    status: "registration",
-                    ownerId: this.state.currentUser.uid,
-                    teams: [],
-                    matches: [],
-                    createdAt: new Date().toISOString()
-                };
-
-                this.state.leagues.push(league);
-                this.saveToLocalStorage("leagues", this.state.leagues);
-                this.showToast("League created successfully!", "success");
-                this.closeModal();
-                document.getElementById("leagueForm").reset();
-                this.renderPage("leagues");
-            },
-
-            joinLeague(leagueId) {
-                if (!this.state.currentUser) {
-                    this.showToast("Please login first", "error");
-                    return;
-                }
-
-                const league = this.state.leagues.find(l => l.id === leagueId);
-                if (!league) {
-                    this.showToast("League not found", "error");
-                    return;
-                }
-
-                const userCoins = this.getCoins();
-                if (userCoins < league.entryFee) {
-                    this.showToast(`You need ${league.entryFee} Veno Coins to join`, "error");
-                    return;
-                }
-
-                if (league.teams.some(t => t.ownerId === this.state.currentUser.uid)) {
-                    this.showToast("You already joined this league", "info");
-                    return;
-                }
-
-                this.deductCoins(league.entryFee);
-                league.teams.push({
-                    id: "team_" + Date.now(),
-                    name: `${this.state.currentUser.displayName}'s Team`,
-                    ownerId: this.state.currentUser.uid,
-                    joinedAt: new Date().toISOString()
-                });
-
-                this.saveToLocalStorage("leagues", this.state.leagues);
-                this.showToast("Successfully joined the league!", "success");
-                this.renderPage("leagues");
-            },
-
-            viewLeague(leagueId) {
-                const league = this.state.leagues.find(l => l.id === leagueId);
-                if (!league) return;
-
-                const mainContent = document.getElementById("mainContent");
-                mainContent.innerHTML = `
-                    <div style="max-width: 900px; margin: 0 auto;">
-                        <button class="btn btn-secondary" onclick="app.renderPage('leagues')" style="margin-bottom: 20px;">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </button>
-                        <div class="card" style="margin-bottom: 30px;">
-                            <h2>${league.name}</h2>
-                            <div class="card-meta">
-                                <span class="meta-item">🎮 ${league.gameType}</span>
-                                <span class="meta-item">👥 ${league.teams?.length}/${league.maxTeams}</span>
-                                <span class="meta-item">💰 Entry: ${league.entryFee} VC</span>
-                                <span class="meta-item">🏆 Prize Pool: ${Math.round(league.prizePool)} VC</span>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h3 style="margin-bottom: 15px;">Teams in League</h3>
-                            <div class="grid">
-                                ${league.teams.map(team => `
-                                    <div class="card">
-                                        <div class="card-header">⚽ ${team.name}</div>
-                                        <div class="card-meta">
-                                            <span class="meta-item">Joined ${new Date(team.joinedAt).toLocaleDateString()}</span>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            },
-
-            // ==================== TEAM ACTIONS ====================
-            createTeam() {
-                if (!this.state.currentUser) {
-                    this.showToast("Please login first", "error");
-                    return;
-                }
-
-                const teamName = prompt("Enter team name:");
-                if (!teamName) return;
-
-                const team = {
-                    id: "team_" + Date.now(),
-                    name: teamName,
-                    gameType: "eFootball",
-                    formation: "4-4-2",
-                    players: [],
-                    wins: 0,
-                    draws: 0,
-                    losses: 0,
-                    createdAt: new Date().toISOString()
-                };
-
-                this.state.teams.push(team);
-                this.saveToLocalStorage("teams", this.state.teams);
-                this.showToast("Team created successfully!", "success");
-                this.renderPage("teams");
-            },
-
-            editTeam(teamId) {
-                this.showToast("Edit feature coming soon!", "info");
-            },
-
-            // ==================== USER MANAGEMENT ====================
-            loadUserData() {
-                try {
-                    const user = localStorage.getItem(this.STORAGE_KEYS.USER);
-                    if (user) {
-                        this.state.currentUser = JSON.parse(user);
-                    }
-
-                    this.state.leagues = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.LEAGUES) || "[]");
-                    this.state.teams = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.TEAMS) || "[]");
-                    this.state.users = JSON.parse(localStorage.getItem("users") || "[]");
-
-                    // Add mock users if not exists
-                    if (this.state.users.length === 0) {
-                        this.state.users = [
-                            {
-                                uid: "user_1",
-                                displayName: "Pro Player",
-                                email: "pro@example.com",
-                                photoURL: "https://ui-avatars.com/api/?name=Pro+Player&background=10b981&color=fff",
-                                wins: 45,
-                                coins: 5000
-                            },
-                            {
-                                uid: "user_2",
-                                displayName: "Gaming Master",
-                                email: "master@example.com",
-                                photoURL: "https://ui-avatars.com/api/?name=Gaming+Master&background=f59e0b&color=fff",
-                                wins: 38,
-                                coins: 4200
-                            },
-                            {
-                                uid: "user_3",
-                                displayName: "Champion",
-                                email: "champ@example.com",
-                                photoURL: "https://ui-avatars.com/api/?name=Champion&background=3b82f6&color=fff",
-                                wins: 52,
-                                coins: 6100
-                            },
-                            {
-                                uid: "user_4",
-                                displayName: "Rising Star",
-                                email: "star@example.com",
-                                photoURL: "https://ui-avatars.com/api/?name=Rising+Star&background=8b5cf6&color=fff",
-                                wins: 28,
-                                coins: 2800
-                            }
-                        ];
-                        this.saveToLocalStorage("users", this.state.users);
-                    }
-                } catch (error) {
-                    console.error("Error loading user data:", error);
-                }
-            },
-
-            logoutUser() {
-                if (confirm("Are you sure you want to logout?")) {
-                    localStorage.removeItem(this.STORAGE_KEYS.USER);
-                    this.state.currentUser = null;
-                    this.renderPage("home");
-                    this.showToast("Logged out successfully", "success");
-                }
-            },
-
-            // ==================== COINS SYSTEM ====================
-            getCoins() {
-                if (!this.state.currentUser) return 0;
-                const coinsStr = localStorage.getItem(this.STORAGE_KEYS.COINS);
-                const coins = coinsStr ? JSON.parse(coinsStr) : {};
-                return coins[this.state.currentUser.uid] || 100; // Default 100 coins
-            },
-
-            addCoins(amount) {
-                if (!this.state.currentUser) return;
-                const coins = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.COINS) || "{}");
-                coins[this.state.currentUser.uid] = (coins[this.state.currentUser.uid] || 100) + amount;
-                localStorage.setItem(this.STORAGE_KEYS.COINS, JSON.stringify(coins));
-                this.updateCoinsDisplay();
-            },
-
-            deductCoins(amount) {
-                if (!this.state.currentUser) return false;
-                const coins = JSON.parse(localStorage.getItem(this.STORAGE_KEYS.COINS) || "{}");
-                const currentCoins = coins[this.state.currentUser.uid] || 100;
-                if (currentCoins >= amount) {
-                    coins[this.state.currentUser.uid] = currentCoins - amount;
-                    localStorage.setItem(this.STORAGE_KEYS.COINS, JSON.stringify(coins));
-                    this.updateCoinsDisplay();
-                    return true;
-                }
-                return false;
-            },
-
-            updateCoinsDisplay() {
-                const coinsSpan = document.getElementById("venoCoinsAmount");
-                if (coinsSpan) {
-                    coinsSpan.textContent = this.getCoins();
-                }
-            },
-
-            // ==================== STORAGE ====================
-            saveToLocalStorage(key, data) {
-                try {
-                    localStorage.setItem(this.STORAGE_KEYS[key.toUpperCase()] || key, JSON.stringify(data));
-                } catch (error) {
-                    console.error("Error saving to localStorage:", error);
-                }
-            },
-
-            // ==================== NOTIFICATIONS ====================
-            showToast(message, type = "success") {
-                const container = document.getElementById("toastContainer");
-                const toast = document.createElement("div");
-                toast.className = `toast ${type}`;
-                toast.innerHTML = `<i class="fas ${this.getToastIcon(type)}"></i> ${message}`;
-                container.appendChild(toast);
-
-                setTimeout(() => toast.classList.add("show"), 10);
-                setTimeout(() => {
-                    toast.classList.remove("show");
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
-            },
-
-            getToastIcon(type) {
-                const icons = {
-                    success: "fa-check-circle",
-                    error: "fa-exclamation-circle",
-                    warning: "fa-exclamation-triangle",
-                    info: "fa-info-circle"
-                };
-                return icons[type] || icons.info;
-            },
-
-            // ==================== DYNAMIC LISTENERS ====================
-            attachDynamicListeners() {
-                // Tab switching
-                document.querySelectorAll(".tab-btn").forEach(btn => {
-                    btn.addEventListener("click", (e) => {
-                        const tabName = e.target.dataset.tab;
-                        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-                        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-                        e.target.classList.add("active");
-                        document.getElementById(tabName).classList.add("active");
-                    });
-                });
-            },
-
-            // ==================== API INTEGRATION (BACKEND) ====================
-            async apiCall(endpoint, method = "GET", data = null) {
-                try {
-                    const options = {
-                        method: method,
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${this.state.currentUser?.uid || ""}`
-                        }
-                    };
-
-                    if (data) {
-                        options.body = JSON.stringify(data);
-                    }
-
-                    const response = await fetch(`${this.API_BASE}${endpoint}`, options);
-                    
-                    if (!response.ok) {
-                        throw new Error(`API Error: ${response.status}`);
-                    }
-
-                    return await response.json();
-                } catch (error) {
-                    console.error("API Call Error:", error);
-                    this.showToast("Server connection error", "error");
-                    return null;
-                }
+    try {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+        if (!response.ok) {
+            if (response.status === 401) {
+                logout();
+                return null;
             }
-        };
+            throw new Error(`API Error: ${response.statusText}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('API Error:', error);
+        showToast('Connection error. Please try again.', 'error');
+        return null;
+    }
+}
 
-        // ==================== INITIALIZE APP ====================
-        document.addEventListener("DOMContentLoaded", () => {
-            app.init();
-        });
+// ============== DATA LOADING ==============
+async function loadAppData() {
+    try {
+        // Load leagues
+        const leaguesData = await apiCall(API_ENDPOINTS.leagues);
+        if (leaguesData) {
+            appState.leagues = leaguesData.data || leaguesData;
+        }
 
-        // ==================== PREVENT AUTO-RELOAD ====================
-        window.addEventListener("beforeunload", (e) => {
-            // Don't prevent unload, just save data
-            app.state.currentUser && localStorage.setItem(app.STORAGE_KEYS.USER, JSON.stringify(app.state.currentUser));
-        });
+        // Load teams
+        const teamsData = await apiCall(API_ENDPOINTS.teams);
+        if (teamsData) {
+            appState.teams = teamsData.data || teamsData;
+        }
+
+        // Load users
+        const usersData = await apiCall(API_ENDPOINTS.users);
+        if (usersData) {
+            appState.users = usersData.data || usersData;
+        }
+    } catch (error) {
+        console.error('Error loading app data:', error);
+    }
+}
+
+// ============== PAGE MANAGEMENT ==============
+function switchPage(page) {
+    appState.currentPage = page;
+    closeSidebar();
+
+    // Hide all pages
+    document.querySelectorAll('.page-section').forEach(el => {
+        el.style.display = 'none';
+    });
+
+    // Show selected page
+    switch (page) {
+        case 'home':
+            document.getElementById('homePage').style.display = 'block';
+            renderHomePage();
+            break;
+        case 'leaderboard':
+            document.getElementById('leaderboardPage').style.display = 'block';
+            renderLeaderboard();
+            break;
+        default:
+            document.getElementById('homePage').style.display = 'block';
+            renderHomePage();
+    }
+
+    // Update active menu
+    document.querySelectorAll('.sidebar-menu li').forEach(li => {
+        li.classList.remove('active');
+    });
+    document.getElementById(page + 'Menu')?.classList.add('active');
+}
+
+// ============== RENDERING FUNCTIONS ==============
+function renderHomePage() {
+    renderFeaturedLeagues();
+    renderActiveLeagues();
+    renderMyTeams();
+    renderTopPlayers();
+}
+
+function renderFeaturedLeagues() {
+    const container = document.getElementById('featuredLeaguesContainer');
+    const featured = appState.leagues.filter(l => l.featured).slice(0, 6);
+
+    if (featured.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i><p>No featured leagues</p></div>';
+        return;
+    }
+
+    container.innerHTML = featured.map(league => createLeagueCardHTML(league)).join('');
+    attachLeagueEventListeners();
+}
+
+function renderActiveLeagues() {
+    const container = document.getElementById('activeLeaguesContainer');
+    const active = appState.leagues.filter(l => l.status === 'active').slice(0, 6);
+
+    if (active.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-fire"></i><p>No active leagues</p></div>';
+        return;
+    }
+
+    container.innerHTML = active.map(league => createLeagueCardHTML(league)).join('');
+    attachLeagueEventListeners();
+}
+
+function renderMyTeams() {
+    const container = document.getElementById('myTeamsContainer');
+    const myTeams = appState.teams.filter(t => t.ownerId === currentUser.id).slice(0, 6);
+
+    if (myTeams.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-users"></i>
+                <h3>No Teams Yet</h3>
+                <p>Create your first team to get started!</p>
+                <button class="btn btn-primary" onclick="showModal('createTeamModal')" style="margin-top: 10px;">
+                    <i class="fas fa-plus-circle"></i> Create Team
+                </button>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = myTeams.map(team => createTeamCardHTML(team)).join('');
+}
+
+function renderTopPlayers() {
+    const container = document.getElementById('topPlayersContainer');
+    const topPlayers = appState.users.slice(0, 6);
+
+    if (topPlayers.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>No players found</p></div>';
+        return;
+    }
+
+    container.innerHTML = topPlayers.map(player => createUserCardHTML(player)).join('');
+    attachPlayerEventListeners();
+}
+
+function renderLeaderboard() {
+    const tbody = document.getElementById('leaderboardBody');
+    const sorted = [...appState.users].sort((a, b) => (b.wins || 0) - (a.wins || 0));
+
+    tbody.innerHTML = sorted.map((user, index) => `
+        <tr>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">${index + 1}</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600;">${user.name}</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">${user.wins || 0}</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">${user.losses || 0}</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">
+                ${user.wins + user.losses > 0 ? Math.round((user.wins / (user.wins + user.losses)) * 100) : 0}%
+            </td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--primary); font-weight: 600;">
+                ${user.coins || 0}
+            </td>
+        </tr>
+    `).join('');
+}
+
+// ============== HTML GENERATION ==============
+function createLeagueCardHTML(league) {
+    const teamsCount = league.teams_count || league.teams?.length || 0;
+    const maxTeams = league.max_teams || 16;
+    const isFull = teamsCount >= maxTeams;
+
+    return `
+        <div class="league-card">
+            <div class="league-header">
+                <span class="status-badge status-${league.status || 'registration'}">${league.status || 'REGISTRATION'}</span>
+                <h3>${league.name}</h3>
+                <p class="league-game">${league.game_type || 'eFootball'}</p>
+            </div>
+            <div class="league-body">
+                <div class="league-stats">
+                    <div class="stat">
+                        <div class="stat-value">${teamsCount}/${maxTeams}</div>
+                        <div class="stat-label">Teams</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">${league.matches_played || 0}</div>
+                        <div class="stat-label">Matches</div>
+                    </div>
+                </div>
+                <div class="league-info">
+                    <div class="info-item">
+                        <strong>${league.prize_pool || 0}</strong> VC Prize
+                    </div>
+                    <div class="info-item">
+                        <strong>${league.entry_fee || 0}</strong> VC Fee
+                    </div>
+                </div>
+            </div>
+            <div class="league-footer">
+                <button class="join-btn" data-league-id="${league.id}" ${isFull ? 'disabled' : ''}>
+                    ${isFull ? 'FULL' : 'Join'}
+                </button>
+                <button class="view-btn" data-league-id="${league.id}">View</button>
+            </div>
+        </div>
+    `;
+}
+
+function createTeamCardHTML(team) {
+    return `
+        <div class="team-card">
+            <div class="team-logo">
+                ${team.logo ? `<img src="${team.logo}" alt="${team.name}">` : '<i class="fas fa-shield"></i>'}
+            </div>
+            <div class="team-info">
+                <div class="team-name">${team.name}</div>
+                <div class="team-stats">
+                    <span><i class="fas fa-trophy"></i> ${team.wins || 0}W</span>
+                    <span><i class="fas fa-futbol"></i> ${team.matches || 0}M</span>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function createUserCardHTML(player) {
+    return `
+        <div class="user-card">
+            <div class="user-avatar">
+                <img src="${player.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}`}" alt="${player.name}">
+            </div>
+            <div class="user-info">
+                <div class="user-name">${player.name}</div>
+                <div class="user-stats">
+                    <span><i class="fas fa-trophy"></i> ${player.wins || 0}W</span>
+                    <span><i class="fas fa-coins"></i> ${player.coins || 0}</span>
+                </div>
+            </div>
+            <button class="challenge-btn" data-user-id="${player.id}">Challenge</button>
+        </div>
+    `;
+}
+
+// ============== EVENT ATTACHERS ==============
+function attachLeagueEventListeners() {
+    document.querySelectorAll('.join-btn[data-league-id]').forEach(btn => {
+        btn.addEventListener('click', (e) => joinLeague(e.target.dataset.leagueId));
+    });
+    document.querySelectorAll('.view-btn[data-league-id]').forEach(btn => {
+        btn.addEventListener('click', (e) => viewLeague(e.target.dataset.leagueId));
+    });
+}
+
+function attachPlayerEventListeners() {
+    document.querySelectorAll('.challenge-btn[data-user-id]').forEach(btn => {
+        btn.addEventListener('click', (e) => sendChallenge(e.target.dataset.userId));
+    });
+}
+
+// ============== FORM HANDLERS ==============
+async function handleCreateLeague(e) {
+    e.preventDefault();
+
+    const leagueData = {
+        name: document.getElementById('leagueName').value,
+        game_type: document.getElementById('gameType').value,
+        max_teams: parseInt(document.getElementById('maxTeams').value),
+        entry_fee: parseInt(document.getElementById('entryFee').value),
+        description: document.getElementById('leagueDescription').value,
+        owner_id: currentUser.id
+    };
+
+    const result = await apiCall(API_ENDPOINTS.leagues, 'POST', leagueData);
+    if (result) {
+        showToast('League created successfully!', 'success');
+        document.getElementById('createLeagueForm').reset();
+        hideModal('createLeagueModal');
+        await loadAppData();
+        renderHomePage();
+    }
+}
+
+async function handleCreateTeam(e) {
+    e.preventDefault();
+
+    const teamData = {
+        name: document.getElementById('teamName').value,
+        formation: document.getElementById('teamFormation').value,
+        game_type: document.getElementById('teamGameType').value,
+        owner_id: currentUser.id
+    };
+
+    const result = await apiCall(API_ENDPOINTS.teams, 'POST', teamData);
+    if (result) {
+        showToast('Team created successfully!', 'success');
+        document.getElementById('createTeamForm').reset();
+        hideModal('createTeamModal');
+        await loadAppData();
+        renderHomePage();
+    }
+}
+
+async function joinLeague(leagueId) {
+    const result = await apiCall(`${API_ENDPOINTS.leagues}/${leagueId}/join`, 'POST');
+    if (result) {
+        showToast('Successfully joined league!', 'success');
+        await loadAppData();
+        renderHomePage();
+    }
+}
+
+function viewLeague(leagueId) {
+    window.location.href = `/league/${leagueId}`;
+}
+
+async function sendChallenge(userId) {
+    const result = await apiCall(`${API_ENDPOINTS.matches}/challenge`, 'POST', {
+        challenger_id: currentUser.id,
+        opponent_id: userId
+    });
+    if (result) {
+        showToast('Challenge sent!', 'success');
+    }
+}
+
+// ============== UI HELPERS ==============
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('active');
+    document.body.style.overflow = document.getElementById('sidebar').classList.contains('open') ? 'hidden' : '';
+}
+
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function toggleProfilePopup() {
+    document.getElementById('profilePopup').classList.toggle('active');
+}
+
+function showModal(modalId) {
+    document.getElementById(modalId).classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function hideModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
+    container.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function updateVenoCoinsDisplay() {
+    const coins = currentUser.coins || 0;
+    document.getElementById('venoCoinsAmount').textContent = coins;
+}
+
+// ============== AUTH ==============
+async function logout() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('authToken');
+    currentUser = null;
+    authToken = null;
+    redirectToLogin();
+}
+
+function redirectToLogin() {
+    window.location.href = '/login.html';
+}
     </script>
 </body>
 </html>
