@@ -3,1141 +3,1156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Veno-Arena - Gaming Platform</title>
+    <title>Crunk Games - Competitive Gaming Platform</title>
     
-    <!-- External Libraries -->
+    <!-- Boxicons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- PWA Meta Tags -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#10b981">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Veno-Arena">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Play tournaments, create teams, and earn Veno Coins!">
-    <meta property="og:title" content="Veno-Arena">
-    <meta property="og:description" content="Play tournaments, create teams, and earn Veno Coins!">
-    <meta property="og:image" content="https://rajola-ceo.github.io/icon-512x512.png">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-
     <style>
-/* ========== GLOBAL VARIABLES & RESET ========== */
-:root {
-    --primary: #10b981;
-    --primary-dark: #059669;
-    --primary-light: #34d399;
-    --bg-primary: #05070d;
-    --bg-secondary: #0b1222;
-    --bg-tertiary: #111827;
-    --border-color: #1f2937;
-    --text-primary: #e6e6e6;
-    --text-secondary: #9ca3af;
-    --text-muted: #6b7280;
-    --success: #10b981;
-    --error: #ef4444;
-    --warning: #f59e0b;
-    --info: #3b82f6;
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-    --shadow-primary: 0 8px 20px rgba(16, 185, 129, 0.2);
-}
-
-body.light-theme {
-    --primary: #059669;
-    --primary-dark: #047857;
-    --primary-light: #10b981;
-    --bg-primary: #f3f4f6;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #e5e7eb;
-    --border-color: #d1d5db;
-    --text-primary: #111827;
-    --text-secondary: #4b5563;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    width: 100%;
-    height: 100%;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    line-height: 1.5;
-    overflow-x: hidden;
-}
-
-.app {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* ========== TOPBAR ========== */
-.topbar {
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    backdrop-filter: blur(10px);
-    box-shadow: var(--shadow-sm);
-}
-
-.menu-btn {
-    font-size: 24px;
-    cursor: pointer;
-    color: var(--primary);
-    border: none;
-    background: none;
-    padding: 8px;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.menu-btn:hover {
-    background: rgba(16, 185, 129, 0.1);
-    transform: scale(1.1);
-}
-
-.brand {
-    flex: 1;
-    text-align: center;
-}
-
-.brand h1 {
-    font-size: 24px;
-    font-weight: 700;
-    background: linear-gradient(135deg, #fff, var(--primary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: 1px;
-}
-
-.topbar-icons {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.veno-coins-display {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(16, 185, 129, 0.1);
-    padding: 8px 16px;
-    border-radius: 40px;
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    font-weight: 700;
-}
-
-.veno-coins-display i {
-    color: #fbbf24;
-    font-size: 18px;
-}
-
-.veno-coins-display span {
-    color: var(--primary);
-}
-
-.profile-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    cursor: pointer;
-    border: 2px solid var(--primary);
-    transition: all 0.3s ease;
-}
-
-.profile-avatar:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-}
-
-.profile-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* ========== SIDEBAR ========== */
-.sidebar {
-    position: fixed;
-    left: -300px;
-    top: 0;
-    width: 280px;
-    height: 100vh;
-    background: var(--bg-secondary);
-    border-right: 1px solid var(--border-color);
-    transition: all 0.3s ease;
-    z-index: 2000;
-    overflow-y: auto;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-}
-
-.sidebar.open {
-    left: 0;
-}
-
-.sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.sidebar-header h3 {
-    color: var(--primary);
-    font-size: 20px;
-}
-
-.close-sidebar {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 24px;
-}
-
-.close-sidebar:hover {
-    background: rgba(255, 85, 85, 0.1);
-    color: #ff5555;
-    transform: rotate(90deg);
-}
-
-.sidebar-menu {
-    list-style: none;
-    padding: 10px 15px;
-}
-
-.sidebar-menu li {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 5px;
-    color: var(--text-primary);
-    font-weight: 500;
-}
-
-.sidebar-menu li i {
-    width: 24px;
-    color: var(--primary);
-    font-size: 18px;
-}
-
-.sidebar-menu li:hover {
-    background: var(--primary);
-    color: white;
-    transform: translateX(5px);
-}
-
-.sidebar-menu li:hover i {
-    color: white;
-}
-
-.sidebar-menu li.active {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--primary);
-    border-left: 3px solid var(--primary);
-}
-
-.sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(3px);
-}
-
-.sidebar-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* ========== MAIN CONTENT ========== */
-.main-content {
-    flex: 1;
-    overflow-y: auto;
-    padding-bottom: 20px;
-}
-
-/* ========== HERO SECTION ========== */
-.hero {
-    background: linear-gradient(135deg, #1a2a3a, #0f172a);
-    margin: 20px;
-    border-radius: 24px;
-    padding: 40px;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-}
-
-.hero h1 {
-    font-size: 32px;
-    margin-bottom: 12px;
-    background: linear-gradient(135deg, #fff, var(--primary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.hero p {
-    color: #9ca3af;
-    margin-bottom: 24px;
-    font-size: 16px;
-}
-
-.hero-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.btn {
-    padding: 12px 24px;
-    border-radius: 30px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 16px;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: white;
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-}
-
-.btn-secondary {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
-
-/* ========== QUICK ACTIONS ========== */
-.quick-actions {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 0 20px;
-    margin-bottom: 40px;
-}
-
-.action-card {
-    background: var(--bg-tertiary);
-    border-radius: 16px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid var(--border-color);
-}
-
-.action-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--primary);
-    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
-}
-
-.action-card i {
-    font-size: 40px;
-    color: var(--primary);
-    margin-bottom: 12px;
-}
-
-.action-card h3 {
-    font-size: 18px;
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-
-.action-card p {
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-/* ========== LEAGUES SECTION ========== */
-.section {
-    padding: 0 20px;
-    margin-bottom: 40px;
-}
-
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.section-header h2 {
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.section-header a {
-    color: var(--primary);
-    text-decoration: none;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.leagues-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
-}
-
-.league-card {
-    background: var(--bg-tertiary);
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-}
-
-.league-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--primary);
-    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
-}
-
-.league-header {
-    background: linear-gradient(135deg, #1f2937, #111827);
-    padding: 20px;
-    position: relative;
-}
-
-.league-header h3 {
-    font-size: 18px;
-    margin-bottom: 5px;
-    font-weight: 600;
-}
-
-.league-game {
-    font-size: 12px;
-    color: #9ca3af;
-}
-
-.status-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-}
-
-.status-live {
-    background: #10b981;
-    color: white;
-    animation: pulse 2s infinite;
-}
-
-.status-registration {
-    background: #f59e0b;
-    color: white;
-}
-
-.status-completed {
-    background: #6b7280;
-    color: white;
-}
-
-.league-body {
-    padding: 15px;
-    flex: 1;
-}
-
-.league-stats {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.stat {
-    text-align: center;
-}
-
-.stat-value {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--primary);
-}
-
-.stat-label {
-    font-size: 11px;
-    color: var(--text-secondary);
-}
-
-.league-info {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.info-item {
-    font-size: 12px;
-}
-
-.info-item strong {
-    color: var(--primary);
-}
-
-.league-footer {
-    padding: 15px;
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    gap: 10px;
-}
-
-.join-btn, .view-btn {
-    flex: 1;
-    padding: 8px;
-    border-radius: 30px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
-    font-size: 12px;
-}
-
-.join-btn {
-    background: var(--primary);
-    color: white;
-}
-
-.join-btn:hover:not(:disabled) {
-    background: var(--primary-dark);
-    transform: scale(1.02);
-}
-
-.join-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.view-btn {
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-}
-
-.view-btn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-}
-
-/* ========== TEAMS SECTION ========== */
-.teams-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.team-card {
-    background: var(--bg-tertiary);
-    border-radius: 16px;
-    padding: 15px;
-    border: 1px solid var(--border-color);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.team-card:hover {
-    transform: translateX(5px);
-    border-color: var(--primary);
-}
-
-.team-logo {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #1f2937, #111827);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.team-info {
-    flex: 1;
-}
-
-.team-name {
-    font-weight: 600;
-    font-size: 16px;
-    margin-bottom: 5px;
-}
-
-.team-stats {
-    display: flex;
-    gap: 12px;
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-/* ========== USERS SECTION ========== */
-.users-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-}
-
-.user-card {
-    background: var(--bg-tertiary);
-    border-radius: 16px;
-    padding: 20px;
-    border: 1px solid var(--border-color);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.user-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--primary);
-    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
-}
-
-.user-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 2px solid var(--primary);
-    flex-shrink: 0;
-}
-
-.user-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.user-info {
-    flex: 1;
-}
-
-.user-name {
-    font-weight: 600;
-    font-size: 16px;
-    margin-bottom: 5px;
-}
-
-.user-stats {
-    display: flex;
-    gap: 10px;
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.challenge-btn {
-    padding: 6px 12px;
-    background: var(--primary);
-    border: none;
-    border-radius: 20px;
-    color: white;
-    font-size: 11px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-
-.challenge-btn:hover {
-    background: var(--primary-dark);
-    transform: scale(1.02);
-}
-
-/* ========== MODALS ========== */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 10000;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(5px);
-}
-
-.modal.active {
-    display: flex;
-}
-
-.modal-content {
-    background: var(--bg-primary);
-    border-radius: 24px;
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    border: 1px solid var(--border-color);
-    padding: 30px;
-    animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.modal-header h2 {
-    font-size: 24px;
-    color: var(--primary);
-}
-
-.modal-close {
-    font-size: 28px;
-    cursor: pointer;
-    color: var(--text-secondary);
-    transition: all 0.3s ease;
-}
-
-.modal-close:hover {
-    color: #ff5555;
-    transform: rotate(90deg);
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 12px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    color: var(--text-primary);
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-}
-
-/* ========== TOAST NOTIFICATIONS ========== */
-.toast-container {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10000;
-    pointer-events: none;
-}
-
-.toast {
-    background: var(--primary);
-    color: var(--bg-primary);
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-weight: 600;
-    margin-top: 10px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    pointer-events: auto;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.toast.error {
-    background: #ff5555;
-}
-
-.toast.warning {
-    background: #f59e0b;
-}
-
-.toast.info {
-    background: #3b82f6;
-}
-
-/* ========== EMPTY STATE ========== */
-.empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    background: var(--bg-tertiary);
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-}
-
-.empty-state i {
-    font-size: 60px;
-    color: var(--primary);
-    margin-bottom: 20px;
-    opacity: 0.5;
-}
-
-.empty-state h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.empty-state p {
-    margin-bottom: 20px;
-}
-
-/* ========== LOADING STATE ========== */
-.loading {
-    text-align: center;
-    padding: 60px;
-    color: var(--text-secondary);
-}
-
-.loading i {
-    font-size: 40px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-}
-
-/* ========== FOOTER ========== */
-.footer {
-    margin-top: auto;
-    padding: 20px;
-    text-align: center;
-    border-top: 1px solid var(--border-color);
-    color: var(--text-muted);
-    font-size: 12px;
-}
-
-/* ========== PROFILE POPUP ========== */
-.profile-popup {
-    display: none;
-    position: absolute;
-    top: 50px;
-    right: 0;
-    width: 260px;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 16px;
-    z-index: 1001;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.profile-popup.active {
-    display: block;
-    animation: slideDown 0.3s ease;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.account-info {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.account-info img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: 2px solid var(--primary);
-}
-
-.account-info p {
-    margin: 0;
-    font-size: 13px;
-}
-
-.profile-menu {
-    margin-bottom: 12px;
-}
-
-.profile-menu a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px;
-    border-radius: 8px;
-    color: var(--text-primary);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    margin-bottom: 5px;
-    font-size: 13px;
-}
-
-.profile-menu a:hover {
-    background: var(--bg-secondary);
-    color: var(--primary);
-}
-
-#logoutBtn {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    background: #ff5555;
-    color: white;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-#logoutBtn:hover {
-    background: #e04848;
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
-    .topbar {
-        height: 55px;
-        padding: 0 12px;
-    }
-    
-    .brand h1 {
-        font-size: 18px;
-    }
-    
-    .quick-actions {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        padding: 0 10px;
-    }
-    
-    .action-card {
-        padding: 12px;
-    }
-    
-    .action-card i {
-        font-size: 24px;
-    }
-    
-    .action-card h3 {
-        font-size: 12px;
-    }
-    
-    .leagues-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .teams-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .users-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .hero {
-        padding: 20px;
-        margin: 10px;
-    }
-    
-    .hero h1 {
-        font-size: 24px;
-    }
-    
-    .hero-buttons {
-        flex-direction: column;
-    }
-    
-    .btn {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .section {
-        padding: 0 10px;
-    }
-    
-    .modal-content {
-        width: 95%;
-        padding: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .veno-coins-display {
-        display: none;
-    }
-    
-    .brand h1 {
-        font-size: 16px;
-    }
-    
-    .quick-actions {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
-        margin-bottom: 20px;
-    }
-    
-    .action-card i {
-        font-size: 20px;
-    }
-    
-    .action-card h3 {
-        font-size: 11px;
-    }
-    
-    .action-card p {
-        display: none;
-    }
-}
+        /* ===============================
+           GLOBAL VARIABLES & RESET
+        =============================== */
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #34d399;
+            --secondary: #3b82f6;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --bg-primary: #05070d;
+            --bg-secondary: #0b1222;
+            --bg-tertiary: #111827;
+            --border-color: #1f2937;
+            --text-primary: #e6e6e6;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --transition: all 0.3s ease;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --shadow-primary: 0 8px 20px rgba(16, 185, 129, 0.2);
+        }
+
+        body.light-theme {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #10b981;
+            --bg-primary: #f3f4f6;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e5e7eb;
+            --border-color: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===============================
+           TOPBAR
+        =============================== */
+        .topbar {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .topbar-left, .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--primary);
+            transition: var(--transition);
+            padding: 8px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+        }
+
+        .menu-btn:hover {
+            background: rgba(16, 185, 129, 0.1);
+            transform: scale(1.1);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .brand h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .veno-coins-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .veno-coins-display i {
+            color: #fbbf24;
+            font-size: 18px;
+        }
+
+        .veno-coins-display span {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary);
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 250px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px;
+            z-index: 1001;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .profile-menu.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .profile-info {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 12px;
+        }
+
+        .profile-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-info-text h3 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-info-text p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .profile-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-primary);
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+
+        .profile-menu-item:hover {
+            background: var(--bg-secondary);
+            color: var(--primary);
+        }
+
+        .profile-menu-item i {
+            color: var(--primary);
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: var(--danger);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .logout-btn:hover {
+            background: #d93333;
+            transform: translateY(-2px);
+        }
+
+        /* ===============================
+           SIDEBAR
+        =============================== */
+        .sidebar {
+            position: fixed;
+            left: -300px;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            z-index: 2000;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-header h3 {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .sidebar-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .sidebar-close:hover {
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 10px 15px;
+        }
+
+        .sidebar-menu li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .sidebar-menu li:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu li.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+
+        .sidebar-menu li i {
+            width: 24px;
+            color: var(--primary);
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            backdrop-filter: blur(3px);
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===============================
+           MAIN CONTENT
+        =============================== */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 70px;
+        }
+
+        .page {
+            display: none;
+            min-height: 100%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===============================
+           HERO SECTION
+        =============================== */
+        .hero {
+            background: linear-gradient(135deg, #1a2a3a, #0f172a);
+            border-radius: 24px;
+            margin: 20px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: #9ca3af;
+            margin-bottom: 24px;
+            font-size: 16px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-primary);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d93333;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ===============================
+           CARDS & GRIDS
+        =============================== */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+            margin-bottom: 40px;
+        }
+
+        .action-card {
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-primary);
+        }
+
+        .action-card i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .action-card h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .action-card p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ===============================
+           SECTIONS
+        =============================== */
+        .section {
+            padding: 0 20px;
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-header h2 {
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-header a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+
+        .section-header a:hover {
+            transform: translateX(5px);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-primary);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #1f2937, #111827);
+            padding: 20px;
+            position: relative;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-live { background: #10b981; color: white; }
+        .badge-pending { background: #f59e0b; color: white; }
+        .badge-completed { background: #6b7280; color: white; }
+
+        .card-title {
+            font-size: 18px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .card-footer {
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+        }
+
+        .card-footer button {
+            flex: 1;
+            padding: 8px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 12px;
+        }
+
+        .btn-join {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-join:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-view {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-view:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* ===============================
+           FORMS & INPUTS
+        =============================== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* ===============================
+           MODAL
+        =============================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            padding: 30px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+            transform: rotate(90deg);
+        }
+
+        /* ===============================
+           TOAST NOTIFICATIONS
+        =============================== */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10001;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            box-shadow: var(--shadow-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: auto;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+        .toast.warning { background: var(--warning); }
+        .toast.info { background: var(--secondary); }
+
+        /* ===============================
+           LOADING & EMPTY STATES
+        =============================== */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-secondary);
+        }
+
+        .loading i {
+            font-size: 40px;
+            animation: spin 1s linear infinite;
+            color: var(--primary);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        /* ===============================
+           TABLE STYLES
+        =============================== */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        table th,
+        table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table th {
+            background: var(--bg-secondary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* ===============================
+           BOTTOM NAVIGATION
+        =============================== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 12px;
+        }
+
+        .bottom-nav-item:hover,
+        .bottom-nav-item.active {
+            color: var(--primary);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .bottom-nav-item i {
+            font-size: 24px;
+        }
+
+        .bottom-nav-item span {
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* ===============================
+           FOOTER
+        =============================== */
+        .footer {
+            margin-top: auto;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        /* ===============================
+           ANIMATIONS
+        =============================== */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===============================
+           RESPONSIVE DESIGN
+        =============================== */
+        @media (max-width: 768px) {
+            .topbar {
+                height: 55px;
+                padding: 0 12px;
+            }
+
+            .brand h1 {
+                font-size: 18px;
+            }
+
+            .veno-coins-display {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+
+            .hero {
+                margin: 10px;
+                padding: 20px;
+            }
+
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                padding: 0 10px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 0 10px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .action-card i {
+                font-size: 28px;
+            }
+
+            .action-card h3 {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand h1 {
+                font-size: 16px;
+            }
+
+            .veno-coins-display {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 20px;
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            table th, table td {
+                padding: 8px 10px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="app">
         <!-- TOPBAR -->
         <header class="topbar">
-            <button class="menu-btn" id="menuBtn">
-                <i class="bx bx-menu"></i>
-            </button>
-            <div class="brand">
-                <h1>🏆 Veno-Arena</h1>
+            <div class="topbar-left">
+                <button class="menu-btn" id="menuBtn">
+                    <i class="bx bx-menu"></i>
+                </button>
+                <div class="brand">
+                    <div class="brand-icon">🏆</div>
+                    <h1>Crunk Games</h1>
+                </div>
             </div>
-            <div class="topbar-icons">
+
+            <div class="topbar-right">
                 <div class="veno-coins-display">
                     <i class="fas fa-coins"></i>
-                    <span id="venoCoinsAmount">0</span>
+                    <span id="venoCoins">0</span>
                 </div>
-                <div style="position: relative;">
-                    <img id="profileAvatarImg" class="profile-avatar" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
-                    <div class="profile-popup" id="profilePopup">
-                        <div class="account-info">
-                            <img id="popupProfileImg" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
-                            <div>
-                                <p id="profileNameDisplay" style="font-weight: 600;">User</p>
-                                <p id="profileEmailDisplay">user@example.com</p>
+
+                <div class="profile-section">
+                    <img id="profileAvatar" class="profile-avatar" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
+                    <div class="profile-menu" id="profileMenu">
+                        <div class="profile-info">
+                            <img id="profileMenuAvatar" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
+                            <div class="profile-info-text">
+                                <h3 id="profileName">User</h3>
+                                <p id="profileEmail">user@example.com</p>
                             </div>
                         </div>
-                        <div class="profile-menu">
-                            <a href="#" id="viewProfileLink">
-                                <i class="fas fa-user"></i> View Profile
-                            </a>
-                            <a href="#" id="settingsLink">
-                                <i class="fas fa-cog"></i> Settings
-                            </a>
-                        </div>
-                        <button id="logoutBtn">
-                            <i class="bx bx-log-out"></i> Logout
+                        <a href="#" class="profile-menu-item" onclick="goToPage('profile-page')">
+                            <i class="fas fa-user"></i> My Profile
+                        </a>
+                        <a href="#" class="profile-menu-item" onclick="goToPage('my-leagues')">
+                            <i class="fas fa-trophy"></i> My Leagues
+                        </a>
+                        <a href="#" class="profile-menu-item" onclick="goToPage('my-teams')">
+                            <i class="fas fa-users"></i> My Teams
+                        </a>
+                        <a href="#" class="profile-menu-item" onclick="goToPage('settings')">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <button class="logout-btn" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
                         </button>
                     </div>
                 </div>
@@ -1148,252 +1163,409 @@ html, body {
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h3>Menu</h3>
-                <span class="close-sidebar" id="closeSidebar">
+                <button class="sidebar-close" id="sidebarClose">
                     <i class="bx bx-x"></i>
-                </span>
+                </button>
             </div>
             <ul class="sidebar-menu">
-                <li id="homeMenu" class="active">
+                <li onclick="goToPage('home-page')" id="sidebarHome">
                     <i class="bx bx-home"></i> Home
                 </li>
-                <li id="leaguesMenu">
-                    <i class="bx bx-trophy"></i> Leagues
+                <li onclick="goToPage('tournaments-page')" id="sidebarTournaments">
+                    <i class="bx bx-trophy"></i> Tournaments
                 </li>
-                <li id="teamsMenu">
-                    <i class="bx bx-shield"></i> Teams
+                <li onclick="goToPage('leagues-page')" id="sidebarLeagues">
+                    <i class="fas fa-calendar-alt"></i> Leagues
                 </li>
-                <li id="leaderboardMenu">
-                    <i class="bx bx-bar-chart"></i> Leaderboard
+                <li onclick="goToPage('teams-page')" id="sidebarTeams">
+                    <i class="fas fa-users"></i> Teams
                 </li>
-                <li id="profileMenu">
-                    <i class="bx bx-user-circle"></i> Profile
+                <li onclick="goToPage('leaderboard')" id="sidebarLeaderboard">
+                    <i class="bx bx-bar-chart-alt-2"></i> Leaderboard
                 </li>
             </ul>
         </div>
-
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <!-- MAIN CONTENT -->
-        <main class="main-content">
+        <div class="main-content">
             <!-- HOME PAGE -->
-            <div id="homePage" class="page-section">
-                <!-- HERO SECTION -->
-                <section class="hero">
-                    <h1>⚽ Football Tournaments & Leagues</h1>
-                    <p>Create teams, join tournaments, compete with players worldwide, and earn Veno Coins!</p>
-                    <div class="hero-buttons">
-                        <button class="btn btn-primary" id="createLeagueBtn">
-                            <i class="fas fa-plus-circle"></i> Create League
-                        </button>
-                        <button class="btn btn-secondary" id="browseLeaguesBtn">
-                            <i class="fas fa-search"></i> Browse Leagues
-                        </button>
+            <div class="page active" id="home-page">
+                <div class="hero">
+                    <div class="hero-content">
+                        <h1>⚽ Welcome to Crunk Games</h1>
+                        <p>Compete in tournaments, create leagues, and earn Veno Coins!</p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary" onclick="goToPage('tournaments-page')">
+                                <i class="fas fa-play"></i> Browse Tournaments
+                            </button>
+                            <button class="btn btn-secondary" onclick="openModal('createLeagueModal')">
+                                <i class="fas fa-plus"></i> Create League
+                            </button>
+                        </div>
                     </div>
-                </section>
+                </div>
 
-                <!-- QUICK ACTIONS -->
                 <div class="quick-actions">
-                    <div class="action-card" id="createTeamCard">
-                        <i class="fas fa-users"></i>
-                        <h3>Create Team</h3>
-                        <p>Build your dream squad</p>
-                    </div>
-                    <div class="action-card" id="myTeamsCard">
-                        <i class="fas fa-shield"></i>
-                        <h3>My Teams</h3>
-                        <p>View your teams</p>
-                    </div>
-                    <div class="action-card" id="leaderboardCard">
+                    <div class="action-card" onclick="goToPage('tournaments-page')">
                         <i class="fas fa-trophy"></i>
-                        <h3>Leaderboard</h3>
-                        <p>Check rankings</p>
+                        <h3>Tournaments</h3>
+                        <p>Find and join tournaments</p>
                     </div>
-                    <div class="action-card" id="challengeCard">
-                        <i class="fas fa-handshake"></i>
-                        <h3>Challenge</h3>
-                        <p>Challenge players</p>
+                    <div class="action-card" onclick="goToPage('leagues-page')">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Leagues</h3>
+                        <p>Create or join leagues</p>
+                    </div>
+                    <div class="action-card" onclick="goToPage('teams-page')">
+                        <i class="fas fa-users"></i>
+                        <h3>Teams</h3>
+                        <p>Build your dream team</p>
+                    </div>
+                    <div class="action-card" onclick="goToPage('leaderboard')">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Leaderboard</h3>
+                        <p>View global rankings</p>
                     </div>
                 </div>
 
                 <!-- FEATURED LEAGUES -->
-                <section class="section">
+                <div class="section">
                     <div class="section-header">
                         <h2><i class="fas fa-star"></i> Featured Leagues</h2>
+                        <a href="#" onclick="goToPage('leagues-page')">View All <i class="bx bx-chevron-right"></i></a>
                     </div>
-                    <div class="leagues-grid" id="featuredLeaguesContainer">
-                        <div class="empty-state">
-                            <i class="fas fa-spinner"></i>
-                            <p>Loading leagues...</p>
-                        </div>
+                    <div class="grid" id="featuredLeaguesGrid">
+                        <div class="loading"><i class="fas fa-spinner"></i> Loading...</div>
                     </div>
-                </section>
+                </div>
 
                 <!-- ACTIVE LEAGUES -->
-                <section class="section">
+                <div class="section">
                     <div class="section-header">
                         <h2><i class="fas fa-fire"></i> Active Leagues</h2>
                     </div>
-                    <div class="leagues-grid" id="activeLeaguesContainer">
-                        <div class="empty-state">
-                            <i class="fas fa-spinner"></i>
-                            <p>Loading leagues...</p>
-                        </div>
+                    <div class="grid" id="activeLeaguesGrid">
+                        <div class="loading"><i class="fas fa-spinner"></i> Loading...</div>
                     </div>
-                </section>
+                </div>
+            </div>
 
-                <!-- MY TEAMS -->
-                <section class="section">
+            <!-- TOURNAMENTS PAGE -->
+            <div class="page" id="tournaments-page">
+                <div class="section">
                     <div class="section-header">
-                        <h2><i class="fas fa-users"></i> My Teams</h2>
+                        <h2><i class="fas fa-trophy"></i> Tournaments</h2>
+                        <button class="btn btn-primary" onclick="openModal('createTournamentModal')">
+                            <i class="fas fa-plus"></i> Create
+                        </button>
                     </div>
-                    <div class="teams-grid" id="myTeamsContainer">
-                        <div class="empty-state">
-                            <i class="fas fa-users"></i>
-                            <h3>No Teams Yet</h3>
-                            <p>Create your first team to get started!</p>
-                        </div>
+                    <div class="grid" id="tournamentsGrid">
+                        <div class="loading"><i class="fas fa-spinner"></i> Loading...</div>
                     </div>
-                </section>
+                </div>
+            </div>
 
-                <!-- TOP PLAYERS -->
-                <section class="section">
+            <!-- LEAGUES PAGE -->
+            <div class="page" id="leagues-page">
+                <div class="section">
                     <div class="section-header">
-                        <h2><i class="fas fa-users"></i> Top Players</h2>
+                        <h2><i class="fas fa-calendar-alt"></i> Leagues</h2>
+                        <button class="btn btn-primary" onclick="openModal('createLeagueModal')">
+                            <i class="fas fa-plus"></i> Create
+                        </button>
                     </div>
-                    <div class="users-grid" id="topPlayersContainer">
-                        <div class="empty-state">
-                            <i class="fas fa-spinner"></i>
-                            <p>Loading players...</p>
-                        </div>
+                    <div class="grid" id="leaguesGrid">
+                        <div class="loading"><i class="fas fa-spinner"></i> Loading...</div>
                     </div>
-                </section>
+                </div>
+            </div>
+
+            <!-- TEAMS PAGE -->
+            <div class="page" id="teams-page">
+                <div class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-users"></i> Teams</h2>
+                        <button class="btn btn-primary" onclick="openModal('createTeamModal')">
+                            <i class="fas fa-plus"></i> Create
+                        </button>
+                    </div>
+                    <div class="grid" id="teamsGrid">
+                        <div class="loading"><i class="fas fa-spinner"></i> Loading...</div>
+                    </div>
+                </div>
             </div>
 
             <!-- LEADERBOARD PAGE -->
-            <div id="leaderboardPage" class="page-section" style="display: none;">
-                <section class="section">
+            <div class="page" id="leaderboard">
+                <div class="section">
                     <div class="section-header">
-                        <h2><i class="fas fa-trophy"></i> Global Leaderboard</h2>
+                        <h2><i class="fas fa-chart-line"></i> Leaderboard</h2>
                     </div>
-                    <div id="leaderboardContainer" style="overflow-x: auto;">
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <thead style="background: var(--bg-tertiary);">
+                    <div class="table-responsive">
+                        <table id="leaderboardTable">
+                            <thead>
                                 <tr>
-                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Rank</th>
-                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Player</th>
-                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Wins</th>
-                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Losses</th>
-                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Win Rate</th>
-                                    <th style="padding: 12px; text-align: left; color: var(--primary);">Coins</th>
+                                    <th>Rank</th>
+                                    <th>Player</th>
+                                    <th>Leagues Won</th>
+                                    <th>Veno Coins</th>
                                 </tr>
                             </thead>
                             <tbody id="leaderboardBody">
                                 <tr>
-                                    <td colspan="6" style="padding: 20px; text-align: center; color: var(--text-secondary);">
-                                        Loading leaderboard...
-                                    </td>
+                                    <td colspan="4" class="loading"><i class="fas fa-spinner"></i> Loading...</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </section>
+                </div>
             </div>
-        </main>
 
-        <!-- FOOTER -->
-        <footer class="footer">
-            <p>Veno-Arena © 2026 | Play tournaments, earn Veno Coins!</p>
-        </footer>
+            <!-- MY LEAGUES PAGE -->
+            <div class="page" id="my-leagues">
+                <div class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-trophy"></i> My Leagues</h2>
+                    </div>
+                    <div class="grid" id="myLeaguesGrid">
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-alt"></i>
+                            <h3>No Leagues</h3>
+                            <p>You haven't joined any leagues yet</p>
+                            <button class="btn btn-primary" onclick="goToPage('leagues-page')">
+                                <i class="fas fa-search"></i> Find Leagues
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MY TEAMS PAGE -->
+            <div class="page" id="my-teams">
+                <div class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-users"></i> My Teams</h2>
+                    </div>
+                    <div class="grid" id="myTeamsGrid">
+                        <div class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <h3>No Teams</h3>
+                            <p>Create your first team to get started</p>
+                            <button class="btn btn-primary" onclick="openModal('createTeamModal')">
+                                <i class="fas fa-plus"></i> Create Team
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILE PAGE -->
+            <div class="page" id="profile-page">
+                <div class="section" style="max-width: 600px; margin: 0 auto;">
+                    <div class="section-header">
+                        <h2><i class="fas fa-user"></i> My Profile</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <img id="profilePageAvatar" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 15px;" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
+                            </div>
+                            <div class="form-group">
+                                <label>Display Name</label>
+                                <input type="text" id="displayNameInput" placeholder="Your display name">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="emailInput" placeholder="your@email.com" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="tel" id="phoneInput" placeholder="+1234567890">
+                            </div>
+                            <button class="btn btn-primary" onclick="updateProfile()" style="width: 100%;">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SETTINGS PAGE -->
+            <div class="page" id="settings">
+                <div class="section" style="max-width: 600px; margin: 0 auto;">
+                    <div class="section-header">
+                        <h2><i class="fas fa-cog"></i> Settings</h2>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 style="margin-bottom: 15px;">Account Settings</h3>
+                            <div class="form-group">
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span>Email Notifications</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" id="smsNotifications">
+                                    <span>SMS Notifications</span>
+                                </label>
+                            </div>
+                            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+                            <h3 style="margin-bottom: 15px;">Display Settings</h3>
+                            <div class="form-group">
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" id="darkMode" checked onchange="toggleTheme()">
+                                    <span>Dark Mode</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <nav class="bottom-nav">
+            <a class="bottom-nav-item active" onclick="goToPage('home-page')">
+                <i class="bx bx-home"></i>
+                <span>Home</span>
+            </a>
+            <a class="bottom-nav-item" onclick="goToPage('tournaments-page')">
+                <i class="bx bx-trophy"></i>
+                <span>Tournaments</span>
+            </a>
+            <a class="bottom-nav-item" onclick="goToPage('leagues-page')">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Leagues</span>
+            </a>
+            <a class="bottom-nav-item" onclick="goToPage('teams-page')">
+                <i class="fas fa-users"></i>
+                <span>Teams</span>
+            </a>
+            <a class="bottom-nav-item" onclick="goToPage('leaderboard')">
+                <i class="bx bx-bar-chart-alt-2"></i>
+                <span>Top</span>
+            </a>
+        </nav>
     </div>
 
-    <!-- CREATE LEAGUE MODAL -->
+    <!-- MODALS -->
     <div class="modal" id="createLeagueModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-plus-circle"></i> Create New League</h2>
-                <span class="modal-close" id="closeLeagueModal">×</span>
+                <h2>Create League</h2>
+                <button class="modal-close" onclick="closeModal('createLeagueModal')">
+                    <i class="bx bx-x"></i>
+                </button>
             </div>
-            <form id="createLeagueForm">
+            <form onsubmit="createLeague(event)">
                 <div class="form-group">
-                    <label>League Name *</label>
-                    <input type="text" id="leagueName" placeholder="E.g., Champions 2026" required>
+                    <label>League Name</label>
+                    <input type="text" id="leagueName" required placeholder="Enter league name">
                 </div>
                 <div class="form-group">
-                    <label>Game Type *</label>
-                    <select id="gameType" required>
-                        <option value="">Select Game Type</option>
+                    <label>Game Type</label>
+                    <select id="leagueGameType" required>
                         <option value="eFootball">eFootball</option>
-                        <option value="FC">FC (EA Sports FC)</option>
+                        <option value="FC">FC (FIFA)</option>
                         <option value="DLS">Dream League Soccer</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Max Teams (4-32) *</label>
-                    <input type="number" id="maxTeams" min="4" max="32" value="16" required>
+                    <label>Max Teams</label>
+                    <input type="number" id="leagueMaxTeams" required min="4" max="32" value="16" placeholder="4-32">
                 </div>
                 <div class="form-group">
                     <label>Entry Fee (Veno Coins)</label>
-                    <input type="number" id="entryFee" min="0" value="50">
+                    <input type="number" id="leagueEntryFee" required min="0" value="50" placeholder="0">
                 </div>
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea id="leagueDescription" rows="3" placeholder="League rules and details..."></textarea>
+                    <textarea id="leagueDescription" placeholder="League description..." rows="3"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
-                    <i class="fas fa-trophy"></i> Create League
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-check"></i> Create League
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- CREATE TEAM MODAL -->
+    <div class="modal" id="createTournamentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Tournament</h2>
+                <button class="modal-close" onclick="closeModal('createTournamentModal')">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+            <form onsubmit="createTournament(event)">
+                <div class="form-group">
+                    <label>Tournament Name</label>
+                    <input type="text" id="tournamentName" required placeholder="Enter tournament name">
+                </div>
+                <div class="form-group">
+                    <label>Game Type</label>
+                    <select id="tournamentGameType" required>
+                        <option value="eFootball">eFootball</option>
+                        <option value="FC">FC (FIFA)</option>
+                        <option value="DLS">Dream League Soccer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Max Participants</label>
+                    <input type="number" id="tournamentMaxParticipants" required min="4" max="64" value="16">
+                </div>
+                <div class="form-group">
+                    <label>Prize Pool (Veno Coins)</label>
+                    <input type="number" id="tournamentPrizePool" required min="100" value="1000">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-check"></i> Create Tournament
+                </button>
+            </form>
+        </div>
+    </div>
+
     <div class="modal" id="createTeamModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2><i class="fas fa-users"></i> Create New Team</h2>
-                <span class="modal-close" id="closeTeamModal">×</span>
+                <h2>Create Team</h2>
+                <button class="modal-close" onclick="closeModal('createTeamModal')">
+                    <i class="bx bx-x"></i>
+                </button>
             </div>
-            <form id="createTeamForm">
+            <form onsubmit="createTeam(event)">
                 <div class="form-group">
-                    <label>Team Name *</label>
-                    <input type="text" id="teamName" placeholder="E.g., FC Barcelona" required>
+                    <label>Team Name</label>
+                    <input type="text" id="teamName" required placeholder="Enter team name">
                 </div>
                 <div class="form-group">
-                    <label>Team Formation *</label>
+                    <label>Game Type</label>
+                    <select id="teamGameType" required>
+                        <option value="eFootball">eFootball</option>
+                        <option value="FC">FC (FIFA)</option>
+                        <option value="DLS">Dream League Soccer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Formation</label>
                     <select id="teamFormation" required>
-                        <option value="">Select Formation</option>
-                        <option value="4-3-3">4-3-3</option>
                         <option value="4-4-2">4-4-2</option>
+                        <option value="4-3-3">4-3-3</option>
                         <option value="3-5-2">3-5-2</option>
                         <option value="5-3-2">5-3-2</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Game Type *</label>
-                    <select id="teamGameType" required>
-                        <option value="">Select Game Type</option>
-                        <option value="eFootball">eFootball</option>
-                        <option value="FC">FC</option>
-                        <option value="DLS">DLS</option>
-                    </select>
+                    <label>Description</label>
+                    <textarea id="teamDescription" placeholder="Team description..." rows="3"></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
-                    <i class="fas fa-check-circle"></i> Create Team
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-check"></i> Create Team
                 </button>
             </form>
-        </div>
-    </div>
-
-    <!-- CHALLENGE MODAL -->
-    <div class="modal" id="challengeModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-handshake"></i> Challenge a Player</h2>
-                <span class="modal-close" id="closeChallengeModal">×</span>
-            </div>
-            <div id="playersListForChallenge" style="max-height: 400px; overflow-y: auto;">
-                <p style="text-align: center; color: var(--text-secondary);">Loading players...</p>
-            </div>
         </div>
     </div>
 
@@ -1401,492 +1573,561 @@ html, body {
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-// ============== CONFIGURATION ==============
-const API_BASE_URL = 'YOUR_BACKEND_API_URL'; // Replace with your backend URL
-const API_ENDPOINTS = {
-    auth: '/api/auth',
-    leagues: '/api/leagues',
-    teams: '/api/teams',
-    users: '/api/users',
-    matches: '/api/matches',
-    leaderboard: '/api/leaderboard'
-};
+        // ===============================
+        // API CONFIGURATION
+        // ===============================
+        const API_BASE_URL = 'https://arena-backend-cv5d.onrender.com/api';
 
-// ============== STATE MANAGEMENT ==============
-let currentUser = null;
-let authToken = null;
-let appState = {
-    leagues: [],
-    teams: [],
-    users: [],
-    currentPage: 'home'
-};
+        // ===============================
+        // STATE MANAGEMENT
+        // ===============================
+        let currentUser = null;
+        let currentPage = 'home-page';
+        let tournaments = [];
+        let leagues = [];
+        let teams = [];
+        let leaderboard = [];
 
-// ============== INITIALIZATION ==============
-document.addEventListener('DOMContentLoaded', () => {
-    initializeApp();
-});
+        // ===============================
+        // API HELPER FUNCTIONS
+        // ===============================
+        async function apiCall(endpoint, method = 'GET', data = null, isFormData = false) {
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+                        ...(!isFormData && { 'Content-Type': 'application/json' })
+                    }
+                };
 
-async function initializeApp() {
-    loadUserFromStorage();
-    setupEventListeners();
-    if (currentUser && authToken) {
-        await loadAppData();
-        updateVenoCoinsDisplay();
-        renderHomePage();
-    } else {
-        redirectToLogin();
-    }
-}
+                if (data) {
+                    options.body = isFormData ? data : JSON.stringify(data);
+                }
 
-function loadUserFromStorage() {
-    const stored = localStorage.getItem('user');
-    const token = localStorage.getItem('authToken');
-    if (stored && token) {
-        currentUser = JSON.parse(stored);
-        authToken = token;
-    }
-}
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
 
-function saveUserToStorage() {
-    if (currentUser) {
-        localStorage.setItem('user', JSON.stringify(currentUser));
-    }
-    if (authToken) {
-        localStorage.setItem('authToken', authToken);
-    }
-}
+                if (response.status === 401) {
+                    logout();
+                    return null;
+                }
 
-// ============== EVENT LISTENERS ==============
-function setupEventListeners() {
-    // Sidebar
-    document.getElementById('menuBtn').addEventListener('click', toggleSidebar);
-    document.getElementById('closeSidebar').addEventListener('click', closeSidebar);
-    document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
+                if (!response.ok) {
+                    const error = await response.json();
+                    showToast(error.message || 'An error occurred', 'error');
+                    return null;
+                }
 
-    // Navigation
-    document.getElementById('homeMenu').addEventListener('click', () => switchPage('home'));
-    document.getElementById('leaguesMenu').addEventListener('click', () => switchPage('leagues'));
-    document.getElementById('teamsMenu').addEventListener('click', () => switchPage('teams'));
-    document.getElementById('leaderboardMenu').addEventListener('click', () => switchPage('leaderboard'));
-    document.getElementById('profileMenu').addEventListener('click', () => switchPage('profile'));
-
-    // Profile
-    document.getElementById('profileAvatarImg').addEventListener('click', toggleProfilePopup);
-    document.getElementById('logoutBtn').addEventListener('click', logout);
-
-    // Modals
-    document.getElementById('createLeagueBtn').addEventListener('click', () => showModal('createLeagueModal'));
-    document.getElementById('browseLeaguesBtn').addEventListener('click', () => switchPage('leagues'));
-    document.getElementById('closeLeagueModal').addEventListener('click', () => hideModal('createLeagueModal'));
-    document.getElementById('closeTeamModal').addEventListener('click', () => hideModal('createTeamModal'));
-    document.getElementById('closeChallengeModal').addEventListener('click', () => hideModal('challengeModal'));
-
-    // Forms
-    document.getElementById('createLeagueForm').addEventListener('submit', handleCreateLeague);
-    document.getElementById('createTeamForm').addEventListener('submit', handleCreateTeam);
-
-    // Quick Actions
-    document.getElementById('createTeamCard').addEventListener('click', () => showModal('createTeamModal'));
-    document.getElementById('myTeamsCard').addEventListener('click', () => switchPage('teams'));
-    document.getElementById('leaderboardCard').addEventListener('click', () => switchPage('leaderboard'));
-    document.getElementById('challengeCard').addEventListener('click', () => showModal('challengeModal'));
-}
-
-// ============== API CALLS ==============
-async function apiCall(endpoint, method = 'GET', data = null) {
-    const options = {
-        method,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
-        }
-    };
-
-    if (data) {
-        options.body = JSON.stringify(data);
-    }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
-        if (!response.ok) {
-            if (response.status === 401) {
-                logout();
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                showToast('Connection error. Check your internet.', 'error');
                 return null;
             }
-            throw new Error(`API Error: ${response.statusText}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('API Error:', error);
-        showToast('Connection error. Please try again.', 'error');
-        return null;
-    }
-}
-
-// ============== DATA LOADING ==============
-async function loadAppData() {
-    try {
-        // Load leagues
-        const leaguesData = await apiCall(API_ENDPOINTS.leagues);
-        if (leaguesData) {
-            appState.leagues = leaguesData.data || leaguesData;
         }
 
-        // Load teams
-        const teamsData = await apiCall(API_ENDPOINTS.teams);
-        if (teamsData) {
-            appState.teams = teamsData.data || teamsData;
+        // ===============================
+        // AUTHENTICATION
+        // ===============================
+        async function login(email, password) {
+            const response = await apiCall('/auth/login', 'POST', { email, password });
+            if (response && response.token) {
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('user', JSON.stringify(response.user));
+                currentUser = response.user;
+                updateUI();
+                showToast('Logged in successfully!', 'success');
+                loadDashboard();
+                return true;
+            }
+            return false;
         }
 
-        // Load users
-        const usersData = await apiCall(API_ENDPOINTS.users);
-        if (usersData) {
-            appState.users = usersData.data || usersData;
+        async function signup(userData) {
+            const response = await apiCall('/auth/signup', 'POST', userData);
+            if (response && response.token) {
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('user', JSON.stringify(response.user));
+                currentUser = response.user;
+                updateUI();
+                showToast('Account created successfully!', 'success');
+                loadDashboard();
+                return true;
+            }
+            return false;
         }
-    } catch (error) {
-        console.error('Error loading app data:', error);
-    }
-}
 
-// ============== PAGE MANAGEMENT ==============
-function switchPage(page) {
-    appState.currentPage = page;
-    closeSidebar();
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            currentUser = null;
+            window.location.href = '/login.html';
+        }
 
-    // Hide all pages
-    document.querySelectorAll('.page-section').forEach(el => {
-        el.style.display = 'none';
-    });
+        // ===============================
+        // UI MANAGEMENT
+        // ===============================
+        function updateUI() {
+            if (currentUser) {
+                document.getElementById('profileName').textContent = currentUser.displayName || 'User';
+                document.getElementById('profileEmail').textContent = currentUser.email;
+                document.getElementById('profileAvatar').src = currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName)}&background=10b981&color=fff&size=128`;
+                document.getElementById('profileMenuAvatar').src = document.getElementById('profileAvatar').src;
+                document.getElementById('profilePageAvatar').src = document.getElementById('profileAvatar').src;
+                document.getElementById('displayNameInput').value = currentUser.displayName || '';
+                document.getElementById('emailInput').value = currentUser.email;
+                document.getElementById('phoneInput').value = currentUser.phone || '';
+            }
+        }
 
-    // Show selected page
-    switch (page) {
-        case 'home':
-            document.getElementById('homePage').style.display = 'block';
-            renderHomePage();
-            break;
-        case 'leaderboard':
-            document.getElementById('leaderboardPage').style.display = 'block';
-            renderLeaderboard();
-            break;
-        default:
-            document.getElementById('homePage').style.display = 'block';
-            renderHomePage();
-    }
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.bottom-nav-item').forEach(item => item.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            currentPage = pageId;
+            
+            closeSidebar();
+            closeProfileMenu();
+            
+            // Activate corresponding nav item
+            if (pageId === 'home-page') {
+                document.querySelectorAll('.bottom-nav-item')[0].classList.add('active');
+            } else if (pageId === 'tournaments-page') {
+                document.querySelectorAll('.bottom-nav-item')[1].classList.add('active');
+            } else if (pageId === 'leagues-page') {
+                document.querySelectorAll('.bottom-nav-item')[2].classList.add('active');
+            } else if (pageId === 'teams-page') {
+                document.querySelectorAll('.bottom-nav-item')[3].classList.add('active');
+            } else if (pageId === 'leaderboard') {
+                document.querySelectorAll('.bottom-nav-item')[4].classList.add('active');
+            }
 
-    // Update active menu
-    document.querySelectorAll('.sidebar-menu li').forEach(li => {
-        li.classList.remove('active');
-    });
-    document.getElementById(page + 'Menu')?.classList.add('active');
-}
+            // Load page data
+            loadPageData(pageId);
+        }
 
-// ============== RENDERING FUNCTIONS ==============
-function renderHomePage() {
-    renderFeaturedLeagues();
-    renderActiveLeagues();
-    renderMyTeams();
-    renderTopPlayers();
-}
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
 
-function renderFeaturedLeagues() {
-    const container = document.getElementById('featuredLeaguesContainer');
-    const featured = appState.leagues.filter(l => l.featured).slice(0, 6);
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
 
-    if (featured.length === 0) {
-        container.innerHTML = '<div class="empty-state"><i class="fas fa-trophy"></i><p>No featured leagues</p></div>';
-        return;
-    }
+        function openProfileMenu() {
+            document.getElementById('profileMenu').classList.toggle('active');
+        }
 
-    container.innerHTML = featured.map(league => createLeagueCardHTML(league)).join('');
-    attachLeagueEventListeners();
-}
+        function closeProfileMenu() {
+            document.getElementById('profileMenu').classList.remove('active');
+        }
 
-function renderActiveLeagues() {
-    const container = document.getElementById('activeLeaguesContainer');
-    const active = appState.leagues.filter(l => l.status === 'active').slice(0, 6);
+        function openSidebar() {
+            document.getElementById('sidebar').classList.add('open');
+            document.getElementById('sidebarOverlay').classList.add('active');
+        }
 
-    if (active.length === 0) {
-        container.innerHTML = '<div class="empty-state"><i class="fas fa-fire"></i><p>No active leagues</p></div>';
-        return;
-    }
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
 
-    container.innerHTML = active.map(league => createLeagueCardHTML(league)).join('');
-    attachLeagueEventListeners();
-}
+        // ===============================
+        // NOTIFICATIONS
+        // ===============================
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
 
-function renderMyTeams() {
-    const container = document.getElementById('myTeamsContainer');
-    const myTeams = appState.teams.filter(t => t.ownerId === currentUser.id).slice(0, 6);
+        // ===============================
+        // DATA LOADING
+        // ===============================
+        async function loadDashboard() {
+            await loadTournaments();
+            await loadLeagues();
+            await loadTeams();
+            await loadLeaderboard();
+            await loadVenoCoins();
+        }
 
-    if (myTeams.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <i class="fas fa-users"></i>
-                <h3>No Teams Yet</h3>
-                <p>Create your first team to get started!</p>
-                <button class="btn btn-primary" onclick="showModal('createTeamModal')" style="margin-top: 10px;">
-                    <i class="fas fa-plus-circle"></i> Create Team
-                </button>
-            </div>
-        `;
-        return;
-    }
+        async function loadPageData(pageId) {
+            switch(pageId) {
+                case 'home-page':
+                    renderFeaturedLeagues();
+                    renderActiveLeagues();
+                    break;
+                case 'tournaments-page':
+                    renderTournaments();
+                    break;
+                case 'leagues-page':
+                    renderLeagues();
+                    break;
+                case 'teams-page':
+                    renderTeams();
+                    break;
+                case 'leaderboard':
+                    renderLeaderboard();
+                    break;
+                case 'my-leagues':
+                    renderMyLeagues();
+                    break;
+                case 'my-teams':
+                    renderMyTeams();
+                    break;
+            }
+        }
 
-    container.innerHTML = myTeams.map(team => createTeamCardHTML(team)).join('');
-}
+        async function loadTournaments() {
+            const response = await apiCall('/tournaments');
+            if (response) {
+                tournaments = response.data || response;
+            }
+        }
 
-function renderTopPlayers() {
-    const container = document.getElementById('topPlayersContainer');
-    const topPlayers = appState.users.slice(0, 6);
+        async function loadLeagues() {
+            const response = await apiCall('/leagues');
+            if (response) {
+                leagues = response.data || response;
+            }
+        }
 
-    if (topPlayers.length === 0) {
-        container.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>No players found</p></div>';
-        return;
-    }
+        async function loadTeams() {
+            const response = await apiCall('/teams');
+            if (response) {
+                teams = response.data || response;
+            }
+        }
 
-    container.innerHTML = topPlayers.map(player => createUserCardHTML(player)).join('');
-    attachPlayerEventListeners();
-}
+        async function loadLeaderboard() {
+            const response = await apiCall('/leaderboard');
+            if (response) {
+                leaderboard = response.data || response;
+            }
+        }
 
-function renderLeaderboard() {
-    const tbody = document.getElementById('leaderboardBody');
-    const sorted = [...appState.users].sort((a, b) => (b.wins || 0) - (a.wins || 0));
+        async function loadVenoCoins() {
+            if (currentUser) {
+                const response = await apiCall(`/users/${currentUser.id}/coins`);
+                if (response) {
+                    document.getElementById('venoCoins').textContent = response.coins || 0;
+                }
+            }
+        }
 
-    tbody.innerHTML = sorted.map((user, index) => `
-        <tr>
-            <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">${index + 1}</td>
-            <td style="padding: 12px; border-bottom: 1px solid var(--border-color); font-weight: 600;">${user.name}</td>
-            <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">${user.wins || 0}</td>
-            <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">${user.losses || 0}</td>
-            <td style="padding: 12px; border-bottom: 1px solid var(--border-color);">
-                ${user.wins + user.losses > 0 ? Math.round((user.wins / (user.wins + user.losses)) * 100) : 0}%
-            </td>
-            <td style="padding: 12px; border-bottom: 1px solid var(--border-color); color: var(--primary); font-weight: 600;">
-                ${user.coins || 0}
-            </td>
-        </tr>
-    `).join('');
-}
-
-// ============== HTML GENERATION ==============
-function createLeagueCardHTML(league) {
-    const teamsCount = league.teams_count || league.teams?.length || 0;
-    const maxTeams = league.max_teams || 16;
-    const isFull = teamsCount >= maxTeams;
-
-    return `
-        <div class="league-card">
-            <div class="league-header">
-                <span class="status-badge status-${league.status || 'registration'}">${league.status || 'REGISTRATION'}</span>
-                <h3>${league.name}</h3>
-                <p class="league-game">${league.game_type || 'eFootball'}</p>
-            </div>
-            <div class="league-body">
-                <div class="league-stats">
-                    <div class="stat">
-                        <div class="stat-value">${teamsCount}/${maxTeams}</div>
-                        <div class="stat-label">Teams</div>
+        // ===============================
+        // RENDERING FUNCTIONS
+        // ===============================
+        function renderCard(item, type = 'league') {
+            let html = `
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-badge badge-${item.status || 'pending'}">${item.status || 'Pending'}</span>
+                        <h3 class="card-title">${item.name}</h3>
+                        <p class="card-subtitle">${item.gameType || 'Game'}</p>
                     </div>
-                    <div class="stat">
-                        <div class="stat-value">${league.matches_played || 0}</div>
-                        <div class="stat-label">Matches</div>
+                    <div class="card-body">
+                        <div class="card-stats">
+                            <div class="stat">
+                                <div class="stat-value">${item.teams?.length || item.participants?.length || 0}</div>
+                                <div class="stat-label">${type === 'league' ? 'Teams' : 'Players'}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${item.prizePool || 0}</div>
+                                <div class="stat-label">Prize</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${item.maxTeams || item.maxParticipants || 0}</div>
+                                <div class="stat-label">Max</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="card-footer button btn-join" onclick="joinItem('${item.id}', '${type}')">
+                            <i class="fas fa-sign-in-alt"></i> Join
+                        </button>
+                        <button class="card-footer button btn-view" onclick="viewItem('${item.id}', '${type}')">
+                            <i class="fas fa-eye"></i> View
+                        </button>
                     </div>
                 </div>
-                <div class="league-info">
-                    <div class="info-item">
-                        <strong>${league.prize_pool || 0}</strong> VC Prize
+            `;
+            return html;
+        }
+
+        function renderTournaments() {
+            const container = document.getElementById('tournamentsGrid');
+            if (tournaments.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-trophy"></i><h3>No Tournaments</h3><p>No tournaments available yet</p></div>`;
+                return;
+            }
+            container.innerHTML = tournaments.map(t => renderCard(t, 'tournament')).join('');
+        }
+
+        function renderLeagues() {
+            const container = document.getElementById('leaguesGrid');
+            if (leagues.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-alt"></i><h3>No Leagues</h3><p>No leagues available yet</p></div>`;
+                return;
+            }
+            container.innerHTML = leagues.map(l => renderCard(l, 'league')).join('');
+        }
+
+        function renderTeams() {
+            const container = document.getElementById('teamsGrid');
+            if (teams.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-users"></i><h3>No Teams</h3><p>No teams available yet</p></div>`;
+                return;
+            }
+            container.innerHTML = teams.map(t => renderCard(t, 'team')).join('');
+        }
+
+        function renderFeaturedLeagues() {
+            const container = document.getElementById('featuredLeaguesGrid');
+            const featured = leagues.slice(0, 3);
+            if (featured.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-star"></i><h3>No Featured Leagues</h3></div>`;
+                return;
+            }
+            container.innerHTML = featured.map(l => renderCard(l, 'league')).join('');
+        }
+
+        function renderActiveLeagues() {
+            const container = document.getElementById('activeLeaguesGrid');
+            const active = leagues.filter(l => l.status === 'live').slice(0, 3);
+            if (active.length === 0) {
+                container.innerHTML = `<div class="empty-state"><i class="fas fa-fire"></i><h3>No Active Leagues</h3></div>`;
+                return;
+            }
+            container.innerHTML = active.map(l => renderCard(l, 'league')).join('');
+        }
+
+        function renderMyLeagues() {
+            const container = document.getElementById('myLeaguesGrid');
+            const myLeagues = leagues.filter(l => l.ownerId === currentUser?.id);
+            if (myLeagues.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>No Leagues</h3>
+                        <p>You haven't joined any leagues yet</p>
+                        <button class="btn btn-primary" onclick="goToPage('leagues-page')">
+                            <i class="fas fa-search"></i> Find Leagues
+                        </button>
                     </div>
-                    <div class="info-item">
-                        <strong>${league.entry_fee || 0}</strong> VC Fee
+                `;
+                return;
+            }
+            container.innerHTML = myLeagues.map(l => renderCard(l, 'league')).join('');
+        }
+
+        function renderMyTeams() {
+            const container = document.getElementById('myTeamsGrid');
+            const myTeams = teams.filter(t => t.ownerId === currentUser?.id);
+            if (myTeams.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <h3>No Teams</h3>
+                        <p>Create your first team to get started</p>
+                        <button class="btn btn-primary" onclick="openModal('createTeamModal')">
+                            <i class="fas fa-plus"></i> Create Team
+                        </button>
                     </div>
-                </div>
-            </div>
-            <div class="league-footer">
-                <button class="join-btn" data-league-id="${league.id}" ${isFull ? 'disabled' : ''}>
-                    ${isFull ? 'FULL' : 'Join'}
-                </button>
-                <button class="view-btn" data-league-id="${league.id}">View</button>
-            </div>
-        </div>
-    `;
-}
+                `;
+                return;
+            }
+            container.innerHTML = myTeams.map(t => renderCard(t, 'team')).join('');
+        }
 
-function createTeamCardHTML(team) {
-    return `
-        <div class="team-card">
-            <div class="team-logo">
-                ${team.logo ? `<img src="${team.logo}" alt="${team.name}">` : '<i class="fas fa-shield"></i>'}
-            </div>
-            <div class="team-info">
-                <div class="team-name">${team.name}</div>
-                <div class="team-stats">
-                    <span><i class="fas fa-trophy"></i> ${team.wins || 0}W</span>
-                    <span><i class="fas fa-futbol"></i> ${team.matches || 0}M</span>
-                </div>
-            </div>
-        </div>
-    `;
-}
+        function renderLeaderboard() {
+            const tbody = document.getElementById('leaderboardBody');
+            if (leaderboard.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="empty-state"><i class="fas fa-chart-line"></i> No leaderboard data</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = leaderboard.slice(0, 20).map((player, idx) => `
+                <tr>
+                    <td>#${idx + 1}</td>
+                    <td>${player.displayName}</td>
+                    <td>${player.leaguesWon || 0}</td>
+                    <td>💰 ${player.venoCoins || 0}</td>
+                </tr>
+            `).join('');
+        }
 
-function createUserCardHTML(player) {
-    return `
-        <div class="user-card">
-            <div class="user-avatar">
-                <img src="${player.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}`}" alt="${player.name}">
-            </div>
-            <div class="user-info">
-                <div class="user-name">${player.name}</div>
-                <div class="user-stats">
-                    <span><i class="fas fa-trophy"></i> ${player.wins || 0}W</span>
-                    <span><i class="fas fa-coins"></i> ${player.coins || 0}</span>
-                </div>
-            </div>
-            <button class="challenge-btn" data-user-id="${player.id}">Challenge</button>
-        </div>
-    `;
-}
+        // ===============================
+        // CREATE/JOIN FUNCTIONS
+        // ===============================
+        async function createLeague(e) {
+            e.preventDefault();
+            
+            const data = {
+                name: document.getElementById('leagueName').value,
+                gameType: document.getElementById('leagueGameType').value,
+                maxTeams: parseInt(document.getElementById('leagueMaxTeams').value),
+                entryFee: parseInt(document.getElementById('leagueEntryFee').value),
+                description: document.getElementById('leagueDescription').value
+            };
 
-// ============== EVENT ATTACHERS ==============
-function attachLeagueEventListeners() {
-    document.querySelectorAll('.join-btn[data-league-id]').forEach(btn => {
-        btn.addEventListener('click', (e) => joinLeague(e.target.dataset.leagueId));
-    });
-    document.querySelectorAll('.view-btn[data-league-id]').forEach(btn => {
-        btn.addEventListener('click', (e) => viewLeague(e.target.dataset.leagueId));
-    });
-}
+            const response = await apiCall('/leagues', 'POST', data);
+            if (response) {
+                closeModal('createLeagueModal');
+                showToast('League created successfully!', 'success');
+                await loadLeagues();
+                renderLeagues();
+                
+                // Reset form
+                e.target.reset();
+            }
+        }
 
-function attachPlayerEventListeners() {
-    document.querySelectorAll('.challenge-btn[data-user-id]').forEach(btn => {
-        btn.addEventListener('click', (e) => sendChallenge(e.target.dataset.userId));
-    });
-}
+        async function createTournament(e) {
+            e.preventDefault();
+            
+            const data = {
+                name: document.getElementById('tournamentName').value,
+                gameType: document.getElementById('tournamentGameType').value,
+                maxParticipants: parseInt(document.getElementById('tournamentMaxParticipants').value),
+                prizePool: parseInt(document.getElementById('tournamentPrizePool').value)
+            };
 
-// ============== FORM HANDLERS ==============
-async function handleCreateLeague(e) {
-    e.preventDefault();
+            const response = await apiCall('/tournaments', 'POST', data);
+            if (response) {
+                closeModal('createTournamentModal');
+                showToast('Tournament created successfully!', 'success');
+                await loadTournaments();
+                renderTournaments();
+                e.target.reset();
+            }
+        }
 
-    const leagueData = {
-        name: document.getElementById('leagueName').value,
-        game_type: document.getElementById('gameType').value,
-        max_teams: parseInt(document.getElementById('maxTeams').value),
-        entry_fee: parseInt(document.getElementById('entryFee').value),
-        description: document.getElementById('leagueDescription').value,
-        owner_id: currentUser.id
-    };
+        async function createTeam(e) {
+            e.preventDefault();
+            
+            const data = {
+                name: document.getElementById('teamName').value,
+                gameType: document.getElementById('teamGameType').value,
+                formation: document.getElementById('teamFormation').value,
+                description: document.getElementById('teamDescription').value
+            };
 
-    const result = await apiCall(API_ENDPOINTS.leagues, 'POST', leagueData);
-    if (result) {
-        showToast('League created successfully!', 'success');
-        document.getElementById('createLeagueForm').reset();
-        hideModal('createLeagueModal');
-        await loadAppData();
-        renderHomePage();
-    }
-}
+            const response = await apiCall('/teams', 'POST', data);
+            if (response) {
+                closeModal('createTeamModal');
+                showToast('Team created successfully!', 'success');
+                await loadTeams();
+                renderTeams();
+                e.target.reset();
+            }
+        }
 
-async function handleCreateTeam(e) {
-    e.preventDefault();
+        async function joinItem(itemId, type) {
+            const response = await apiCall(`/${type}s/${itemId}/join`, 'POST');
+            if (response) {
+                showToast(`Joined ${type} successfully!`, 'success');
+                await loadPageData(currentPage);
+            }
+        }
 
-    const teamData = {
-        name: document.getElementById('teamName').value,
-        formation: document.getElementById('teamFormation').value,
-        game_type: document.getElementById('teamGameType').value,
-        owner_id: currentUser.id
-    };
+        function viewItem(itemId, type) {
+            window.location.href = `/${type}-detail.html?id=${itemId}`;
+        }
 
-    const result = await apiCall(API_ENDPOINTS.teams, 'POST', teamData);
-    if (result) {
-        showToast('Team created successfully!', 'success');
-        document.getElementById('createTeamForm').reset();
-        hideModal('createTeamModal');
-        await loadAppData();
-        renderHomePage();
-    }
-}
+        // ===============================
+        // PROFILE FUNCTIONS
+        // ===============================
+        async function updateProfile() {
+            const data = {
+                displayName: document.getElementById('displayNameInput').value,
+                phone: document.getElementById('phoneInput').value
+            };
 
-async function joinLeague(leagueId) {
-    const result = await apiCall(`${API_ENDPOINTS.leagues}/${leagueId}/join`, 'POST');
-    if (result) {
-        showToast('Successfully joined league!', 'success');
-        await loadAppData();
-        renderHomePage();
-    }
-}
+            const response = await apiCall(`/users/${currentUser.id}`, 'PUT', data);
+            if (response) {
+                currentUser = response;
+                localStorage.setItem('user', JSON.stringify(currentUser));
+                updateUI();
+                showToast('Profile updated successfully!', 'success');
+            }
+        }
 
-function viewLeague(leagueId) {
-    window.location.href = `/league/${leagueId}`;
-}
+        // ===============================
+        // THEME TOGGLE
+        // ===============================
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('light-theme');
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        }
 
-async function sendChallenge(userId) {
-    const result = await apiCall(`${API_ENDPOINTS.matches}/challenge`, 'POST', {
-        challenger_id: currentUser.id,
-        opponent_id: userId
-    });
-    if (result) {
-        showToast('Challenge sent!', 'success');
-    }
-}
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-theme');
+            document.getElementById('darkMode').checked = true;
+        }
 
-// ============== UI HELPERS ==============
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('sidebarOverlay').classList.toggle('active');
-    document.body.style.overflow = document.getElementById('sidebar').classList.contains('open') ? 'hidden' : '';
-}
+        // ===============================
+        // EVENT LISTENERS
+        // ===============================
+        document.getElementById('menuBtn').addEventListener('click', openSidebar);
+        document.getElementById('sidebarClose').addEventListener('click', closeSidebar);
+        document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
+        document.getElementById('profileAvatar').addEventListener('click', openProfileMenu);
 
-function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebarOverlay').classList.remove('active');
-    document.body.style.overflow = '';
-}
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.profile-section')) {
+                closeProfileMenu();
+            }
+        });
 
-function toggleProfilePopup() {
-    document.getElementById('profilePopup').classList.toggle('active');
-}
+        // Close modals when clicking outside
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
 
-function showModal(modalId) {
-    document.getElementById(modalId).classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
+        // ===============================
+        // INITIALIZATION
+        // ===============================
+        async function init() {
+            // Check if user is logged in
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            if (!token || !user) {
+                window.location.href = '/login.html';
+                return;
+            }
 
-function hideModal(modalId) {
-    document.getElementById(modalId).classList.remove('active');
-    document.body.style.overflow = '';
-}
+            currentUser = JSON.parse(user);
+            updateUI();
+            
+            // Load initial data
+            await loadDashboard();
+            
+            // Refresh data every 30 seconds
+            setInterval(loadDashboard, 30000);
+        }
 
-function showToast(message, type = 'success') {
-    const container = document.getElementById('toastContainer');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
-    container.appendChild(toast);
-
-    setTimeout(() => toast.classList.add('show'), 10);
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
-
-function updateVenoCoinsDisplay() {
-    const coins = currentUser.coins || 0;
-    document.getElementById('venoCoinsAmount').textContent = coins;
-}
-
-// ============== AUTH ==============
-async function logout() {
-    localStorage.removeItem('user');
-    localStorage.removeItem('authToken');
-    currentUser = null;
-    authToken = null;
-    redirectToLogin();
-}
-
-function redirectToLogin() {
-    window.location.href = '/login.html';
-}
+        // Start app when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
 </html>
