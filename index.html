@@ -3,29 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Crunk Games - Competitive Gaming Platform</title>
+    <title>Arena - Football Leagues & Tournaments</title>
     
-    <!-- Boxicons -->
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <!-- Meta Tags -->
+    <meta name="description" content="Create and manage football leagues, tournaments, and teams on Arena">
+    <meta name="keywords" content="football, leagues, tournaments, eFootball, FC, DLS">
+    <meta name="theme-color" content="#10b981">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Arena">
     
-    <!-- Font Awesome -->
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect fill='%2310b981' width='32' height='32'/><text x='16' y='24' font-size='20' fill='white' text-anchor='middle' font-weight='bold'>⚽</text></svg>">
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <style>
-        /* ===============================
-           GLOBAL VARIABLES & RESET
-        =============================== */
         :root {
             --primary: #10b981;
             --primary-dark: #059669;
             --primary-light: #34d399;
-            --secondary: #3b82f6;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --success: #10b981;
             --bg-primary: #05070d;
             --bg-secondary: #0b1222;
             --bg-tertiary: #111827;
@@ -33,23 +32,10 @@
             --text-primary: #e6e6e6;
             --text-secondary: #9ca3af;
             --text-muted: #6b7280;
-            --transition: all 0.3s ease;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-            --shadow-primary: 0 8px 20px rgba(16, 185, 129, 0.2);
-        }
-
-        body.light-theme {
-            --primary: #059669;
-            --primary-dark: #047857;
-            --primary-light: #10b981;
-            --bg-primary: #f3f4f6;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #e5e7eb;
-            --border-color: #d1d5db;
-            --text-primary: #111827;
-            --text-secondary: #4b5563;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
         }
 
         * {
@@ -58,424 +44,278 @@
             box-sizing: border-box;
         }
 
-        html, body {
-            height: 100%;
-            width: 100%;
-        }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.5;
             overflow-x: hidden;
         }
 
-        .app {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        html, body {
+            height: 100%;
         }
 
-        /* ===============================
-           TOPBAR
-        =============================== */
+        /* LAYOUT */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            position: fixed;
+            height: calc(100vh - 70px);
+            top: 70px;
+            left: 0;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 280px;
+            overflow-y: auto;
+        }
+
+        /* TOPBAR */
         .topbar {
             height: 70px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
         }
 
-        .topbar-left, .topbar-right {
+        .topbar-left {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
-        .menu-btn {
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary);
             font-size: 24px;
             cursor: pointer;
-            color: var(--primary);
-            transition: var(--transition);
-            padding: 8px;
-            border-radius: 50%;
-            border: none;
-            background: transparent;
-        }
-
-        .menu-btn:hover {
-            background: rgba(16, 185, 129, 0.1);
-            transform: scale(1.1);
         }
 
         .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .brand-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-        }
-
-        .brand h1 {
             font-size: 24px;
             font-weight: 700;
             color: var(--primary);
             letter-spacing: 1px;
         }
 
-        .veno-coins-display {
+        .topbar-right {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 20px;
+        }
+
+        .coins-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             background: rgba(16, 185, 129, 0.1);
             padding: 8px 16px;
             border-radius: 40px;
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
-        .veno-coins-display i {
+        .coins-display i {
             color: #fbbf24;
-            font-size: 18px;
+            font-size: 16px;
         }
 
-        .veno-coins-display span {
+        .coins-value {
             font-weight: 700;
-            font-size: 16px;
             color: var(--primary);
         }
 
-        .profile-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .profile-menu {
             position: relative;
         }
 
-        .profile-avatar {
+        .profile-pic {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            overflow: hidden;
+            object-fit: cover;
             border: 2px solid var(--primary);
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease;
         }
 
-        .profile-avatar:hover {
+        .profile-pic:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
         }
 
-        .profile-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .profile-menu {
+        .profile-dropdown {
             display: none;
             position: absolute;
             top: 50px;
             right: 0;
-            width: 250px;
+            width: 220px;
             background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 12px;
+            border: 1px solid var(--border-color);
             z-index: 1001;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .profile-menu.active {
+        .profile-dropdown.active {
             display: block;
-            animation: slideDown 0.3s ease;
         }
 
-        .profile-info {
-            display: flex;
-            gap: 12px;
-            padding: 12px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 12px;
-        }
-
-        .profile-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .profile-info-text h3 {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .profile-info-text p {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .profile-menu-item {
+        .profile-dropdown-item {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 10px;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: var(--transition);
             color: var(--text-primary);
             text-decoration: none;
-            margin-bottom: 5px;
-        }
-
-        .profile-menu-item:hover {
-            background: var(--bg-secondary);
-            color: var(--primary);
-        }
-
-        .profile-menu-item i {
-            color: var(--primary);
-        }
-
-        .logout-btn {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 10px;
-            background: var(--danger);
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .logout-btn:hover {
-            background: #d93333;
-            transform: translateY(-2px);
-        }
-
-        /* ===============================
-           SIDEBAR
-        =============================== */
-        .sidebar {
-            position: fixed;
-            left: -300px;
-            top: 0;
-            width: 280px;
-            height: 100vh;
-            background: var(--bg-secondary);
-            border-right: 1px solid var(--border-color);
             transition: all 0.3s ease;
-            z-index: 2000;
-            overflow-y: auto;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
         }
 
-        .sidebar.open {
-            left: 0;
-        }
-
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .sidebar-header h3 {
+        .profile-dropdown-item:hover {
+            background: var(--bg-secondary);
             color: var(--primary);
-            font-size: 20px;
         }
 
-        .sidebar-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: var(--transition);
+        .profile-dropdown-item.danger {
+            color: #ff5555;
         }
 
-        .sidebar-close:hover {
-            color: var(--danger);
-            transform: rotate(90deg);
-        }
-
+        /* SIDEBAR MENU */
         .sidebar-menu {
             list-style: none;
-            padding: 10px 15px;
+            padding: 20px 0;
         }
 
-        .sidebar-menu li {
+        .sidebar-menu-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-bottom: 5px;
+            padding: 12px 20px;
             color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
         }
 
-        .sidebar-menu li:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateX(5px);
-        }
-
-        .sidebar-menu li.active {
+        .sidebar-menu-item:hover {
             background: rgba(16, 185, 129, 0.1);
             color: var(--primary);
-            border-left: 3px solid var(--primary);
+            border-left-color: var(--primary);
         }
 
-        .sidebar-menu li i {
-            width: 24px;
+        .sidebar-menu-item.active {
+            background: rgba(16, 185, 129, 0.1);
             color: var(--primary);
+            border-left-color: var(--primary);
         }
 
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1999;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-            backdrop-filter: blur(3px);
+        .sidebar-menu-item i {
+            width: 20px;
+            text-align: center;
         }
 
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* ===============================
-           MAIN CONTENT
-        =============================== */
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding-bottom: 70px;
-        }
-
+        /* PAGES */
         .page {
             display: none;
-            min-height: 100%;
-            animation: fadeIn 0.3s ease;
         }
 
         .page.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .page-header {
+            padding: 30px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
         }
 
-        /* ===============================
-           HERO SECTION
-        =============================== */
-        .hero {
-            background: linear-gradient(135deg, #1a2a3a, #0f172a);
-            border-radius: 24px;
-            margin: 20px;
-            padding: 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
+        .page-subtitle {
+            color: var(--text-secondary);
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* CARDS & COMPONENTS */
+        .card {
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
+        .card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.1);
         }
 
-        .hero h1 {
-            font-size: 36px;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            color: #9ca3af;
-            margin-bottom: 24px;
-            font-size: 16px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 0 30px 30px;
         }
 
         .btn {
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
+            padding: 10px 20px;
+            border-radius: 8px;
             border: none;
-            display: flex;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 16px;
         }
 
         .btn-primary {
@@ -485,236 +325,34 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-primary);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
         }
 
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #d93333;
-            transform: translateY(-2px);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* ===============================
-           CARDS & GRIDS
-        =============================== */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 0 20px;
-            margin-bottom: 40px;
-        }
-
-        .action-card {
-            background: var(--bg-tertiary);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            border: 1px solid var(--border-color);
-        }
-
-        .action-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: var(--shadow-primary);
-        }
-
-        .action-card i {
-            font-size: 40px;
-            color: var(--primary);
-            margin-bottom: 12px;
-        }
-
-        .action-card h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-
-        .action-card p {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        /* ===============================
-           SECTIONS
-        =============================== */
-        .section {
-            padding: 0 20px;
-            margin-bottom: 40px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .section-header h2 {
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-header a {
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: var(--transition);
-        }
-
-        .section-header a:hover {
-            transform: translateX(5px);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--bg-tertiary);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: var(--shadow-primary);
-        }
-
-        .card-header {
-            background: linear-gradient(135deg, #1f2937, #111827);
-            padding: 20px;
-            position: relative;
-        }
-
-        .card-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .badge-live { background: #10b981; color: white; }
-        .badge-pending { background: #f59e0b; color: white; }
-        .badge-completed { background: #6b7280; color: white; }
-
-        .card-title {
-            font-size: 18px;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .card-subtitle {
-            font-size: 12px;
-            color: #9ca3af;
-        }
-
-        .card-body {
-            padding: 15px;
-        }
-
-        .card-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .card-footer {
-            padding: 15px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 10px;
-        }
-
-        .card-footer button {
-            flex: 1;
-            padding: 8px;
-            border-radius: 30px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 12px;
-        }
-
-        .btn-join {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-join:hover {
-            background: var(--primary-dark);
-        }
-
-        .btn-view {
-            background: transparent;
+            background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
         }
 
-        .btn-view:hover {
+        .btn-secondary:hover {
             border-color: var(--primary);
             color: var(--primary);
         }
 
-        /* ===============================
-           FORMS & INPUTS
-        =============================== */
+        .btn-danger {
+            background: #ff5555;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e04848;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -723,20 +361,18 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: var(--text-primary);
         }
 
-        .form-group input,
-        .form-group select,
+        .form-group input, 
+        .form-group select, 
         .form-group textarea {
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px;
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 8px;
             color: var(--text-primary);
             font-size: 14px;
-            transition: var(--transition);
             font-family: inherit;
         }
 
@@ -748,824 +384,497 @@
             box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
         }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .error-message {
-            color: var(--danger);
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        /* ===============================
-           MODAL
-        =============================== */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+        /* TABLE */
+        .table {
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
+            border-collapse: collapse;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 0 30px;
         }
 
-        .modal.active {
-            display: flex;
-            animation: slideUp 0.3s ease;
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-content {
-            background: var(--bg-primary);
-            border-radius: 24px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid var(--border-color);
-            padding: 30px;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h2 {
-            font-size: 24px;
+        .table th {
+            background: var(--bg-secondary);
             color: var(--primary);
+            font-weight: 600;
         }
 
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 28px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: var(--transition);
+        .table tr:hover {
+            background: var(--bg-secondary);
         }
 
-        .modal-close:hover {
-            color: var(--danger);
-            transform: rotate(90deg);
-        }
-
-        /* ===============================
-           TOAST NOTIFICATIONS
-        =============================== */
+        /* TOAST */
         .toast-container {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 10001;
-            pointer-events: none;
+            z-index: 2000;
         }
 
         .toast {
             background: var(--primary);
             color: white;
             padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
+            border-radius: 8px;
             margin-top: 10px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: var(--transition);
-            box-shadow: var(--shadow-primary);
             display: flex;
             align-items: center;
             gap: 8px;
-            pointer-events: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
         }
 
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
+        .toast.error {
+            background: var(--error);
         }
 
-        .toast.success { background: var(--success); }
-        .toast.error { background: var(--danger); }
-        .toast.warning { background: var(--warning); }
-        .toast.info { background: var(--secondary); }
+        .toast.warning {
+            background: var(--warning);
+        }
 
-        /* ===============================
-           LOADING & EMPTY STATES
-        =============================== */
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* LOADING */
         .loading {
             text-align: center;
-            padding: 60px;
+            padding: 40px;
             color: var(--text-secondary);
         }
 
-        .loading i {
-            font-size: 40px;
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--primary);
+            border-radius: 50%;
             animation: spin 1s linear infinite;
-            color: var(--primary);
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 60px;
-            background: var(--bg-tertiary);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-        }
-
-        .empty-state i {
-            font-size: 60px;
-            color: var(--primary);
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-
-        .empty-state h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
-        .empty-state p {
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        /* ===============================
-           TABLE STYLES
-        =============================== */
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        /* LEAGUE CARD */
+        .league-card {
             background: var(--bg-tertiary);
             border-radius: 16px;
             overflow: hidden;
-        }
-
-        table th,
-        table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        table th {
-            background: var(--bg-secondary);
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        table tr:hover {
-            background: var(--bg-secondary);
-        }
-
-        /* ===============================
-           BOTTOM NAVIGATION
-        =============================== */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 70px;
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 999;
-        }
-
-        .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
             cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 12px;
+            transition: all 0.3s ease;
         }
 
-        .bottom-nav-item:hover,
-        .bottom-nav-item.active {
-            color: var(--primary);
-            background: rgba(16, 185, 129, 0.1);
+        .league-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
         }
 
-        .bottom-nav-item i {
-            font-size: 24px;
-        }
-
-        .bottom-nav-item span {
-            font-size: 10px;
-            font-weight: 600;
-        }
-
-        /* ===============================
-           FOOTER
-        =============================== */
-        .footer {
-            margin-top: auto;
+        .league-card-header {
+            background: linear-gradient(135deg, #1f2937, #111827);
             padding: 20px;
-            background: var(--bg-secondary);
-            border-top: 1px solid var(--border-color);
-            text-align: center;
-            color: var(--text-muted);
+            position: relative;
+        }
+
+        .league-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--primary);
+            color: white;
+        }
+
+        .league-card-body {
+            padding: 15px;
+        }
+
+        .league-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .league-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
             font-size: 12px;
         }
 
-        /* ===============================
-           ANIMATIONS
-        =============================== */
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .stat {
+            text-align: center;
         }
 
-        /* ===============================
-           RESPONSIVE DESIGN
-        =============================== */
+        .stat-value {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            .topbar {
-                height: 55px;
-                padding: 0 12px;
+            .sidebar {
+                transform: translateX(-100%);
             }
 
-            .brand h1 {
-                font-size: 18px;
+            .content {
+                margin-left: 0;
             }
 
-            .veno-coins-display {
-                font-size: 14px;
-                padding: 6px 12px;
-            }
-
-            .hero {
-                margin: 10px;
-                padding: 20px;
-            }
-
-            .hero h1 {
-                font-size: 24px;
-            }
-
-            .quick-actions {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-                padding: 0 10px;
+            .menu-toggle {
+                display: block;
             }
 
             .grid {
                 grid-template-columns: 1fr;
             }
 
-            .section {
-                padding: 0 10px;
-            }
-
-            .modal-content {
-                width: 95%;
-                padding: 20px;
-            }
-
-            .action-card i {
-                font-size: 28px;
-            }
-
-            .action-card h3 {
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .brand h1 {
-                font-size: 16px;
-            }
-
-            .veno-coins-display {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 20px;
-            }
-
-            .quick-actions {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            table {
+            .table {
                 font-size: 12px;
             }
 
-            table th, table td {
-                padding: 8px 10px;
+            .table th,
+            .table td {
+                padding: 10px;
             }
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease;
         }
     </style>
 </head>
 <body>
-    <div class="app">
+    <div class="app-container">
         <!-- TOPBAR -->
-        <header class="topbar">
+        <div class="topbar">
             <div class="topbar-left">
-                <button class="menu-btn" id="menuBtn">
-                    <i class="bx bx-menu"></i>
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
                 </button>
-                <div class="brand">
-                    <div class="brand-icon">🏆</div>
-                    <h1>Crunk Games</h1>
-                </div>
+                <div class="brand">⚽ Arena</div>
             </div>
-
             <div class="topbar-right">
-                <div class="veno-coins-display">
+                <div class="coins-display">
                     <i class="fas fa-coins"></i>
-                    <span id="venoCoins">0</span>
+                    <span class="coins-value" id="coinsDisplay">0</span>
                 </div>
-
-                <div class="profile-section">
-                    <img id="profileAvatar" class="profile-avatar" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
-                    <div class="profile-menu" id="profileMenu">
-                        <div class="profile-info">
-                            <img id="profileMenuAvatar" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
-                            <div class="profile-info-text">
-                                <h3 id="profileName">User</h3>
-                                <p id="profileEmail">user@example.com</p>
-                            </div>
-                        </div>
-                        <a href="#" class="profile-menu-item" onclick="goToPage('profile-page')">
-                            <i class="fas fa-user"></i> My Profile
-                        </a>
-                        <a href="#" class="profile-menu-item" onclick="goToPage('my-leagues')">
-                            <i class="fas fa-trophy"></i> My Leagues
-                        </a>
-                        <a href="#" class="profile-menu-item" onclick="goToPage('my-teams')">
-                            <i class="fas fa-users"></i> My Teams
-                        </a>
-                        <a href="#" class="profile-menu-item" onclick="goToPage('settings')">
-                            <i class="fas fa-cog"></i> Settings
-                        </a>
-                        <button class="logout-btn" onclick="logout()">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
+                <div class="profile-menu">
+                    <img id="profilePic" class="profile-pic" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff" alt="Profile" onclick="toggleProfileMenu()">
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a class="profile-dropdown-item" href="#" onclick="goToPage('profile')"><i class="fas fa-user"></i> Profile</a>
+                        <a class="profile-dropdown-item" href="#" onclick="goToPage('settings')"><i class="fas fa-cog"></i> Settings</a>
+                        <hr style="border:none;border-top:1px solid var(--border-color);margin:8px 0;">
+                        <a class="profile-dropdown-item danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
                     </div>
                 </div>
             </div>
-        </header>
-
-        <!-- SIDEBAR -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h3>Menu</h3>
-                <button class="sidebar-close" id="sidebarClose">
-                    <i class="bx bx-x"></i>
-                </button>
-            </div>
-            <ul class="sidebar-menu">
-                <li onclick="goToPage('home-page')" id="sidebarHome">
-                    <i class="bx bx-home"></i> Home
-                </li>
-                <li onclick="goToPage('tournaments-page')" id="sidebarTournaments">
-                    <i class="bx bx-trophy"></i> Tournaments
-                </li>
-                <li onclick="goToPage('leagues-page')" id="sidebarLeagues">
-                    <i class="fas fa-calendar-alt"></i> Leagues
-                </li>
-                <li onclick="goToPage('teams-page')" id="sidebarTeams">
-                    <i class="fas fa-users"></i> Teams
-                </li>
-                <li onclick="goToPage('leaderboard')" id="sidebarLeaderboard">
-                    <i class="bx bx-bar-chart-alt-2"></i> Leaderboard
-                </li>
-            </ul>
         </div>
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <!-- MAIN CONTENT -->
         <div class="main-content">
-            <!-- HOME PAGE -->
-            <div class="page active" id="home-page">
-                <div class="hero">
-                    <div class="hero-content">
-                        <h1>⚽ Welcome to Crunk Games</h1>
-                        <p>Compete in tournaments, create leagues, and earn Veno Coins!</p>
-                        <div class="hero-buttons">
-                            <button class="btn btn-primary" onclick="goToPage('tournaments-page')">
-                                <i class="fas fa-play"></i> Browse Tournaments
-                            </button>
-                            <button class="btn btn-secondary" onclick="openModal('createLeagueModal')">
+            <!-- SIDEBAR -->
+            <div class="sidebar" id="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="sidebar-menu-item active" onclick="goToPage('home')">
+                        <i class="fas fa-home"></i> <span>Home</span>
+                    </li>
+                    <li class="sidebar-menu-item" onclick="goToPage('leagues')">
+                        <i class="fas fa-trophy"></i> <span>Leagues</span>
+                    </li>
+                    <li class="sidebar-menu-item" onclick="goToPage('teams')">
+                        <i class="fas fa-users"></i> <span>Teams</span>
+                    </li>
+                    <li class="sidebar-menu-item" onclick="goToPage('leaderboard')">
+                        <i class="fas fa-chart-bar"></i> <span>Leaderboard</span>
+                    </li>
+                    <li class="sidebar-menu-item" onclick="goToPage('tournaments')">
+                        <i class="fas fa-gamepad"></i> <span>Tournaments</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+            <!-- CONTENT AREA -->
+            <div class="content">
+                <!-- HOME PAGE -->
+                <div id="homePage" class="page active">
+                    <div class="page-header">
+                        <div class="page-title">Welcome, <span id="userName">User</span>!</div>
+                        <div class="page-subtitle">Manage your leagues, teams, and compete in tournaments</div>
+                    </div>
+
+                    <div style="padding: 0 30px 30px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
+                            <div class="card" style="text-align: center;">
+                                <div style="font-size: 32px; font-weight: 700; color: var(--primary); margin-bottom: 8px;" id="totalLeagues">0</div>
+                                <div style="color: var(--text-secondary);">Total Leagues</div>
+                            </div>
+                            <div class="card" style="text-align: center;">
+                                <div style="font-size: 32px; font-weight: 700; color: var(--primary); margin-bottom: 8px;" id="totalTeams">0</div>
+                                <div style="color: var(--text-secondary);">Your Teams</div>
+                            </div>
+                            <div class="card" style="text-align: center;">
+                                <div style="font-size: 32px; font-weight: 700; color: var(--primary); margin-bottom: 8px;" id="totalMatches">0</div>
+                                <div style="color: var(--text-secondary);">Matches Played</div>
+                            </div>
+                            <div class="card" style="text-align: center;">
+                                <div style="font-size: 32px; font-weight: 700; color: var(--primary); margin-bottom: 8px;" id="winRate">0%</div>
+                                <div style="color: var(--text-secondary);">Win Rate</div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                            <div class="card" style="text-align: center; cursor: pointer;" onclick="goToPage('leagues')">
+                                <div style="font-size: 48px; margin-bottom: 12px;">🏆</div>
+                                <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Join Leagues</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Find and join existing leagues</div>
+                            </div>
+                            <div class="card" style="text-align: center; cursor: pointer;" onclick="showCreateLeague()">
+                                <div style="font-size: 48px; margin-bottom: 12px;">⚽</div>
+                                <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Create League</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Start your own league</div>
+                            </div>
+                            <div class="card" style="text-align: center; cursor: pointer;" onclick="showCreateTeam()">
+                                <div style="font-size: 48px; margin-bottom: 12px;">👥</div>
+                                <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Create Team</div>
+                                <div style="font-size: 12px; color: var(--text-secondary);">Build your dream team</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LEAGUES PAGE -->
+                <div id="leaguesPage" class="page">
+                    <div class="page-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div class="page-title">Leagues</div>
+                                <div class="page-subtitle">Browse and manage football leagues</div>
+                            </div>
+                            <button class="btn btn-primary" onclick="showCreateLeague()">
                                 <i class="fas fa-plus"></i> Create League
                             </button>
                         </div>
                     </div>
-                </div>
 
-                <div class="quick-actions">
-                    <div class="action-card" onclick="goToPage('tournaments-page')">
-                        <i class="fas fa-trophy"></i>
-                        <h3>Tournaments</h3>
-                        <p>Find and join tournaments</p>
-                    </div>
-                    <div class="action-card" onclick="goToPage('leagues-page')">
-                        <i class="fas fa-calendar-alt"></i>
-                        <h3>Leagues</h3>
-                        <p>Create or join leagues</p>
-                    </div>
-                    <div class="action-card" onclick="goToPage('teams-page')">
-                        <i class="fas fa-users"></i>
-                        <h3>Teams</h3>
-                        <p>Build your dream team</p>
-                    </div>
-                    <div class="action-card" onclick="goToPage('leaderboard')">
-                        <i class="fas fa-chart-line"></i>
-                        <h3>Leaderboard</h3>
-                        <p>View global rankings</p>
-                    </div>
-                </div>
-
-                <!-- FEATURED LEAGUES -->
-                <div class="section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-star"></i> Featured Leagues</h2>
-                        <a href="#" onclick="goToPage('leagues-page')">View All <i class="bx bx-chevron-right"></i></a>
-                    </div>
-                    <div class="grid" id="featuredLeaguesGrid">
-                        <div class="loading"><i class="fas fa-spinner"></i> Loading...</div>
-                    </div>
-                </div>
-
-                <!-- ACTIVE LEAGUES -->
-                <div class="section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-fire"></i> Active Leagues</h2>
-                    </div>
-                    <div class="grid" id="activeLeaguesGrid">
-                        <div class="loading"><i class="fas fa-spinner"></i> Loading...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TOURNAMENTS PAGE -->
-            <div class="page" id="tournaments-page">
-                <div class="section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-trophy"></i> Tournaments</h2>
-                        <button class="btn btn-primary" onclick="openModal('createTournamentModal')">
-                            <i class="fas fa-plus"></i> Create
-                        </button>
-                    </div>
-                    <div class="grid" id="tournamentsGrid">
-                        <div class="loading"><i class="fas fa-spinner"></i> Loading...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- LEAGUES PAGE -->
-            <div class="page" id="leagues-page">
-                <div class="section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-calendar-alt"></i> Leagues</h2>
-                        <button class="btn btn-primary" onclick="openModal('createLeagueModal')">
-                            <i class="fas fa-plus"></i> Create
-                        </button>
-                    </div>
-                    <div class="grid" id="leaguesGrid">
-                        <div class="loading"><i class="fas fa-spinner"></i> Loading...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TEAMS PAGE -->
-            <div class="page" id="teams-page">
-                <div class="section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-users"></i> Teams</h2>
-                        <button class="btn btn-primary" onclick="openModal('createTeamModal')">
-                            <i class="fas fa-plus"></i> Create
-                        </button>
-                    </div>
-                    <div class="grid" id="teamsGrid">
-                        <div class="loading"><i class="fas fa-spinner"></i> Loading...</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- LEADERBOARD PAGE -->
-            <div class="page" id="leaderboard">
-                <div class="section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-chart-line"></i> Leaderboard</h2>
-                    </div>
-                    <div class="table-responsive">
-                        <table id="leaderboardTable">
-                            <thead>
-                                <tr>
-                                    <th>Rank</th>
-                                    <th>Player</th>
-                                    <th>Leagues Won</th>
-                                    <th>Veno Coins</th>
-                                </tr>
-                            </thead>
-                            <tbody id="leaderboardBody">
-                                <tr>
-                                    <td colspan="4" class="loading"><i class="fas fa-spinner"></i> Loading...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- MY LEAGUES PAGE -->
-            <div class="page" id="my-leagues">
-                <div class="section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-trophy"></i> My Leagues</h2>
-                    </div>
-                    <div class="grid" id="myLeaguesGrid">
-                        <div class="empty-state">
-                            <i class="fas fa-calendar-alt"></i>
-                            <h3>No Leagues</h3>
-                            <p>You haven't joined any leagues yet</p>
-                            <button class="btn btn-primary" onclick="goToPage('leagues-page')">
-                                <i class="fas fa-search"></i> Find Leagues
-                            </button>
+                    <div id="leaguesContent" style="padding: 0 30px 30px;">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p style="margin-top: 12px;">Loading leagues...</p>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- MY TEAMS PAGE -->
-            <div class="page" id="my-teams">
-                <div class="section">
-                    <div class="section-header">
-                        <h2><i class="fas fa-users"></i> My Teams</h2>
-                    </div>
-                    <div class="grid" id="myTeamsGrid">
-                        <div class="empty-state">
-                            <i class="fas fa-users"></i>
-                            <h3>No Teams</h3>
-                            <p>Create your first team to get started</p>
-                            <button class="btn btn-primary" onclick="openModal('createTeamModal')">
+                <!-- TEAMS PAGE -->
+                <div id="teamsPage" class="page">
+                    <div class="page-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div class="page-title">Teams</div>
+                                <div class="page-subtitle">Your teams and squad management</div>
+                            </div>
+                            <button class="btn btn-primary" onclick="showCreateTeam()">
                                 <i class="fas fa-plus"></i> Create Team
                             </button>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- PROFILE PAGE -->
-            <div class="page" id="profile-page">
-                <div class="section" style="max-width: 600px; margin: 0 auto;">
-                    <div class="section-header">
-                        <h2><i class="fas fa-user"></i> My Profile</h2>
+                    <div id="teamsContent" style="padding: 0 30px 30px;">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p style="margin-top: 12px;">Loading teams...</p>
+                        </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div style="text-align: center; margin-bottom: 20px;">
-                                <img id="profilePageAvatar" style="width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--primary); margin-bottom: 15px;" src="https://ui-avatars.com/api/?name=User&background=10b981&color=fff&size=128" alt="Profile">
-                            </div>
+                </div>
+
+                <!-- LEADERBOARD PAGE -->
+                <div id="leaderboardPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">Leaderboard</div>
+                        <div class="page-subtitle">Global rankings and top performers</div>
+                    </div>
+
+                    <div id="leaderboardContent" style="padding: 0 30px 30px;">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p style="margin-top: 12px;">Loading leaderboard...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOURNAMENTS PAGE -->
+                <div id="tournamentsPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">Tournaments</div>
+                        <div class="page-subtitle">Featured tournaments and competitions</div>
+                    </div>
+
+                    <div id="tournamentsContent" style="padding: 0 30px 30px;">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p style="margin-top: 12px;">Loading tournaments...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROFILE PAGE -->
+                <div id="profilePage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">Profile</div>
+                        <div class="page-subtitle">Manage your profile information</div>
+                    </div>
+
+                    <div style="padding: 0 30px 30px; max-width: 600px;">
+                        <div class="card">
                             <div class="form-group">
                                 <label>Display Name</label>
-                                <input type="text" id="displayNameInput" placeholder="Your display name">
+                                <input type="text" id="displayName" placeholder="Your display name">
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="email" id="emailInput" placeholder="your@email.com" readonly>
+                                <input type="email" id="email" placeholder="your@email.com" disabled>
                             </div>
                             <div class="form-group">
-                                <label>Phone</label>
-                                <input type="tel" id="phoneInput" placeholder="+1234567890">
+                                <label>Bio</label>
+                                <textarea id="bio" placeholder="Tell us about yourself" rows="4"></textarea>
                             </div>
-                            <button class="btn btn-primary" onclick="updateProfile()" style="width: 100%;">
-                                <i class="fas fa-save"></i> Save Changes
-                            </button>
+                            <button class="btn btn-primary btn-block" onclick="updateProfile()">Save Profile</button>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- SETTINGS PAGE -->
-            <div class="page" id="settings">
-                <div class="section" style="max-width: 600px; margin: 0 auto;">
-                    <div class="section-header">
-                        <h2><i class="fas fa-cog"></i> Settings</h2>
+                <!-- SETTINGS PAGE -->
+                <div id="settingsPage" class="page">
+                    <div class="page-header">
+                        <div class="page-title">Settings</div>
+                        <div class="page-subtitle">Configure application preferences</div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 style="margin-bottom: 15px;">Account Settings</h3>
+
+                    <div style="padding: 0 30px 30px; max-width: 600px;">
+                        <div class="card">
                             <div class="form-group">
-                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                                    <input type="checkbox" id="emailNotifications" checked>
-                                    <span>Email Notifications</span>
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                                    <input type="checkbox" id="smsNotifications">
-                                    <span>SMS Notifications</span>
-                                </label>
-                            </div>
-                            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
-                            <h3 style="margin-bottom: 15px;">Display Settings</h3>
-                            <div class="form-group">
-                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                                    <input type="checkbox" id="darkMode" checked onchange="toggleTheme()">
+                                <label style="display: flex; align-items: center; justify-content: space-between;">
                                     <span>Dark Mode</span>
+                                    <input type="checkbox" id="darkMode" checked>
                                 </label>
                             </div>
+                            <div class="form-group">
+                                <label style="display: flex; align-items: center; justify-content: space-between;">
+                                    <span>Notifications</span>
+                                    <input type="checkbox" id="notifications" checked>
+                                </label>
+                            </div>
+                            <hr style="border:none;border-top:1px solid var(--border-color);margin:20px 0;">
+                            <button class="btn btn-danger btn-block" onclick="logout()">Logout</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- BOTTOM NAVIGATION -->
-        <nav class="bottom-nav">
-            <a class="bottom-nav-item active" onclick="goToPage('home-page')">
-                <i class="bx bx-home"></i>
-                <span>Home</span>
-            </a>
-            <a class="bottom-nav-item" onclick="goToPage('tournaments-page')">
-                <i class="bx bx-trophy"></i>
-                <span>Tournaments</span>
-            </a>
-            <a class="bottom-nav-item" onclick="goToPage('leagues-page')">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Leagues</span>
-            </a>
-            <a class="bottom-nav-item" onclick="goToPage('teams-page')">
-                <i class="fas fa-users"></i>
-                <span>Teams</span>
-            </a>
-            <a class="bottom-nav-item" onclick="goToPage('leaderboard')">
-                <i class="bx bx-bar-chart-alt-2"></i>
-                <span>Top</span>
-            </a>
-        </nav>
     </div>
 
     <!-- MODALS -->
-    <div class="modal" id="createLeagueModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Create League</h2>
-                <button class="modal-close" onclick="closeModal('createLeagueModal')">
-                    <i class="bx bx-x"></i>
+    <div id="createLeagueModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 2001; align-items: center; justify-content: center;">
+        <div class="card" style="width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Create New League</h2>
+                <button class="btn btn-secondary" onclick="closeModal('createLeagueModal)" style="padding: 8px 12px;">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form onsubmit="createLeague(event)">
-                <div class="form-group">
-                    <label>League Name</label>
-                    <input type="text" id="leagueName" required placeholder="Enter league name">
-                </div>
-                <div class="form-group">
-                    <label>Game Type</label>
-                    <select id="leagueGameType" required>
-                        <option value="eFootball">eFootball</option>
-                        <option value="FC">FC (FIFA)</option>
-                        <option value="DLS">Dream League Soccer</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Max Teams</label>
-                    <input type="number" id="leagueMaxTeams" required min="4" max="32" value="16" placeholder="4-32">
-                </div>
-                <div class="form-group">
-                    <label>Entry Fee (Veno Coins)</label>
-                    <input type="number" id="leagueEntryFee" required min="0" value="50" placeholder="0">
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="leagueDescription" placeholder="League description..." rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-check"></i> Create League
-                </button>
-            </form>
+
+            <div class="form-group">
+                <label>League Name</label>
+                <input type="text" id="leagueName" placeholder="e.g., Pro League 2024">
+            </div>
+            <div class="form-group">
+                <label>Game Type</label>
+                <select id="gameType">
+                    <option value="eFootball">eFootball</option>
+                    <option value="FC">FC (FIFA/EA Sports FC)</option>
+                    <option value="DLS">Dream League Soccer (DLS)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Max Teams</label>
+                <input type="number" id="maxTeams" value="16" min="2" max="32">
+            </div>
+            <div class="form-group">
+                <label>Entry Fee (coins)</label>
+                <input type="number" id="entryFee" value="0" min="0">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="leagueDescription" placeholder="League description" rows="3"></textarea>
+            </div>
+
+            <button class="btn btn-primary btn-block" onclick="createLeague()">Create League</button>
         </div>
     </div>
 
-    <div class="modal" id="createTournamentModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Create Tournament</h2>
-                <button class="modal-close" onclick="closeModal('createTournamentModal')">
-                    <i class="bx bx-x"></i>
+    <div id="createTeamModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 2001; align-items: center; justify-content: center;">
+        <div class="card" style="width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Create New Team</h2>
+                <button class="btn btn-secondary" onclick="closeModal('createTeamModal')" style="padding: 8px 12px;">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form onsubmit="createTournament(event)">
-                <div class="form-group">
-                    <label>Tournament Name</label>
-                    <input type="text" id="tournamentName" required placeholder="Enter tournament name">
-                </div>
-                <div class="form-group">
-                    <label>Game Type</label>
-                    <select id="tournamentGameType" required>
-                        <option value="eFootball">eFootball</option>
-                        <option value="FC">FC (FIFA)</option>
-                        <option value="DLS">Dream League Soccer</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Max Participants</label>
-                    <input type="number" id="tournamentMaxParticipants" required min="4" max="64" value="16">
-                </div>
-                <div class="form-group">
-                    <label>Prize Pool (Veno Coins)</label>
-                    <input type="number" id="tournamentPrizePool" required min="100" value="1000">
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-check"></i> Create Tournament
-                </button>
-            </form>
-        </div>
-    </div>
 
-    <div class="modal" id="createTeamModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Create Team</h2>
-                <button class="modal-close" onclick="closeModal('createTeamModal')">
-                    <i class="bx bx-x"></i>
-                </button>
+            <div class="form-group">
+                <label>Team Name</label>
+                <input type="text" id="teamName" placeholder="e.g., Manchester United">
             </div>
-            <form onsubmit="createTeam(event)">
-                <div class="form-group">
-                    <label>Team Name</label>
-                    <input type="text" id="teamName" required placeholder="Enter team name">
-                </div>
-                <div class="form-group">
-                    <label>Game Type</label>
-                    <select id="teamGameType" required>
-                        <option value="eFootball">eFootball</option>
-                        <option value="FC">FC (FIFA)</option>
-                        <option value="DLS">Dream League Soccer</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Formation</label>
-                    <select id="teamFormation" required>
-                        <option value="4-4-2">4-4-2</option>
-                        <option value="4-3-3">4-3-3</option>
-                        <option value="3-5-2">3-5-2</option>
-                        <option value="5-3-2">5-3-2</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="teamDescription" placeholder="Team description..." rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-check"></i> Create Team
-                </button>
-            </form>
+            <div class="form-group">
+                <label>Formation</label>
+                <select id="formation">
+                    <option value="4-3-3">4-3-3</option>
+                    <option value="4-4-2">4-4-2</option>
+                    <option value="3-5-2">3-5-2</option>
+                    <option value="5-3-2">5-3-2</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Game Type</label>
+                <select id="teamGameType">
+                    <option value="eFootball">eFootball</option>
+                    <option value="FC">FC (FIFA/EA Sports FC)</option>
+                    <option value="DLS">Dream League Soccer (DLS)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="teamDescription" placeholder="Team description" rows="3"></textarea>
+            </div>
+
+            <button class="btn btn-primary btn-block" onclick="createTeam()">Create Team</button>
         </div>
     </div>
 
@@ -1573,561 +882,470 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        // ===============================
-        // API CONFIGURATION
-        // ===============================
+        // ========== CONFIGURATION ==========
         const API_BASE_URL = 'https://arena-backend-cv5d.onrender.com/api';
+        const AUTH_TOKEN_KEY = 'arena_auth_token';
+        const USER_KEY = 'arena_user';
 
-        // ===============================
-        // STATE MANAGEMENT
-        // ===============================
-        let currentUser = null;
-        let currentPage = 'home-page';
-        let tournaments = [];
-        let leagues = [];
-        let teams = [];
-        let leaderboard = [];
+        // ========== STATE MANAGEMENT ==========
+        let state = {
+            user: null,
+            token: null,
+            leagues: [],
+            teams: [],
+            leaderboard: [],
+            tournaments: [],
+            coins: 0
+        };
 
-        // ===============================
-        // API HELPER FUNCTIONS
-        // ===============================
-        async function apiCall(endpoint, method = 'GET', data = null, isFormData = false) {
+        // ========== API FUNCTIONS ==========
+        async function apiCall(endpoint, options = {}) {
             try {
-                const options = {
-                    method,
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
-                        ...(!isFormData && { 'Content-Type': 'application/json' })
-                    }
+                const url = `${API_BASE_URL}${endpoint}`;
+                const headers = {
+                    'Content-Type': 'application/json',
+                    ...options.headers
                 };
 
-                if (data) {
-                    options.body = isFormData ? data : JSON.stringify(data);
+                if (state.token) {
+                    headers['Authorization'] = `Bearer ${state.token}`;
                 }
 
-                const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+                const response = await fetch(url, {
+                    method: options.method || 'GET',
+                    headers,
+                    body: options.body ? JSON.stringify(options.body) : undefined
+                });
 
                 if (response.status === 401) {
                     logout();
-                    return null;
+                    throw new Error('Unauthorized');
                 }
 
                 if (!response.ok) {
                     const error = await response.json();
-                    showToast(error.message || 'An error occurred', 'error');
-                    return null;
+                    throw new Error(error.message || `HTTP ${response.status}`);
                 }
 
                 return await response.json();
             } catch (error) {
                 console.error('API Error:', error);
-                showToast('Connection error. Check your internet.', 'error');
-                return null;
+                throw error;
             }
         }
 
-        // ===============================
-        // AUTHENTICATION
-        // ===============================
+        // ========== AUTHENTICATION ==========
         async function login(email, password) {
-            const response = await apiCall('/auth/login', 'POST', { email, password });
-            if (response && response.token) {
-                localStorage.setItem('token', response.token);
-                localStorage.setItem('user', JSON.stringify(response.user));
-                currentUser = response.user;
+            try {
+                const data = await apiCall('/auth/login', {
+                    method: 'POST',
+                    body: { email, password }
+                });
+
+                state.token = data.token;
+                state.user = data.user;
+
+                localStorage.setItem(AUTH_TOKEN_KEY, state.token);
+                localStorage.setItem(USER_KEY, JSON.stringify(state.user));
+
                 updateUI();
+                goToPage('home');
                 showToast('Logged in successfully!', 'success');
-                loadDashboard();
-                return true;
+            } catch (error) {
+                showToast(error.message, 'error');
             }
-            return false;
         }
 
-        async function signup(userData) {
-            const response = await apiCall('/auth/signup', 'POST', userData);
-            if (response && response.token) {
-                localStorage.setItem('token', response.token);
-                localStorage.setItem('user', JSON.stringify(response.user));
-                currentUser = response.user;
+        async function register(email, password, displayName) {
+            try {
+                const data = await apiCall('/auth/register', {
+                    method: 'POST',
+                    body: { email, password, displayName }
+                });
+
+                state.token = data.token;
+                state.user = data.user;
+
+                localStorage.setItem(AUTH_TOKEN_KEY, state.token);
+                localStorage.setItem(USER_KEY, JSON.stringify(state.user));
+
                 updateUI();
-                showToast('Account created successfully!', 'success');
-                loadDashboard();
-                return true;
+                goToPage('home');
+                showToast('Registered successfully!', 'success');
+            } catch (error) {
+                showToast(error.message, 'error');
             }
-            return false;
         }
 
         function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            currentUser = null;
+            state.token = null;
+            state.user = null;
+
+            localStorage.removeItem(AUTH_TOKEN_KEY);
+            localStorage.removeItem(USER_KEY);
+
             window.location.href = '/login.html';
         }
 
-        // ===============================
-        // UI MANAGEMENT
-        // ===============================
-        function updateUI() {
-            if (currentUser) {
-                document.getElementById('profileName').textContent = currentUser.displayName || 'User';
-                document.getElementById('profileEmail').textContent = currentUser.email;
-                document.getElementById('profileAvatar').src = currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName)}&background=10b981&color=fff&size=128`;
-                document.getElementById('profileMenuAvatar').src = document.getElementById('profileAvatar').src;
-                document.getElementById('profilePageAvatar').src = document.getElementById('profileAvatar').src;
-                document.getElementById('displayNameInput').value = currentUser.displayName || '';
-                document.getElementById('emailInput').value = currentUser.email;
-                document.getElementById('phoneInput').value = currentUser.phone || '';
-            }
-        }
-
-        function goToPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.bottom-nav-item').forEach(item => item.classList.remove('active'));
-            
-            document.getElementById(pageId).classList.add('active');
-            currentPage = pageId;
-            
-            closeSidebar();
-            closeProfileMenu();
-            
-            // Activate corresponding nav item
-            if (pageId === 'home-page') {
-                document.querySelectorAll('.bottom-nav-item')[0].classList.add('active');
-            } else if (pageId === 'tournaments-page') {
-                document.querySelectorAll('.bottom-nav-item')[1].classList.add('active');
-            } else if (pageId === 'leagues-page') {
-                document.querySelectorAll('.bottom-nav-item')[2].classList.add('active');
-            } else if (pageId === 'teams-page') {
-                document.querySelectorAll('.bottom-nav-item')[3].classList.add('active');
-            } else if (pageId === 'leaderboard') {
-                document.querySelectorAll('.bottom-nav-item')[4].classList.add('active');
-            }
-
-            // Load page data
-            loadPageData(pageId);
-        }
-
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        function openProfileMenu() {
-            document.getElementById('profileMenu').classList.toggle('active');
-        }
-
-        function closeProfileMenu() {
-            document.getElementById('profileMenu').classList.remove('active');
-        }
-
-        function openSidebar() {
-            document.getElementById('sidebar').classList.add('open');
-            document.getElementById('sidebarOverlay').classList.add('active');
-        }
-
-        function closeSidebar() {
-            document.getElementById('sidebar').classList.remove('open');
-            document.getElementById('sidebarOverlay').classList.remove('active');
-        }
-
-        // ===============================
-        // NOTIFICATIONS
-        // ===============================
-        function showToast(message, type = 'success') {
-            const toastContainer = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
-            toastContainer.appendChild(toast);
-            
-            setTimeout(() => toast.classList.add('show'), 10);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // ===============================
-        // DATA LOADING
-        // ===============================
-        async function loadDashboard() {
-            await loadTournaments();
-            await loadLeagues();
-            await loadTeams();
-            await loadLeaderboard();
-            await loadVenoCoins();
-        }
-
-        async function loadPageData(pageId) {
-            switch(pageId) {
-                case 'home-page':
-                    renderFeaturedLeagues();
-                    renderActiveLeagues();
-                    break;
-                case 'tournaments-page':
-                    renderTournaments();
-                    break;
-                case 'leagues-page':
-                    renderLeagues();
-                    break;
-                case 'teams-page':
-                    renderTeams();
-                    break;
-                case 'leaderboard':
-                    renderLeaderboard();
-                    break;
-                case 'my-leagues':
-                    renderMyLeagues();
-                    break;
-                case 'my-teams':
-                    renderMyTeams();
-                    break;
-            }
-        }
-
-        async function loadTournaments() {
-            const response = await apiCall('/tournaments');
-            if (response) {
-                tournaments = response.data || response;
-            }
-        }
-
+        // ========== LEAGUE FUNCTIONS ==========
         async function loadLeagues() {
-            const response = await apiCall('/leagues');
-            if (response) {
-                leagues = response.data || response;
+            try {
+                state.leagues = await apiCall('/leagues');
+                renderLeagues();
+            } catch (error) {
+                showToast(error.message, 'error');
             }
         }
 
-        async function loadTeams() {
-            const response = await apiCall('/teams');
-            if (response) {
-                teams = response.data || response;
-            }
-        }
+        async function createLeague() {
+            try {
+                const name = document.getElementById('leagueName').value;
+                const gameType = document.getElementById('gameType').value;
+                const maxTeams = parseInt(document.getElementById('maxTeams').value);
+                const entryFee = parseInt(document.getElementById('entryFee').value);
+                const description = document.getElementById('leagueDescription').value;
 
-        async function loadLeaderboard() {
-            const response = await apiCall('/leaderboard');
-            if (response) {
-                leaderboard = response.data || response;
-            }
-        }
-
-        async function loadVenoCoins() {
-            if (currentUser) {
-                const response = await apiCall(`/users/${currentUser.id}/coins`);
-                if (response) {
-                    document.getElementById('venoCoins').textContent = response.coins || 0;
+                if (!name) {
+                    showToast('Please enter a league name', 'error');
+                    return;
                 }
-            }
-        }
 
-        // ===============================
-        // RENDERING FUNCTIONS
-        // ===============================
-        function renderCard(item, type = 'league') {
-            let html = `
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-badge badge-${item.status || 'pending'}">${item.status || 'Pending'}</span>
-                        <h3 class="card-title">${item.name}</h3>
-                        <p class="card-subtitle">${item.gameType || 'Game'}</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-stats">
-                            <div class="stat">
-                                <div class="stat-value">${item.teams?.length || item.participants?.length || 0}</div>
-                                <div class="stat-label">${type === 'league' ? 'Teams' : 'Players'}</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">${item.prizePool || 0}</div>
-                                <div class="stat-label">Prize</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">${item.maxTeams || item.maxParticipants || 0}</div>
-                                <div class="stat-label">Max</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <button class="card-footer button btn-join" onclick="joinItem('${item.id}', '${type}')">
-                            <i class="fas fa-sign-in-alt"></i> Join
-                        </button>
-                        <button class="card-footer button btn-view" onclick="viewItem('${item.id}', '${type}')">
-                            <i class="fas fa-eye"></i> View
-                        </button>
-                    </div>
-                </div>
-            `;
-            return html;
-        }
+                await apiCall('/leagues', {
+                    method: 'POST',
+                    body: { name, gameType, maxTeams, entryFee, description }
+                });
 
-        function renderTournaments() {
-            const container = document.getElementById('tournamentsGrid');
-            if (tournaments.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-trophy"></i><h3>No Tournaments</h3><p>No tournaments available yet</p></div>`;
-                return;
+                closeModal('createLeagueModal');
+                loadLeagues();
+                showToast('League created successfully!', 'success');
+            } catch (error) {
+                showToast(error.message, 'error');
             }
-            container.innerHTML = tournaments.map(t => renderCard(t, 'tournament')).join('');
         }
 
         function renderLeagues() {
-            const container = document.getElementById('leaguesGrid');
-            if (leagues.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-alt"></i><h3>No Leagues</h3><p>No leagues available yet</p></div>`;
+            const container = document.getElementById('leaguesContent');
+
+            if (!state.leagues || state.leagues.length === 0) {
+                container.innerHTML = '<div class="loading">No leagues found. <a href="#" onclick="showCreateLeague()">Create one now!</a></div>';
                 return;
             }
-            container.innerHTML = leagues.map(l => renderCard(l, 'league')).join('');
+
+            container.innerHTML = `
+                <div class="grid">
+                    ${state.leagues.map(league => `
+                        <div class="league-card" onclick="viewLeague('${league._id}')">
+                            <div class="league-card-header">
+                                <div class="league-status">${league.status}</div>
+                                <div class="league-name">${league.name}</div>
+                            </div>
+                            <div class="league-card-body">
+                                <div class="league-stats">
+                                    <div class="stat">
+                                        <div class="stat-value">${league.teams?.length || 0}/${league.maxTeams}</div>
+                                        <div>Teams</div>
+                                    </div>
+                                    <div class="stat">
+                                        <div class="stat-value">${league.gameType}</div>
+                                        <div>Game</div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-block" onclick="joinLeague('${league._id}', event)">Join League</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        async function joinLeague(leagueId, event) {
+            event.stopPropagation();
+            try {
+                await apiCall(`/leagues/${leagueId}/join`, { method: 'POST' });
+                loadLeagues();
+                showToast('Joined league successfully!', 'success');
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        }
+
+        function viewLeague(leagueId) {
+            // Redirect to league detail page
+            window.location.href = `/league-detail.html?id=${leagueId}`;
+        }
+
+        // ========== TEAM FUNCTIONS ==========
+        async function loadTeams() {
+            try {
+                state.teams = await apiCall('/teams');
+                renderTeams();
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        }
+
+        async function createTeam() {
+            try {
+                const name = document.getElementById('teamName').value;
+                const formation = document.getElementById('formation').value;
+                const gameType = document.getElementById('teamGameType').value;
+                const description = document.getElementById('teamDescription').value;
+
+                if (!name) {
+                    showToast('Please enter a team name', 'error');
+                    return;
+                }
+
+                await apiCall('/teams', {
+                    method: 'POST',
+                    body: { name, formation, gameType, description }
+                });
+
+                closeModal('createTeamModal');
+                loadTeams();
+                showToast('Team created successfully!', 'success');
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
         }
 
         function renderTeams() {
-            const container = document.getElementById('teamsGrid');
-            if (teams.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-users"></i><h3>No Teams</h3><p>No teams available yet</p></div>`;
+            const container = document.getElementById('teamsContent');
+
+            if (!state.teams || state.teams.length === 0) {
+                container.innerHTML = '<div class="loading">No teams found. <a href="#" onclick="showCreateTeam()">Create one now!</a></div>';
                 return;
             }
-            container.innerHTML = teams.map(t => renderCard(t, 'team')).join('');
+
+            container.innerHTML = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Team Name</th>
+                            <th>Formation</th>
+                            <th>Game Type</th>
+                            <th>Members</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${state.teams.map(team => `
+                            <tr>
+                                <td>${team.name}</td>
+                                <td>${team.formation}</td>
+                                <td>${team.gameType}</td>
+                                <td>${team.members?.length || 0}</td>
+                                <td>
+                                    <button class="btn btn-secondary" onclick="viewTeam('${team._id}')">View</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
         }
 
-        function renderFeaturedLeagues() {
-            const container = document.getElementById('featuredLeaguesGrid');
-            const featured = leagues.slice(0, 3);
-            if (featured.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-star"></i><h3>No Featured Leagues</h3></div>`;
-                return;
-            }
-            container.innerHTML = featured.map(l => renderCard(l, 'league')).join('');
+        function viewTeam(teamId) {
+            window.location.href = `/team-detail.html?id=${teamId}`;
         }
 
-        function renderActiveLeagues() {
-            const container = document.getElementById('activeLeaguesGrid');
-            const active = leagues.filter(l => l.status === 'live').slice(0, 3);
-            if (active.length === 0) {
-                container.innerHTML = `<div class="empty-state"><i class="fas fa-fire"></i><h3>No Active Leagues</h3></div>`;
-                return;
+        // ========== LEADERBOARD FUNCTIONS ==========
+        async function loadLeaderboard() {
+            try {
+                state.leaderboard = await apiCall('/leaderboard');
+                renderLeaderboard();
+            } catch (error) {
+                showToast(error.message, 'error');
             }
-            container.innerHTML = active.map(l => renderCard(l, 'league')).join('');
-        }
-
-        function renderMyLeagues() {
-            const container = document.getElementById('myLeaguesGrid');
-            const myLeagues = leagues.filter(l => l.ownerId === currentUser?.id);
-            if (myLeagues.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-calendar-alt"></i>
-                        <h3>No Leagues</h3>
-                        <p>You haven't joined any leagues yet</p>
-                        <button class="btn btn-primary" onclick="goToPage('leagues-page')">
-                            <i class="fas fa-search"></i> Find Leagues
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-            container.innerHTML = myLeagues.map(l => renderCard(l, 'league')).join('');
-        }
-
-        function renderMyTeams() {
-            const container = document.getElementById('myTeamsGrid');
-            const myTeams = teams.filter(t => t.ownerId === currentUser?.id);
-            if (myTeams.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-users"></i>
-                        <h3>No Teams</h3>
-                        <p>Create your first team to get started</p>
-                        <button class="btn btn-primary" onclick="openModal('createTeamModal')">
-                            <i class="fas fa-plus"></i> Create Team
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-            container.innerHTML = myTeams.map(t => renderCard(t, 'team')).join('');
         }
 
         function renderLeaderboard() {
-            const tbody = document.getElementById('leaderboardBody');
-            if (leaderboard.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="empty-state"><i class="fas fa-chart-line"></i> No leaderboard data</td></tr>`;
+            const container = document.getElementById('leaderboardContent');
+
+            if (!state.leaderboard || state.leaderboard.length === 0) {
+                container.innerHTML = '<div class="loading">No leaderboard data available</div>';
                 return;
             }
-            tbody.innerHTML = leaderboard.slice(0, 20).map((player, idx) => `
-                <tr>
-                    <td>#${idx + 1}</td>
-                    <td>${player.displayName}</td>
-                    <td>${player.leaguesWon || 0}</td>
-                    <td>💰 ${player.venoCoins || 0}</td>
-                </tr>
-            `).join('');
+
+            container.innerHTML = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Coins</th>
+                            <th>Leagues Won</th>
+                            <th>Win Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${state.leaderboard.map((entry, index) => `
+                            <tr>
+                                <td>#${index + 1}</td>
+                                <td>${entry.displayName}</td>
+                                <td>${entry.coins}</td>
+                                <td>${entry.leaguesWon}</td>
+                                <td>${entry.winRate}%</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
         }
 
-        // ===============================
-        // CREATE/JOIN FUNCTIONS
-        // ===============================
-        async function createLeague(e) {
-            e.preventDefault();
-            
-            const data = {
-                name: document.getElementById('leagueName').value,
-                gameType: document.getElementById('leagueGameType').value,
-                maxTeams: parseInt(document.getElementById('leagueMaxTeams').value),
-                entryFee: parseInt(document.getElementById('leagueEntryFee').value),
-                description: document.getElementById('leagueDescription').value
-            };
-
-            const response = await apiCall('/leagues', 'POST', data);
-            if (response) {
-                closeModal('createLeagueModal');
-                showToast('League created successfully!', 'success');
-                await loadLeagues();
-                renderLeagues();
-                
-                // Reset form
-                e.target.reset();
-            }
-        }
-
-        async function createTournament(e) {
-            e.preventDefault();
-            
-            const data = {
-                name: document.getElementById('tournamentName').value,
-                gameType: document.getElementById('tournamentGameType').value,
-                maxParticipants: parseInt(document.getElementById('tournamentMaxParticipants').value),
-                prizePool: parseInt(document.getElementById('tournamentPrizePool').value)
-            };
-
-            const response = await apiCall('/tournaments', 'POST', data);
-            if (response) {
-                closeModal('createTournamentModal');
-                showToast('Tournament created successfully!', 'success');
-                await loadTournaments();
-                renderTournaments();
-                e.target.reset();
-            }
-        }
-
-        async function createTeam(e) {
-            e.preventDefault();
-            
-            const data = {
-                name: document.getElementById('teamName').value,
-                gameType: document.getElementById('teamGameType').value,
-                formation: document.getElementById('teamFormation').value,
-                description: document.getElementById('teamDescription').value
-            };
-
-            const response = await apiCall('/teams', 'POST', data);
-            if (response) {
-                closeModal('createTeamModal');
-                showToast('Team created successfully!', 'success');
-                await loadTeams();
-                renderTeams();
-                e.target.reset();
-            }
-        }
-
-        async function joinItem(itemId, type) {
-            const response = await apiCall(`/${type}s/${itemId}/join`, 'POST');
-            if (response) {
-                showToast(`Joined ${type} successfully!`, 'success');
-                await loadPageData(currentPage);
-            }
-        }
-
-        function viewItem(itemId, type) {
-            window.location.href = `/${type}-detail.html?id=${itemId}`;
-        }
-
-        // ===============================
-        // PROFILE FUNCTIONS
-        // ===============================
+        // ========== PROFILE FUNCTIONS ==========
         async function updateProfile() {
-            const data = {
-                displayName: document.getElementById('displayNameInput').value,
-                phone: document.getElementById('phoneInput').value
-            };
+            try {
+                const displayName = document.getElementById('displayName').value;
+                const bio = document.getElementById('bio').value;
 
-            const response = await apiCall(`/users/${currentUser.id}`, 'PUT', data);
-            if (response) {
-                currentUser = response;
-                localStorage.setItem('user', JSON.stringify(currentUser));
-                updateUI();
-                showToast('Profile updated successfully!', 'success');
-            }
-        }
-
-        // ===============================
-        // THEME TOGGLE
-        // ===============================
-        function toggleTheme() {
-            const isDark = document.body.classList.toggle('light-theme');
-            localStorage.setItem('theme', isDark ? 'light' : 'dark');
-        }
-
-        // Load saved theme
-        if (localStorage.getItem('theme') === 'light') {
-            document.body.classList.add('light-theme');
-            document.getElementById('darkMode').checked = true;
-        }
-
-        // ===============================
-        // EVENT LISTENERS
-        // ===============================
-        document.getElementById('menuBtn').addEventListener('click', openSidebar);
-        document.getElementById('sidebarClose').addEventListener('click', closeSidebar);
-        document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
-        document.getElementById('profileAvatar').addEventListener('click', openProfileMenu);
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.profile-section')) {
-                closeProfileMenu();
-            }
-        });
-
-        // Close modals when clicking outside
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
+                if (!displayName) {
+                    showToast('Please enter a display name', 'error');
+                    return;
                 }
-            });
-        });
 
-        // ===============================
-        // INITIALIZATION
-        // ===============================
-        async function init() {
-            // Check if user is logged in
-            const token = localStorage.getItem('token');
-            const user = localStorage.getItem('user');
-            
-            if (!token || !user) {
-                window.location.href = '/login.html';
-                return;
+                await apiCall('/users/profile', {
+                    method: 'PUT',
+                    body: { displayName, bio }
+                });
+
+                showToast('Profile updated successfully!', 'success');
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        }
+
+        // ========== UI FUNCTIONS ==========
+        function goToPage(page) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+            // Show selected page
+            const pageElement = document.getElementById(`${page}Page`);
+            if (pageElement) {
+                pageElement.classList.add('active');
+                closeSidebar();
+
+                // Load data for the page
+                switch(page) {
+                    case 'leagues':
+                        loadLeagues();
+                        break;
+                    case 'teams':
+                        loadTeams();
+                        break;
+                    case 'leaderboard':
+                        loadLeaderboard();
+                        break;
+                    case 'profile':
+                        loadProfileData();
+                        break;
+                }
             }
 
-            currentUser = JSON.parse(user);
-            updateUI();
-            
-            // Load initial data
-            await loadDashboard();
-            
-            // Refresh data every 30 seconds
-            setInterval(loadDashboard, 30000);
+            // Update active menu item
+            document.querySelectorAll('.sidebar-menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.sidebar-menu-item')?.classList.add('active');
         }
 
-        // Start app when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
+        function loadProfileData() {
+            if (state.user) {
+                document.getElementById('displayName').value = state.user.displayName || '';
+                document.getElementById('email').value = state.user.email || '';
+                document.getElementById('bio').value = state.user.bio || '';
+            }
         }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('hidden');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.add('hidden');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+
+        function toggleProfileMenu() {
+            document.getElementById('profileDropdown').classList.toggle('active');
+        }
+
+        function showCreateLeague() {
+            document.getElementById('createLeagueModal').style.display = 'flex';
+        }
+
+        function showCreateTeam() {
+            document.getElementById('createTeamModal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function updateUI() {
+            if (state.user) {
+                document.getElementById('userName').textContent = state.user.displayName || state.user.email;
+                document.getElementById('profilePic').src = state.user.avatar || 
+                    `https://ui-avatars.com/api/?name=${state.user.displayName}&background=10b981&color=fff`;
+            }
+            updateCoinsDisplay();
+        }
+
+        function updateCoinsDisplay() {
+            document.getElementById('coinsDisplay').textContent = state.coins || 0;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+            document.getElementById('toastContainer').appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ========== INITIALIZATION ==========
+        window.addEventListener('load', async () => {
+            // Restore session
+            const token = localStorage.getItem(AUTH_TOKEN_KEY);
+            const user = localStorage.getItem(USER_KEY);
+
+            if (token && user) {
+                state.token = token;
+                state.user = JSON.parse(user);
+
+                try {
+                    // Verify token is still valid
+                    const response = await apiCall('/users/profile');
+                    state.user = response;
+                    updateUI();
+                    loadLeagues();
+                } catch (error) {
+                    logout();
+                }
+            } else {
+                window.location.href = '/login.html';
+            }
+        });
+
+        // Close modals on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('[id$="Modal"]').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            }
+        });
+
+        // Close modals on outside click
+        document.addEventListener('click', (e) => {
+            if (e.target.id && e.target.id.includes('Modal')) {
+                e.target.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
